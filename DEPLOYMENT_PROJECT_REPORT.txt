@@ -1,0 +1,415 @@
+================================================================================
+  DEPLOYMENT PROJECT REPORT
+  Project folder: main-page-only
+  Generated from a full scan of this repository (structure, configs, code).
+================================================================================
+
+
+1. Project Overview
+--------------------------------------------------------------------------------
+
+This repository is a travel-agency style website with two main parts:
+
+  (A) Public website — HTML pages, CSS, and JavaScript at the project root.
+      Pages include the home page, package detail, location detail, and reviews.
+      The site can be opened as plain static files, but dynamic features need
+      the backend.
+
+  (B) Backend API and admin — A Java Spring Boot 3.2 application in the
+      "backend" folder. It provides REST APIs under "/api", admin JSON APIs
+      under "/admin/api", session-based admin login at "/admin/login", and
+      optional serving of the same HTML/CSS/JS from the parent folder when
+      you run the server from "backend" with the default static configuration.
+
+Database: MySQL is used for all persistent data (users, bookings, packages,
+locations, hero slides, reviews, FAQs, settings, social feed, visitors).
+
+Handover note: There is no Docker Compose file or Dockerfile in this scan.
+Deployment is typically: build a Spring Boot JAR, run it with Java 17, attach
+MySQL, and either keep the folder layout for "file:../" static files or copy
+the frontend into the JAR (see section 7 and 11).
+
+
+2. Folder Structure
+--------------------------------------------------------------------------------
+
+Root folder name: main-page-only
+
+Main items at the repository root:
+
+  index.html              — Main landing page (large file; loads many CDN scripts).
+  travel-redesign.css     — Primary stylesheet for the public site.
+  travel-redesign.js      — Main client behavior (packages, trip builder, UI).
+  package.html            — Package detail page (used with backend route /package/{slug}).
+  location.html           — Location detail page (used with /location/{id}).
+  reviews.html            — Reviews listing page (used with /reviews).
+
+  js/
+    config.js             — Sets window.__APP_CONFIG__ (apiBase, adminApiBase) for split hosting.
+    api-integration.js    — Fetches public API data; falls back silently if API is down.
+    seasonal-effect.js    — Seasonal UI effect; reads /api/settings/season when available.
+
+  admin/                    — Static admin UI (HTML + admin.css + admin.js).
+    login.html, dashboard.html, hero.html, locations.html, packages.html,
+    bookings.html, faqs.html, reviews.html, social-feed.html
+
+  wp-content/themes/toc/   — Theme assets (e.g. fonts/Millanova.svg, js/functions.min.js).
+
+  backend/                 — Spring Boot Maven project (Java 17).
+    pom.xml                — Dependencies: Web, JPA, Security, Validation, MySQL, JWT (jjwt), Lombok.
+    mvnw.cmd, .mvn/        — Maven Wrapper (Windows script present; build without global Maven).
+    run.cmd                  — Optional: run with flags (--resetdb, --kill-8080, --auto-port).
+    reset-db.cmd             — Drops/recreates MySQL DB (local defaults inside script; see risks).
+    one-click.cmd            — Convenience script (referenced in run.cmd comments).
+    src/main/java/com/nijro/travel/
+      TravelAgencyApplication.java   — Application entry point (main).
+      config/          — SecurityConfig, WebConfig, DataInitializer.
+      controller/      — ApiController, AdminController, PageController.
+      dto/             — Request/response DTOs.
+      entity/          — JPA entities (see section 5).
+      repository/      — Spring Data JPA repositories.
+      service/         — Business logic services.
+      security/        — JwtService, CustomUserDetailsService.
+      filter/          — JwtAuthenticationFilter, VisitorTrackingFilter.
+      exception/       — GlobalExceptionHandler.
+    src/main/resources/application.properties — Main server and DB configuration.
+
+  env.example              — Template for environment variables (root; copy to .env locally).
+  backend/env.example      — Duplicate template for discoverability.
+
+  README.md, backend/README.md
+  DEPLOYMENT_NOTES.txt, PROJECT_STRUCTURE_AND_HOSTING.txt
+  start-backend.cmd        — Windows helper: starts Spring Boot from backend folder.
+
+Important paths not heavily populated in this workspace scan:
+  imgs/ — Referenced by HTML (e.g. /imgs/logo.jpg on admin pages). The scan
+          showed no image files under imgs/ in the working tree. If logo or
+          placeholder images are missing in your clone, add them before go-live
+          or update paths.
+
+There is no package.json / Vite app in this repository; comments mention
+Vite (localhost:5173) only as an example origin for CORS during development.
+
+
+3. Frontend Explanation
+--------------------------------------------------------------------------------
+
+What technology is used?
+  — Classic multi-page HTML site (no React/Vue build step in-repo).
+  — jQuery, Owl Carousel, Fancybox, Waypoints, Swiper, LazyLoad, and theme JS
+    are loaded from CDNs or from wp-content/themes/toc/js/functions.min.js.
+  — Custom logic in travel-redesign.js and js/api-integration.js.
+
+Entry file:
+  — index.html is the main public entry.
+
+Additional pages:
+  — package.html, location.html, reviews.html
+  — admin/*.html for the management UI.
+
+Static assets:
+  — travel-redesign.css, wp-content/themes/toc/fonts/Millanova.svg,
+    wp-content/themes/toc/js/functions.min.js.
+  — Remote images: many Unsplash URLs in HTML, seed data, and fallbacks.
+
+API integration:
+  — js/config.js defines window.apiUrl() and window.adminApiUrl() using optional
+    apiBase / adminApiBase (same-origin when empty).
+  — js/api-integration.js calls /api/hero, /api/packages, /api/locations, etc.
+  — travel-redesign.js calls APIs for reviews, FAQs, seasonal settings, login/
+    register for travelers, and submits reviews with a Bearer JWT after sign-in.
+
+Can the frontend run static-only?
+  — Yes, for viewing pages and embedded static slider data in index.html.
+  — Live hero/packages/locations from the database, bookings, admin, traveler
+    login, moderated reviews, uploads, and analytics require the backend and DB.
+
+
+4. Backend Explanation
+--------------------------------------------------------------------------------
+
+What technology is used?
+  — Java 17, Spring Boot 3.2, Spring Web, Spring Data JPA, Spring Security,
+    Hibernate/JPA, MySQL Connector/J, JWT (jjwt 0.12.x), Lombok.
+
+Main entry point:
+  — com.nijro.travel.TravelAgencyApplication (standard Spring Boot main).
+
+Build / run:
+  — Maven project (pom.xml). Use mvnw.cmd spring-boot:run from backend/ on
+    Windows, or mvn spring-boot:run if Maven is installed.
+  — Java 17 is required (see pom.xml java.version).
+
+Important packages / folders:
+  — controller: REST APIs and HTML forwards (PageController).
+  — service: BookingService, PackageService, LocationService, HeroSlideService,
+    ReviewService, FaqService, UserService, DashboardService, VisitorService,
+    SiteSettingService, SocialFeedService, plus file handling used by reviews/uploads.
+  — repository: JPA repositories for each entity.
+  — entity: User, Booking, TravelPackage, Location, HeroSlide, Review, Faq,
+    SiteSetting, SocialFeedPhoto, Visitor.
+  — security: Password hashing (BCrypt), JWT generation/validation, user loading.
+  — config: Security rules, CORS, upload resource handler, startup seed data.
+
+Security / auth (high level):
+  — Public GET /api/** is open; POST /api/bookings, /api/register, /api/login
+    are open; POST /api/reviews requires an authenticated user (JWT in
+    Authorization header — used by the public site after traveler login).
+  — Admin HTML routes under /admin/* (except login) require ROLE_ADMIN; admin
+    uses form login to /admin/login and session cookies; admin.js uses
+    fetch(..., { credentials: "include" }) to /admin/api/...
+  — CSRF is disabled in SecurityConfig (typical for JWT/API style setups but
+    be aware for any future cookie-based API you add).
+
+Config files:
+  — backend/src/main/resources/application.properties (overridable by env vars).
+
+Does the backend require Java and Maven?
+  — Yes: Java 17 at runtime. Maven or the included Maven Wrapper for builds.
+
+
+5. Database Explanation
+--------------------------------------------------------------------------------
+
+What database is used?
+  — MySQL (JDBC URL uses com.mysql.cj.jdbc.Driver).
+
+Where is configuration?
+  — backend/src/main/resources/application.properties:
+      spring.datasource.url, username, password (from env with local defaults)
+      spring.jpa.hibernate.ddl-auto (default "update" via JPA_DDL_AUTO)
+
+Suggested database name:
+  — travel_agency (also used in env.example JDBC URL).
+
+Environment / passwords:
+  — Set SPRING_DATASOURCE_URL, SPRING_DATASOURCE_USERNAME, and especially
+    SPRING_DATASOURCE_PASSWORD in production. Do not rely on property-file
+    defaults on a public server.
+
+Is MySQL required?
+  — For the full application: yes. There is no alternate database driver in pom.xml.
+
+
+6. Required Environment Variables
+--------------------------------------------------------------------------------
+
+Below lists variables referenced in application.properties and env.example.
+Replace every secret before production. Do not commit a real .env file.
+
+Variable name                    | Purpose
+---------------------------------|--------------------------------------------------
+SPRING_DATASOURCE_URL            | JDBC URL for MySQL (host, port, DB name, params).
+SPRING_DATASOURCE_USERNAME       | MySQL username.
+SPRING_DATASOURCE_PASSWORD       | MySQL password (MUST be set in production).
+SERVER_PORT                      | HTTP port (default 8080 in properties).
+JWT_SECRET                       | Signing key for JWTs (use a long random value).
+JWT_EXPIRATION_MS                | Token lifetime (default 86400000 ms in properties).
+ADMIN_SEED_EMAIL                 | First admin user's email if the users table is empty.
+ADMIN_SEED_PASSWORD              | First admin user's password (hash stored); set before first deploy.
+CORS_ALLOWED_ORIGINS             | Comma-separated allowed origins for /api/** CORS (no spaces).
+JPA_DDL_AUTO                     | Hibernate mode (default "update"); consider "validate" or migrations for mature prod.
+FILE_UPLOAD_DIR                  | Directory for uploaded files (default "uploads"); must be writable and persistent.
+REVIEWS_REQUIRE_APPROVAL         | If true, new reviews need admin approval before public listing.
+app.admin.seed-*                 | Bound from ADMIN_SEED_EMAIL / ADMIN_SEED_PASSWORD above.
+
+Values that MUST be replaced before production:
+  — Database password, JWT secret, admin seed password (and ideally seed email).
+  — CORS_ALLOWED_ORIGINS must list your real public site origin(s), not only localhost.
+
+Safe handling of secrets:
+  — env.example is a template only. Treat any sample password or JWT in docs
+    as non-production. Generate new secrets on the server or in your host's
+    secret manager.
+
+
+7. Deployment Requirements
+--------------------------------------------------------------------------------
+
+Frontend (static):
+  — Any static host (object storage + CDN, Netlify, Cloudflare Pages, GitHub Pages,
+    or nginx) can serve the root HTML/CSS/js/wp-content if you only need a brochure site.
+  — For a working API from another domain: inject window.__APP_CONFIG__ before
+    js/config.js (or edit hosting to prepend a small script) and set CORS on the API.
+
+Backend:
+  — Host that can run a long-lived Java process (JAR).
+  — Java 17 installed.
+  — Network access to MySQL.
+  — Writable directory for uploads (FILE_UPLOAD_DIR) if you use image uploads.
+  — HTTPS reverse proxy (nginx, Caddy, Traefik, or cloud load balancer) recommended.
+
+Database:
+  — MySQL 8.x (or compatible) instance reachable from the app.
+  — Create DB user with least privilege (not necessarily root) for production.
+
+FTP-only hosting:
+  — Enough only for static files. You cannot run Spring Boot or MySQL on plain FTP.
+
+VPS needed?
+  — Not strictly required if you use a Java-friendly PaaS (Render, Railway, etc.),
+    but a small VPS is a common simple choice for Spring Boot + MySQL together.
+
+Static-only vs full-stack:
+  — Static-only: possible without MySQL or Java.
+  — Full product (bookings, admin, DB-driven content): requires backend + MySQL.
+
+
+8. Static Hosting vs Full Hosting
+--------------------------------------------------------------------------------
+
+Static-only:
+  — Pros: cheap, simple, works on GitHub Pages style hosts.
+  — Cons: no real bookings in your database, no admin, APIs and uploads do not run.
+
+Split (static frontend + API elsewhere):
+  — Pros: scalable CDN for assets; API on a small VM or PaaS.
+  — Cons: you must set CORS_ALLOWED_ORIGINS and window.__APP_CONFIG__ apiBase;
+    admin pages must call the same API host (adminApiBase) or same origin.
+
+All-in-one (Spring serves static + API):
+  — Pros: one origin, simplest CORS and cookie behavior for admin.
+  — Cons: production must not rely on "file:../" pointing outside the JAR;
+    copy the website into src/main/resources/static (or classpath:/static/) and
+    adjust spring.web.resources.static-locations, OR serve static from nginx and
+    proxy /api and /admin to Spring.
+
+
+9. Problems to Fix Before Deployment
+--------------------------------------------------------------------------------
+
+Hardcoded / placeholder domains and SEO:
+  — index.html uses https://nijrotravel.com/ in canonical, Open Graph, and JSON-LD.
+    Update these to your real production domain.
+
+Mixed branding / social links:
+  — index.html footer references Facebook/Instagram "Travel Japan" style URLs;
+    travel-redesign.js uses different Nijo Travel Facebook/TikTok/WhatsApp links.
+    Verify all links are intentional and update dead or wrong accounts.
+
+Contact details in code:
+  — travel-redesign.js includes WhatsApp number, mailto:nijojapan@gmail.com, and a
+    credit phone link. Confirm these are correct for production.
+
+Security risks / hardening:
+  — application.properties contains development fallbacks (default JWT, default DB
+    password pattern). Always override with environment variables in production.
+  — spring.jpa.hibernate.ddl-auto=update can mutate schema automatically; plan for
+    controlled migrations in serious production.
+  — CSRF is disabled globally in SecurityConfig — acceptable for current API design
+    but review if you add browser-cookie authenticated POST forms to untrusted origins.
+  — JDBC URL examples use useSSL=false and allowPublicKeyRetrieval=true — tighten for
+    production MySQL (SSL/TLS to DB, least-privilege user).
+  — reset-db.cmd contains a hardcoded DB_PASS for local mysql CLI; do not confuse
+    this with production secrets — align scripts with your real admin workflow.
+
+Layout / packaging:
+  — spring.web.resources.static-locations includes file:../ — works when the working
+    directory is backend/ on a developer machine; a cloud JAR without the parent
+    folder will not find your HTML unless you change this or embed static files.
+
+Missing assets (check your tree):
+  — Admin pages reference /imgs/logo.jpg; this file was not present in the scanned
+    workspace under imgs/. Add the logo or change the path to avoid broken images.
+
+Optional / missing deployment artifacts:
+  — No Dockerfile or docker-compose in repo (not wrong — just means you must supply
+    your own container or process manager story).
+
+Behavior note (reviews):
+  — Public review submission requires traveler JWT (register/login flow in UI).
+    Ensure /api/register and /api/login are reachable with correct CORS if split-hosted.
+
+
+10. Recommended Deployment Method
+--------------------------------------------------------------------------------
+
+Best practical approach for THIS project (admin + uploads + same-origin admin API):
+
+  Recommended: All-in-one on a single VPS (or single PaaS service) with:
+    — MySQL (managed or on same VM),
+    — Spring Boot behind HTTPS reverse proxy,
+    — Frontend files baked into the JAR classpath (static/) OR deployed next to
+      the JAR with a corrected static-locations setting,
+    — Persistent disk or object storage for FILE_UPLOAD_DIR.
+
+Why:
+  — Admin already uses session cookies and same-origin /admin/api paths.
+  — File uploads map to /uploads/** from a local directory — easier on one host
+    with persistent storage.
+  — Avoids CORS complexity for the admin panel.
+
+When split hosting is better:
+  — If traffic is mostly static marketing pages and the API is small — use a CDN
+    for HTML and a small API host; then invest time in CORS, apiBase injection, and HTTPS.
+
+
+11. Step-by-Step Deployment Notes
+--------------------------------------------------------------------------------
+
+A) Prepare MySQL
+  1. Create a MySQL instance and database (e.g. travel_agency).
+  2. Create a dedicated DB user with rights on that database only.
+  3. Build a JDBC URL with SSL settings appropriate to your provider.
+
+B) Prepare secrets and environment
+  1. Set SPRING_DATASOURCE_* and JWT_SECRET on the host (not in Git).
+  2. Set ADMIN_SEED_EMAIL / ADMIN_SEED_PASSWORD before the very first run if you
+     want a known admin; otherwise defaults from properties may apply when the DB is empty.
+  3. Set CORS_ALLOWED_ORIGINS if the browser origin differs from the API host.
+
+C) Build the backend
+  1. From backend/: run mvnw.cmd clean package (or mvn clean package).
+  2. Take the JAR from backend/target/ (Spring Boot repackage).
+
+D) Fix static file serving for production
+  1. Copy project-root HTML/CSS/JS/admin/js/wp-content into backend/src/main/resources/static/
+     preserving paths (/admin → static/admin, etc.), OR mount the project root and
+     adjust spring.web.resources.static-locations to real absolute file URLs.
+  2. Remove reliance on file:../ unless your server deliberately keeps that folder layout.
+
+E) Run the application
+  1. java -jar travel-agency-1.0.0.jar (example name; use actual JAR from target/).
+  2. Ensure SERVER_PORT matches reverse proxy upstream.
+
+F) Reverse proxy and TLS
+  1. Terminate HTTPS at nginx/Caddy/cloud LB.
+  2. Proxy to localhost:8080 (or chosen port).
+
+G) Verify
+  1. Open / — home page loads.
+  2. GET /api/hero returns JSON.
+  3. /admin/login — login works; change admin password after first login.
+  4. Submit a test booking; confirm row in DB.
+  5. Test image upload paths under /uploads/** if used.
+
+H) If using split static hosting
+  1. Deploy HTML/CSS/JS to CDN.
+  2. Set window.__APP_CONFIG__ = { apiBase: 'https://api.yourdomain.com',
+     adminApiBase: 'https://api.yourdomain.com' } before js/config.js.
+  3. Set CORS_ALLOWED_ORIGINS to https://www.yourdomain.com (and apex if needed).
+
+
+12. Final Readiness Summary
+--------------------------------------------------------------------------------
+
+What is ready:
+  — Clear separation between static marketing files and a Spring Boot API.
+  — Environment-driven configuration keys exist for DB, JWT, CORS, uploads, JPA.
+  — Admin and public routes are documented in backend/README.md.
+  — Maven Wrapper is included for builds without installing Maven globally.
+
+What you must supply for production:
+  — MySQL instance and strong credentials.
+  — Strong JWT_SECRET and strong admin password.
+  — A deployment layout that does not depend on developer-only file:../ paths.
+  — HTTPS and a process manager (systemd, Docker, or PaaS) for the Java app.
+  — Verification/fix of SEO URLs (nijrotravel.com), social links, and contact info.
+  — Confirm imgs/ assets (e.g. logo) exist on the server.
+
+FTP-only is insufficient for the full product; Java + MySQL hosting is required
+for bookings, admin, and database-backed content.
+
+================================================================================
+  End of DEPLOYMENT_PROJECT_REPORT.txt
+================================================================================

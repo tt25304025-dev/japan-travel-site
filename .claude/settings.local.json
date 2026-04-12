@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -v \"\\\\\\\\\\\\\\\\n\\\\|//\\\\|'\\\\\\\\|\\\\\"\")",
+      "Bash(head -10 ls /c/Users/Thushan/Desktop/main-page-only/favicon*)"
+    ]
+  }
+}

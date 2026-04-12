@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQs - Admin</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+    <style>
+        .faq-preview { background: #f8f9fa; padding: 12px 16px; border-radius: 8px; margin-top: 4px; font-size: 13px; color: #555; line-height: 1.5; max-height: 60px; overflow: hidden; text-overflow: ellipsis; }
+        .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+        .badge-active { background: #d4edda; color: #155724; }
+        .badge-inactive { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <nav class="admin-nav">
+        <a href="/admin/dashboard" class="admin-brand"><img src="/imgs/logo.jpg" alt="Nijro Travel" class="admin-logo"></a>
+        <a href="/admin/dashboard">Dashboard</a>
+        <a href="/admin/hero">Hero Slides</a>
+        <a href="/admin/locations">Locations</a>
+        <a href="/admin/packages">Packages</a>
+        <a href="/admin/bookings">Bookings</a>
+        <a href="/admin/faqs" class="active">FAQs</a>
+        <a href="/admin/reviews">Reviews</a>
+        <a href="/admin/social-feed">Social Feed</a>
+        <a href="/" target="_blank">View Site</a>
+        <a href="/admin/logout" class="logout">Logout</a>
+    </nav>
+    <main class="admin-main">
+        <h1>Frequently Asked Questions</h1>
+        <p style="color:#666; margin-bottom: 20px;">Manage the FAQ section shown on the main website. Drag sort order to control display order.</p>
+        <button class="btn btn-primary" onclick="openModal()">Add FAQ</button>
+        <div class="table-wrap" style="margin-top: 20px;">
+            <table>
+                <thead><tr><th style="width:40px">Order</th><th>Question</th><th>Answer</th><th style="width:80px">Status</th><th style="width:140px">Actions</th></tr></thead>
+                <tbody id="faqsTable"></tbody>
+            </table>
+        </div>
+    </main>
+    <div class="modal" id="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <h2 id="modalTitle">Add FAQ</h2>
+            <form id="faqForm">
+                <input type="hidden" id="faqId">
+                <div class="form-group">
+                    <label>Question</label>
+                    <textarea id="faqQuestion" rows="2" required placeholder="Enter the question..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Answer</label>
+                    <textarea id="faqAnswer" rows="5" required placeholder="Enter the answer..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Sort Order</label>
+                    <input type="number" id="faqOrder" min="0" value="0" placeholder="Lower number = shown first">
+                </div>
+                <div class="form-group">
+                    <label><input type="checkbox" id="faqActive" checked> Active (visible on website)</label>
+                </div>
+                <div class="form-row">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="/js/config.js"></script>
+    <script src="/admin/admin.js"></script>
+    <script>
+        let allFaqs = [];
+
+        function loadFaqs() {
+            apiFetch('/faqs').then(r => r.json()).then(data => {
+                allFaqs = data;
+                renderTable();
+            }).catch(() => {
+                document.getElementById('faqsTable').innerHTML = '<tr><td colspan="5">Failed to load FAQs. <a href="/admin/login">Login</a></td></tr>';
+            });
+        }
+
+        function renderTable() {
+            document.getElementById('faqsTable').innerHTML = allFaqs.map(f => `
+                <tr>
+                    <td>${f.sortOrder || 0}</td>
+                    <td>${escHtml(f.question)}</td>
+                    <td><div class="faq-preview">${escHtml(f.answer)}</div></td>
+                    <td><span class="badge ${f.active ? 'badge-active' : 'badge-inactive'}">${f.active ? 'Active' : 'Inactive'}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="editFaq(${f.id})">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteFaq(${f.id})">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+            if (!allFaqs.length) {
+                document.getElementById('faqsTable').innerHTML = '<tr><td colspan="5" style="text-align:center;color:#999;padding:40px;">No FAQs yet. Click "Add FAQ" to create one.</td></tr>';
+            }
+        }
+
+        function escHtml(str) {
+            const d = document.createElement('div');
+            d.textContent = str || '';
+            return d.innerHTML;
+        }
+
+        function openModal(id) {
+            document.getElementById('modalTitle').textContent = id ? 'Edit FAQ' : 'Add FAQ';
+            if (!id) {
+                document.getElementById('faqId').value = '';
+                document.getElementById('faqForm').reset();
+                document.getElementById('faqActive').checked = true;
+            }
+            document.getElementById('modal').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('open');
+        }
+
+        function editFaq(id) {
+            const f = allFaqs.find(x => x.id === id);
+            if (!f) return;
+            document.getElementById('faqId').value = f.id;
+            document.getElementById('faqQuestion').value = f.question;
+            document.getElementById('faqAnswer').value = f.answer;
+            document.getElementById('faqOrder').value = f.sortOrder || 0;
+            document.getElementById('faqActive').checked = f.active;
+            openModal(id);
+        }
+
+        function deleteFaq(id) {
+            if (!confirm('Delete this FAQ?')) return;
+            apiFetch('/faqs/' + id, { method: 'DELETE' })
+                .then(r => { if (r.ok) loadFaqs(); })
+                .catch(showError);
+        }
+
+        document.getElementById('faqForm').onsubmit = function(e) {
+            e.preventDefault();
+            const id = document.getElementById('faqId').value;
+            const dto = {
+                question: document.getElementById('faqQuestion').value.trim(),
+                answer: document.getElementById('faqAnswer').value.trim(),
+                sortOrder: parseInt(document.getElementById('faqOrder').value) || 0,
+                active: document.getElementById('faqActive').checked
+            };
+            if (!dto.question || !dto.answer) { alert('Question and Answer are required.'); return; }
+            const url = id ? '/faqs/' + id : '/faqs';
+            const method = id ? 'PUT' : 'POST';
+            apiFetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dto)
+            })
+            .then(r => { if (!r.ok) throw new Error(); return r.json(); })
+            .then(() => { closeModal(); loadFaqs(); })
+            .catch(() => showError('Failed to save FAQ.'));
+        };
+
+        loadFaqs();
+    </script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hero Slides - Admin</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+    <nav class="admin-nav">
+        <a href="/admin/dashboard" class="admin-brand"><img src="/imgs/logo.jpg" alt="Nijro Travel" class="admin-logo"></a>
+        <a href="/admin/dashboard">Dashboard</a>
+        <a href="/admin/hero" class="active">Hero Slides</a>
+        <a href="/admin/locations">Locations</a>
+        <a href="/admin/packages">Packages</a>
+        <a href="/admin/bookings">Bookings</a>
+        <a href="/admin/faqs">FAQs</a>
+        <a href="/admin/reviews">Reviews</a>
+        <a href="/admin/social-feed">Social Feed</a>
+        <a href="/" target="_blank">View Site</a>
+        <a href="/admin/logout" class="logout">Logout</a>
+    </nav>
+    <main class="admin-main">
+        <h1>Hero Slides</h1>
+        <button class="btn btn-primary" onclick="openModal()">Add Hero Slide</button>
+        <div class="table-wrap" style="margin-top: 20px;">
+            <table>
+                <thead><tr><th>Title</th><th>Subtitle</th><th>Active</th><th>Actions</th></tr></thead>
+                <tbody id="slidesTable"></tbody>
+            </table>
+        </div>
+    </main>
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Add Hero Slide</h2>
+            <form id="slideForm">
+                <input type="hidden" id="slideId">
+                <div class="form-group"><label>Title</label><input type="text" id="slideTitle" required></div>
+                <div class="form-group"><label>Subtitle</label><input type="text" id="slideSubtitle"></div>
+                <div class="form-group"><label>Button Text</label><input type="text" id="slideBtnText"></div>
+                <div class="form-group"><label>Button Link</label><input type="text" id="slideBtnLink"></div>
+                <div class="form-group"><label>Location</label><select id="slideLocation"></select></div>
+                <div class="form-group"><label>Active</label><input type="checkbox" id="slideActive" checked></div>
+                <div class="form-group"><label>Image</label><input type="file" id="slideImage" accept="image/*"></div>
+                <div class="form-row">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="/js/config.js"></script>
+    <script src="/admin/admin.js"></script>
+    <script>
+        let locations = [];
+        apiFetch('/locations').then(r => r.json()).then(d => { locations = d; renderLocations(); });
+        loadSlides();
+
+        function renderLocations() {
+            const sel = document.getElementById('slideLocation');
+            sel.innerHTML = '<option value="">-- None --</option>' + locations.map(l => `<option value="${l.id}">${l.name}</option>`).join('');
+        }
+
+        function loadSlides() {
+            apiFetch('/hero').then(r => r.json()).then(data => {
+                const tbody = document.getElementById('slidesTable');
+                tbody.innerHTML = data.map(s => `
+                    <tr>
+                        <td>${s.title}</td>
+                        <td>${s.subtitle || '-'}</td>
+                        <td>${s.isActive ? 'Yes' : 'No'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" onclick="editSlide(${s.id})">Edit</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteSlide(${s.id})">Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
+            }).catch(() => { document.getElementById('slidesTable').innerHTML = '<tr><td colspan="4">Failed to load. <a href="/admin/login">Login</a></td></tr>'; });
+        }
+
+        function openModal(id) {
+            document.getElementById('modalTitle').textContent = id ? 'Edit Hero Slide' : 'Add Hero Slide';
+            document.getElementById('slideId').value = id || '';
+            document.getElementById('slideForm').reset();
+            if (!id) document.getElementById('slideActive').checked = true;
+            document.getElementById('modal').classList.add('open');
+        }
+
+        function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+        function editSlide(id) {
+            apiFetch('/hero').then(r => r.json()).then(slides => {
+                const s = slides.find(x => x.id === id);
+                if (!s) return;
+                document.getElementById('slideId').value = s.id;
+                document.getElementById('slideTitle').value = s.title;
+                document.getElementById('slideSubtitle').value = s.subtitle || '';
+                document.getElementById('slideBtnText').value = s.buttonText || '';
+                document.getElementById('slideBtnLink').value = s.buttonLink || '';
+                document.getElementById('slideLocation').value = s.locationId || '';
+                document.getElementById('slideActive').checked = s.isActive;
+                openModal(id);
+            });
+        }
+
+        function deleteSlide(id) {
+            if (!confirm('Delete this slide?')) return;
+            apiFetch('/hero/' + id, { method: 'DELETE' }).then(r => { if (r.ok) loadSlides(); }).catch(showError);
+        }
+
+        document.getElementById('slideForm').onsubmit = function(e) {
+            e.preventDefault();
+            const id = document.getElementById('slideId').value;
+            const dto = {
+                title: document.getElementById('slideTitle').value,
+                subtitle: document.getElementById('slideSubtitle').value,
+                buttonText: document.getElementById('slideBtnText').value,
+                buttonLink: document.getElementById('slideBtnLink').value,
+                locationId: document.getElementById('slideLocation').value ? parseInt(document.getElementById('slideLocation').value) : null,
+                isActive: document.getElementById('slideActive').checked
+            };
+            const fd = new FormData();
+            fd.append('slide', new Blob([JSON.stringify(dto)], { type: 'application/json' }));
+            const img = document.getElementById('slideImage').files[0];
+            if (img) fd.append('image', img);
+            const url = id ? '/hero/' + id : '/hero';
+            const method = id ? 'PUT' : 'POST';
+            apiFetch(url, { method, body: fd }).then(r => r.json()).then(() => { closeModal(); loadSlides(); }).catch(showError);
+        };
+    </script>
+</body>
+</html>

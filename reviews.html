@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Reviews - Nijo Travel & Tours</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --navy: #1a1f36; --brand: #c0392b; --gold: #f39c12;
+            --radius: 16px;
+        }
+        body { font-family: 'Raleway', sans-serif; background: linear-gradient(135deg, rgba(26,31,54,.96) 0%, rgba(44,62,80,.96) 100%); min-height: 100vh; color: #fff; overflow-x: hidden; }
+        a { color: var(--brand); text-decoration: none; font-weight: 600; }
+        a:hover { text-decoration: underline; }
+
+        .rev-header { background: rgba(0,0,0,.25); padding: 16px 24px; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(8px); }
+        .rev-header-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+        .rev-header a { color: #fff; font-size: 15px; }
+        .rev-header .brand img { height: 40px; vertical-align: middle; }
+
+        .rev-main { max-width: 1100px; margin: 0 auto; padding: 40px 24px 64px; }
+        .rev-main h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.75rem, 4vw, 2.5rem); margin-bottom: 8px; }
+        .rev-main .sub { color: rgba(255,255,255,.65); margin-bottom: 28px; font-size: 16px; }
+
+        .rev-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin-bottom: 32px; padding: 20px 24px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.1); border-radius: var(--radius); }
+        .rev-summary-stars { font-size: 22px; letter-spacing: 4px; }
+        .rev-summary-num { font-size: 24px; font-weight: 800; }
+        .rev-summary-count { font-size: 15px; opacity: .75; }
+
+        .rev-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+        .rev-card { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.1); border-radius: var(--radius); padding: 28px; backdrop-filter: blur(12px); transition: transform .3s; }
+        .rev-card:hover { transform: translateY(-4px); }
+        .rev-photo { height: 160px; border-radius: 12px; overflow: hidden; margin-bottom: 14px; background: rgba(0,0,0,.2); }
+        .rev-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .rev-stars { margin-bottom: 12px; font-size: 18px; }
+        .rev-text { color: rgba(255,255,255,.9); font-size: 15px; line-height: 1.6; margin: 0 0 18px; font-style: italic; }
+        .rev-author { border-top: 1px solid rgba(255,255,255,.1); padding-top: 14px; }
+        .rev-author strong { display: block; font-size: 15px; }
+        .rev-author span { color: rgba(255,255,255,.5); font-size: 13px; }
+
+        .rev-loading, .rev-error, .rev-empty { text-align: center; padding: 48px 24px; color: rgba(255,255,255,.55); font-size: 16px; }
+
+        .rev-footer { text-align: center; padding: 24px; color: rgba(255,255,255,.45); font-size: 14px; }
+
+        @media (max-width: 768px) {
+            .rev-grid { grid-template-columns: 1fr; }
+            .rev-main { padding: 28px 16px 48px; }
+            .rev-summary { padding: 16px; flex-direction: column; align-items: flex-start; }
+            .rev-header-inner { flex-wrap: wrap; gap: 12px; }
+        }
+        @media (max-width: 480px) {
+            .rev-card { padding: 20px 16px; }
+            .rev-photo { height: 140px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="rev-header">
+        <div class="rev-header-inner">
+            <a href="/" class="brand"><img src="/imgs/logo.jpg" alt="Nijro Travel & Tours"></a>
+            <a href="/#testimonials-section">&larr; Back to home</a>
+        </div>
+    </header>
+
+    <main class="rev-main">
+        <h1>Reviews &amp; Testimonials</h1>
+        <p class="sub">What travelers say about their Japan journeys with us.</p>
+        <div class="rev-summary" id="rev-summary" style="display:none"></div>
+        <div class="rev-grid" id="rev-grid"></div>
+        <div class="rev-loading" id="rev-loading">Loading reviews...</div>
+        <div class="rev-error" id="rev-error" style="display:none">Could not load reviews.</div>
+        <div class="rev-empty" id="rev-empty" style="display:none">No reviews yet.</div>
+    </main>
+
+    <footer class="rev-footer">&copy; Nijo Travel & Tours. All rights reserved.</footer>
+    <script src="/js/config.js"></script>
+    <script src="/js/seasonal-effect.js"></script>
+    <script>
+    (function () {
+        function esc(s) {
+            var d = document.createElement('div');
+            d.textContent = s == null ? '' : String(s);
+            return d.innerHTML;
+        }
+        function fmtDate(iso) {
+            if (!iso) return '';
+            try {
+                return new Date(iso).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+            } catch (e) { return ''; }
+        }
+        function stars(n) {
+            var s = '';
+            for (var i = 0; i < (n || 0); i++) s += '\u2B50';
+            return s;
+        }
+        function avgStars(avg) {
+            var r = Math.min(5, Math.max(0, Math.round(avg)));
+            var out = '';
+            for (var i = 0; i < 5; i++) out += i < r ? '\u2605' : '\u2606';
+            return out;
+        }
+
+        fetch((typeof window.apiUrl === 'function' ? window.apiUrl('/api/reviews/summary') : '/api/reviews/summary'))
+            .then(function (r) { if (!r.ok) return null; return r.json(); })
+            .then(function (s) {
+                var el = document.getElementById('rev-summary');
+                if (!el || !s || !s.count) return;
+                el.style.display = '';
+                var avg = typeof s.averageRating === 'number' ? s.averageRating : 0;
+                el.innerHTML = '<span class="rev-summary-stars">' + avgStars(avg) + '</span>' +
+                    '<span class="rev-summary-num">' + avg.toFixed(1) + '</span>' +
+                    '<span class="rev-summary-count">out of 5 · ' + s.count + ' review' + (s.count === 1 ? '' : 's') + '</span>';
+            })
+            .catch(function () {});
+
+        fetch((typeof window.apiUrl === 'function' ? window.apiUrl('/api/reviews') : '/api/reviews'))
+            .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
+            .then(function (reviews) {
+                document.getElementById('rev-loading').style.display = 'none';
+                var grid = document.getElementById('rev-grid');
+                if (!reviews || !reviews.length) {
+                    document.getElementById('rev-empty').style.display = 'block';
+                    return;
+                }
+                grid.innerHTML = reviews.map(function (r) {
+                    var meta = [r.country, fmtDate(r.createdAt)].filter(Boolean).join(' · ');
+                    var photo = r.imageUrl
+                        ? '<div class="rev-photo"><img src="' + esc(r.imageUrl) + '" alt="" loading="lazy"></div>'
+                        : '';
+                    return '<article class="rev-card">' + photo +
+                        '<div class="rev-stars">' + stars(r.rating) + '</div>' +
+                        '<p class="rev-text">"' + esc(r.text) + '"</p>' +
+                        '<div class="rev-author"><strong>' + esc(r.name) + '</strong><span>' + esc(meta) + '</span></div>' +
+                        '</article>';
+                }).join('');
+            })
+            .catch(function () {
+                document.getElementById('rev-loading').style.display = 'none';
+                document.getElementById('rev-error').style.display = 'block';
+            });
+    })();
+    </script>
+</body>
+</html>

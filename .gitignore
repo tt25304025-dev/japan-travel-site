@@ -1,0 +1,20 @@
+# Backend
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# Local overrides (optional)
+application-local.properties
+.env
+.env.local
+
+# Uploads created at runtime
+uploads/
+backend/uploads/
+
+# IDE
+.idea/
+*.iml
+
+# OS
+Thumbs.db
+.DS_Store

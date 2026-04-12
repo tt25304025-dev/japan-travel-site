@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Packages - Admin</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+    <style>
+        .gallery-existing { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; min-height: 0; }
+        .gal-item { position: relative; width: 88px; height: 88px; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; }
+        .gal-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .gal-item button { position: absolute; top: 2px; right: 2px; width: 24px; height: 24px; border: none; border-radius: 50%; background: rgba(0,0,0,.65); color: #fff; cursor: pointer; font-size: 16px; line-height: 1; padding: 0; }
+        .gal-item button:hover { background: #c0392b; }
+        .form-hint { font-size: 12px; color: #666; margin-top: 4px; }
+    </style>
+</head>
+<body>
+    <nav class="admin-nav">
+        <a href="/admin/dashboard" class="admin-brand"><img src="/imgs/logo.jpg" alt="Nijro Travel" class="admin-logo"></a>
+        <a href="/admin/dashboard">Dashboard</a>
+        <a href="/admin/hero">Hero Slides</a>
+        <a href="/admin/locations">Locations</a>
+        <a href="/admin/packages" class="active">Packages</a>
+        <a href="/admin/bookings">Bookings</a>
+        <a href="/admin/faqs">FAQs</a>
+        <a href="/admin/reviews">Reviews</a>
+        <a href="/admin/social-feed">Social Feed</a>
+        <a href="/" target="_blank">View Site</a>
+        <a href="/admin/logout" class="logout">Logout</a>
+    </nav>
+    <main class="admin-main">
+        <h1>Travel Packages</h1>
+        <button class="btn btn-primary" onclick="openModal()">Add Package</button>
+        <div class="table-wrap" style="margin-top: 20px;">
+            <table>
+                <thead><tr><th>Title</th><th>URL</th><th>Price</th><th>Duration</th><th>Location</th><th>Featured</th><th>Actions</th></tr></thead>
+                <tbody id="packagesTable"></tbody>
+            </table>
+        </div>
+    </main>
+    <div class="modal" id="modal">
+        <div class="modal-content" style="max-width:520px;">
+            <h2 id="modalTitle">Add Package</h2>
+            <form id="pkgForm">
+                <input type="hidden" id="pkgId">
+                <div class="form-group"><label>Title</label><input type="text" id="pkgTitle" required></div>
+                <div class="form-group"><label>Description</label><textarea id="pkgDesc" rows="3"></textarea></div>
+                <div class="form-group"><label>Price (USD)</label><input type="number" id="pkgPrice" step="0.01" required></div>
+                <div class="form-group"><label>Duration (days)</label><input type="number" id="pkgDuration" min="1"></div>
+                <div class="form-group"><label>Location</label><select id="pkgLocation"></select></div>
+                <div class="form-group"><label>What's Included</label><textarea id="pkgIncludes" rows="3" placeholder="Hotel, JR Pass, Transfers, Guided tours..."></textarea></div>
+                <div class="form-group"><label>Places Covered</label><textarea id="pkgPlaces" rows="2" placeholder="Tokyo, Kyoto, Osaka..."></textarea></div>
+                <div class="form-group"><label>Image URL</label><input type="text" id="pkgImageUrl" placeholder="Optional if you upload below"></div>
+                <div class="form-group"><label>Upload main image</label><input type="file" id="pkgImage" accept="image/*"></div>
+                <div class="form-group">
+                    <label>Extra images (optional)</label>
+                    <input type="file" id="pkgGallery" accept="image/*" multiple>
+                    <p class="form-hint">Add more photos for the public package page. Not required.</p>
+                    <div id="pkgGalleryExisting" class="gallery-existing"></div>
+                </div>
+                <div class="form-group"><label>Featured</label><input type="checkbox" id="pkgFeatured"></div>
+                <div class="form-row">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="/js/config.js"></script>
+    <script src="/admin/admin.js"></script>
+    <script>
+        let locations = [];
+        let keptGalleryUrls = [];
+
+        apiFetch('/locations').then(r => r.json()).then(d => { locations = d; renderLocSelect(); });
+        loadPackages();
+
+        function renderLocSelect() {
+            const sel = document.getElementById('pkgLocation');
+            sel.innerHTML = '<option value="">-- None --</option>' + locations.map(l => `<option value="${l.id}">${l.name}</option>`).join('');
+        }
+
+        function renderGalleryExisting() {
+            const wrap = document.getElementById('pkgGalleryExisting');
+            wrap.innerHTML = '';
+            keptGalleryUrls.forEach(function (url) {
+                const div = document.createElement('div');
+                div.className = 'gal-item';
+                const img = document.createElement('img');
+                img.src = url;
+                img.alt = '';
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.setAttribute('aria-label', 'Remove');
+                btn.textContent = '\u00d7';
+                btn.addEventListener('click', function () {
+                    keptGalleryUrls = keptGalleryUrls.filter(function (u) { return u !== url; });
+                    renderGalleryExisting();
+                });
+                div.appendChild(img);
+                div.appendChild(btn);
+                wrap.appendChild(div);
+            });
+        }
+
+        function loadPackages() {
+            apiFetch('/packages').then(r => r.json()).then(data => {
+                document.getElementById('packagesTable').innerHTML = data.map(p => {
+                    const slug = p.slug || '';
+                    const pageLink = slug ? `<a href="/package/${encodeURIComponent(slug)}" target="_blank" rel="noopener">/${slug}</a>` : '—';
+                    return `
+                    <tr>
+                        <td>${escapeHtml(p.title)}</td>
+                        <td>${pageLink}</td>
+                        <td>$${p.price}</td>
+                        <td>${p.durationDays || '-'} days</td>
+                        <td>${escapeHtml(p.locationName || '-')}</td>
+                        <td>${p.featured ? 'Yes' : 'No'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" onclick="editPkg(${p.id})">Edit</button>
+                            <button class="btn btn-sm btn-danger" onclick="deletePkg(${p.id})">Delete</button>
+                        </td>
+                    </tr>`;
+                }).join('');
+            }).catch(() => { document.getElementById('packagesTable').innerHTML = '<tr><td colspan="7">Failed to load.</td></tr>'; });
+        }
+
+        function escapeHtml(s) {
+            if (s == null) return '';
+            const d = document.createElement('div');
+            d.textContent = s;
+            return d.innerHTML;
+        }
+
+        function openModal() {
+            document.getElementById('modalTitle').textContent = 'Add Package';
+            document.getElementById('pkgForm').reset();
+            document.getElementById('pkgId').value = '';
+            keptGalleryUrls = [];
+            document.getElementById('pkgGallery').value = '';
+            renderGalleryExisting();
+            document.getElementById('modal').classList.add('open');
+        }
+
+        function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+        function editPkg(id) {
+            apiFetch('/packages').then(r => r.json()).then(pkgs => {
+                const p = pkgs.find(x => x.id === id);
+                if (!p) return;
+                document.getElementById('modalTitle').textContent = 'Edit Package';
+                document.getElementById('pkgId').value = p.id;
+                document.getElementById('pkgTitle').value = p.title;
+                document.getElementById('pkgDesc').value = p.description || '';
+                document.getElementById('pkgPrice').value = p.price;
+                document.getElementById('pkgDuration').value = p.durationDays || '';
+                document.getElementById('pkgLocation').value = p.locationId || '';
+                document.getElementById('pkgIncludes').value = p.includes || '';
+                document.getElementById('pkgPlaces').value = p.placesCovered || '';
+                document.getElementById('pkgImageUrl').value = p.imageUrl || '';
+                document.getElementById('pkgFeatured').checked = p.featured || false;
+                document.getElementById('pkgImage').value = '';
+                document.getElementById('pkgGallery').value = '';
+                keptGalleryUrls = Array.isArray(p.galleryImageUrls) ? p.galleryImageUrls.slice() : [];
+                renderGalleryExisting();
+                document.getElementById('modal').classList.add('open');
+            });
+        }
+
+        function deletePkg(id) {
+            if (!confirm('Delete this package? Its public page will no longer be available.')) return;
+            apiFetch('/packages/' + id, { method: 'DELETE' }).then(r => { if (r.ok) loadPackages(); }).catch(showError);
+        }
+
+        document.getElementById('pkgForm').onsubmit = function(e) {
+            e.preventDefault();
+            const id = document.getElementById('pkgId').value;
+            const dto = {
+                title: document.getElementById('pkgTitle').value,
+                description: document.getElementById('pkgDesc').value,
+                price: parseFloat(document.getElementById('pkgPrice').value),
+                durationDays: parseInt(document.getElementById('pkgDuration').value, 10) || null,
+                locationId: document.getElementById('pkgLocation').value ? parseInt(document.getElementById('pkgLocation').value, 10) : null,
+                includes: document.getElementById('pkgIncludes').value || null,
+                placesCovered: document.getElementById('pkgPlaces').value || null,
+                imageUrl: document.getElementById('pkgImageUrl').value || null,
+                featured: document.getElementById('pkgFeatured').checked
+            };
+            if (id) {
+                dto.galleryImageUrls = keptGalleryUrls;
+            }
+            const fd = new FormData();
+            fd.append('package', new Blob([JSON.stringify(dto)], { type: 'application/json' }));
+            const img = document.getElementById('pkgImage').files[0];
+            if (img) fd.append('image', img);
+            const galInput = document.getElementById('pkgGallery');
+            for (let i = 0; i < galInput.files.length; i++) {
+                fd.append('galleryImages', galInput.files[i]);
+            }
+            const url = id ? '/packages/' + id : '/packages';
+            apiFetch(url, { method: id ? 'PUT' : 'POST', body: fd }).then(r => r.json()).then(() => { closeModal(); loadPackages(); }).catch(showError);
+        };
+    </script>
+</body>
+</html>

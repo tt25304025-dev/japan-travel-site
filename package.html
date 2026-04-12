@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Package - Nijo Travel & Tours</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --navy: #1a1f36; --brand: #c0392b; --gold: #f39c12; --muted: #64748b;
+            --light: #f8fafc; --card: #fff; --radius: 16px;
+        }
+        body { font-family: 'Raleway', sans-serif; background: var(--light); color: #333; line-height: 1.7; overflow-x: hidden; }
+        a { color: var(--brand); text-decoration: none; font-weight: 600; }
+        a:hover { text-decoration: underline; }
+
+        .pkg-header { background: var(--navy); padding: 16px 24px; position: sticky; top: 0; z-index: 100; }
+        .pkg-header-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+        .pkg-header a { color: #fff; font-weight: 600; font-size: 15px; }
+        .pkg-header .brand { font-family: 'Playfair Display', serif; font-size: 20px; }
+
+        .pkg-hero { position: relative; height: 52vh; min-height: 320px; background-size: cover; background-position: center; }
+        .pkg-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.75) 0%, rgba(0,0,0,.15) 55%); display: flex; align-items: flex-end; padding: 36px 24px; }
+        .pkg-hero-text { max-width: 1100px; margin: 0 auto; width: 100%; color: #fff; }
+        .pkg-hero-text .tag-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+        .pkg-tag { font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; background: rgba(255,255,255,.2); padding: 6px 14px; border-radius: 50px; backdrop-filter: blur(6px); }
+        .pkg-tag.featured { background: var(--gold); color: #1a1f36; }
+        .pkg-hero-text h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.75rem, 4.5vw, 3rem); margin-bottom: 6px; line-height: 1.15; }
+        .pkg-hero-text .loc-line { font-size: 17px; opacity: .9; font-weight: 600; }
+
+        .pkg-content { max-width: 1100px; margin: 0 auto; padding: 40px 24px 56px; }
+        .back-link { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 24px; font-weight: 600; font-size: 15px; }
+
+        .pkg-lead { font-size: 18px; color: #475569; margin-bottom: 28px; line-height: 1.75; white-space: pre-line; }
+
+        .info-bar { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 36px; }
+        .info-chip { background: var(--card); border-radius: 12px; padding: 16px 22px; box-shadow: 0 2px 10px rgba(0,0,0,.06); flex: 1; min-width: 160px; }
+        .info-chip .ic-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); font-weight: 700; margin-bottom: 4px; }
+        .info-chip .ic-value { font-size: 18px; font-weight: 800; color: var(--brand); }
+        .info-chip .ic-value.ic-muted { color: var(--navy); font-size: 16px; font-weight: 600; }
+
+        .pkg-section { margin-bottom: 36px; }
+        .pkg-section h2 { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--navy); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; }
+        .pkg-section p, .pkg-section li { font-size: 16px; color: #444; }
+        .pkg-section .box { background: var(--card); border-radius: var(--radius); padding: 20px 22px; box-shadow: 0 2px 10px rgba(0,0,0,.05); border-left: 4px solid #22c55e; }
+
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+        .gallery-grid img { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; cursor: pointer; transition: transform .2s, box-shadow .2s; }
+        .gallery-grid img:hover { transform: scale(1.02); box-shadow: 0 8px 24px rgba(0,0,0,.12); }
+
+        .cta-row { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin-top: 32px; padding-top: 28px; border-top: 1px solid #e2e8f0; }
+        .btn-primary { display: inline-flex; align-items: center; justify-content: center; padding: 14px 28px; background: var(--brand); color: #fff !important; border-radius: 50px; font-weight: 700; font-size: 15px; border: none; cursor: pointer; text-decoration: none !important; transition: background .2s, transform .2s; }
+        .btn-primary:hover { background: #a93226; transform: translateY(-1px); text-decoration: none !important; }
+        .btn-outline { display: inline-flex; align-items: center; padding: 14px 24px; border: 2px solid var(--navy); color: var(--navy) !important; border-radius: 50px; font-weight: 700; font-size: 15px; text-decoration: none !important; }
+        .btn-outline:hover { background: var(--navy); color: #fff !important; text-decoration: none !important; }
+
+        .pkg-loading { text-align: center; padding: 80px 24px; font-size: 18px; color: var(--muted); }
+
+        .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.92); z-index: 1000; align-items: center; justify-content: center; cursor: pointer; }
+        .lightbox.open { display: flex; }
+        .lightbox img { max-width: 92vw; max-height: 90vh; border-radius: 8px; }
+        .lightbox-close { position: absolute; top: 20px; right: 24px; color: #fff; font-size: 32px; cursor: pointer; background: none; border: none; }
+
+        .pkg-footer { background: var(--navy); color: rgba(255,255,255,.65); text-align: center; padding: 24px; font-size: 14px; }
+
+        @media (max-width: 768px) {
+            .pkg-hero { height: 42vh; min-height: 260px; }
+            .pkg-hero-overlay { padding: 28px 16px; }
+            .pkg-content { padding: 32px 16px 48px; }
+            .info-bar { flex-direction: column; }
+            .info-chip { min-width: 0; width: 100%; }
+            .gallery-grid img { height: 140px; }
+            .cta-row { flex-direction: column; align-items: stretch; }
+            .cta-row .btn-primary, .cta-row .btn-outline { width: 100%; justify-content: center; text-align: center; }
+            .lightbox-close { top: 12px; right: 12px; }
+        }
+        @media (max-width: 480px) {
+            .pkg-header-inner { gap: 12px; }
+            .pkg-hero-text h1 { font-size: 1.5rem; }
+            .pkg-lead { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="pkg-header">
+        <div class="pkg-header-inner">
+            <a href="/" class="brand"><img src="/imgs/logo.jpg" alt="Nijro Travel & Tours" style="height:40px;"></a>
+            <a href="/#packages">&larr; All packages</a>
+        </div>
+    </header>
+
+    <div id="pkg-hero" class="pkg-hero" style="background-image:url('')">
+        <div class="pkg-hero-overlay">
+            <div class="pkg-hero-text">
+                <div class="tag-row" id="pkg-tags"></div>
+                <h1 id="pkg-title"></h1>
+                <p class="loc-line" id="pkg-location"></p>
+            </div>
+        </div>
+    </div>
+
+    <main class="pkg-content" id="pkg-content" style="display:none">
+        <a href="/#packages" class="back-link">&larr; Back to all packages</a>
+
+        <p class="pkg-lead" id="pkg-desc"></p>
+
+        <div class="info-bar" id="pkg-info-bar"></div>
+
+        <div class="pkg-section" id="sec-includes" style="display:none">
+            <h2>What&rsquo;s included</h2>
+            <div class="box" id="pkg-includes"></div>
+        </div>
+
+        <div class="pkg-section" id="sec-places" style="display:none">
+            <h2>Places covered</h2>
+            <div class="box" id="pkg-places" style="border-left-color:#c0392b;"></div>
+        </div>
+
+        <div class="pkg-section" id="sec-gallery" style="display:none">
+            <h2>More photos</h2>
+            <div class="gallery-grid" id="pkg-gallery"></div>
+        </div>
+
+        <div class="cta-row">
+            <a href="#" class="btn-primary" id="pkg-book-btn">Book this package</a>
+            <a href="/#packages" class="btn-outline">Compare packages</a>
+        </div>
+    </main>
+
+    <div class="pkg-loading" id="pkg-loading">Loading package&hellip;</div>
+
+    <div class="lightbox" id="lightbox">
+        <button type="button" class="lightbox-close" id="lb-close" aria-label="Close">&times;</button>
+        <img id="lb-img" src="" alt="">
+    </div>
+
+    <footer class="pkg-footer">&copy; Nijo Travel & Tours. All rights reserved.</footer>
+    <script src="/js/config.js"></script>
+    <script src="/js/seasonal-effect.js"></script>
+    <script>
+    (function () {
+        var pathParts = window.location.pathname.split('/').filter(Boolean);
+        var slug = pathParts[pathParts.length - 1];
+        if (!slug) {
+            document.getElementById('pkg-loading').textContent = 'Package not found.';
+            return;
+        }
+
+        fetch((typeof window.apiUrl === 'function' ? window.apiUrl('/api/packages/slug/' + encodeURIComponent(slug)) : '/api/packages/slug/' + encodeURIComponent(slug)))
+            .then(function (r) {
+                if (r.status === 404) throw new Error('notfound');
+                if (!r.ok) throw new Error('fail');
+                return r.json();
+            })
+            .then(render)
+            .catch(function (err) {
+                document.getElementById('pkg-loading').textContent =
+                    err && err.message === 'notfound' ? 'This package is no longer available.' : 'Could not load package.';
+            });
+
+        function esc(s) {
+            var d = document.createElement('div');
+            d.textContent = s || '';
+            return d.innerHTML;
+        }
+
+        function render(p) {
+            document.getElementById('pkg-loading').style.display = 'none';
+            document.getElementById('pkg-content').style.display = '';
+
+            document.title = (p.title || 'Package') + ' - Nijo Travel & Tours';
+
+            var heroImg = p.imageUrl || 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1200&q=80';
+            document.getElementById('pkg-hero').style.backgroundImage = 'url(' + heroImg + ')';
+
+            document.getElementById('pkg-title').textContent = p.title || '';
+            var dur = p.durationDays != null ? p.durationDays + '-day journey' : '';
+            document.getElementById('pkg-location').textContent =
+                (p.locationName ? p.locationName + (dur ? ' · ' + dur : '') : dur) || '';
+
+            var tags = document.getElementById('pkg-tags');
+            tags.innerHTML = '';
+            if (p.durationDays != null) {
+                var dEl = document.createElement('span');
+                dEl.className = 'pkg-tag';
+                dEl.textContent = p.durationDays + ' days';
+                tags.appendChild(dEl);
+            }
+            if (p.featured) {
+                var fEl = document.createElement('span');
+                fEl.className = 'pkg-tag featured';
+                fEl.textContent = 'Featured';
+                tags.appendChild(fEl);
+            }
+
+            document.getElementById('pkg-desc').innerHTML = esc(p.description || '').replace(/\n/g, '<br>');
+
+            var bar = document.getElementById('pkg-info-bar');
+            var chips = '';
+            if (p.price != null) {
+                chips += '<div class="info-chip"><div class="ic-label">From</div><div class="ic-value">'
+                    + new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(p.price)
+                    + ' <span style="font-size:13px;font-weight:600;color:#64748b">/ person</span></div></div>';
+            }
+            if (p.durationDays != null) {
+                chips += '<div class="info-chip"><div class="ic-label">Duration</div><div class="ic-value ic-muted">'
+                    + p.durationDays + ' days</div></div>';
+            }
+            if (p.locationName) {
+                chips += '<div class="info-chip"><div class="ic-label">Location</div><div class="ic-value ic-muted">'
+                    + esc(p.locationName) + '</div></div>';
+            }
+            bar.innerHTML = chips;
+
+            if (p.includes) {
+                document.getElementById('sec-includes').style.display = '';
+                document.getElementById('pkg-includes').innerHTML = '<p>' + esc(p.includes).replace(/\n/g, '<br>') + '</p>';
+            }
+            if (p.placesCovered) {
+                document.getElementById('sec-places').style.display = '';
+                document.getElementById('pkg-places').innerHTML = '<p>' + esc(p.placesCovered).replace(/\n/g, '<br>') + '</p>';
+            }
+
+            var gallery = p.galleryImageUrls && p.galleryImageUrls.length ? p.galleryImageUrls : [];
+            if (gallery.length) {
+                document.getElementById('sec-gallery').style.display = '';
+                var gal = document.getElementById('pkg-gallery');
+                gal.innerHTML = '';
+                gallery.forEach(function (url) {
+                    if (!url) return;
+                    var img = document.createElement('img');
+                    img.src = url;
+                    img.alt = '';
+                    img.addEventListener('click', function () { openPkgLightbox(url); });
+                    gal.appendChild(img);
+                });
+            }
+
+            var bookBtn = document.getElementById('pkg-book-btn');
+            bookBtn.href = '/#inquiry-section';
+            bookBtn.addEventListener('click', function (e) {
+                if (p.id != null) {
+                    try { sessionStorage.setItem('preselectPackageId', String(p.id)); } catch (err) {}
+                }
+            });
+        }
+
+        window.openPkgLightbox = function (src) {
+            document.getElementById('lb-img').src = src;
+            document.getElementById('lightbox').classList.add('open');
+        };
+        document.getElementById('lb-close').addEventListener('click', function () {
+            document.getElementById('lightbox').classList.remove('open');
+        });
+        document.getElementById('lightbox').addEventListener('click', function (e) {
+            if (e.target === this) this.classList.remove('open');
+        });
+    })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Locations - Admin</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+    <style>
+        .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+        .badge-active { background: #d4edda; color: #155724; }
+        .badge-inactive { background: #f8d7da; color: #721c24; }
+        .loc-thumb { width: 60px; height: 40px; object-fit: cover; border-radius: 4px; }
+        .modal-content { max-width: 700px; }
+        .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .gallery-preview { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+        .gallery-preview img { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid #ddd; }
+        .gallery-preview .remove-img { position: relative; }
+        .gallery-preview .remove-img button { position: absolute; top: -6px; right: -6px; background: #c0392b; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; cursor: pointer; line-height: 1; }
+        .section-divider { border: none; border-top: 1px solid #eee; margin: 16px 0 12px; }
+        .section-label { font-weight: 700; font-size: 14px; color: #333; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+    </style>
+</head>
+<body>
+    <nav class="admin-nav">
+        <a href="/admin/dashboard" class="admin-brand"><img src="/imgs/logo.jpg" alt="Nijro Travel" class="admin-logo"></a>
+        <a href="/admin/dashboard">Dashboard</a>
+        <a href="/admin/hero">Hero Slides</a>
+        <a href="/admin/locations" class="active">Locations</a>
+        <a href="/admin/packages">Packages</a>
+        <a href="/admin/bookings">Bookings</a>
+        <a href="/admin/faqs">FAQs</a>
+        <a href="/admin/reviews">Reviews</a>
+        <a href="/admin/social-feed">Social Feed</a>
+        <a href="/" target="_blank">View Site</a>
+        <a href="/admin/logout" class="logout">Logout</a>
+    </nav>
+    <main class="admin-main">
+        <h1>Locations</h1>
+        <p style="color:#666; margin-bottom: 16px;">Manage locations displayed on the website. Each location has its own detail page.</p>
+        <button class="btn btn-primary" onclick="openModal()">Add Location</button>
+        <div class="table-wrap" style="margin-top: 20px;">
+            <table>
+                <thead><tr><th>Image</th><th>Name</th><th>City</th><th>Order</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="locationsTable"></tbody>
+            </table>
+        </div>
+    </main>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Add Location</h2>
+            <form id="locForm">
+                <input type="hidden" id="locId">
+
+                <div class="section-label">Basic Information</div>
+                <div class="form-row-2">
+                    <div class="form-group"><label>Place Name *</label><input type="text" id="locName" required></div>
+                    <div class="form-group"><label>City *</label><input type="text" id="locCity" required></div>
+                </div>
+                <div class="form-group"><label>Short Description</label><textarea id="locDesc" rows="2" placeholder="Brief one-liner shown on cards"></textarea></div>
+                <div class="form-group"><label>Full Description</label><textarea id="locFullDesc" rows="5" placeholder="Detailed description for the location detail page"></textarea></div>
+
+                <hr class="section-divider">
+                <div class="section-label">Media</div>
+                <div class="form-group"><label>Main Image URL</label><input type="text" id="locImageUrl" placeholder="Or upload below"></div>
+                <div class="form-group"><label>Upload Main Image</label><input type="file" id="locImage" accept="image/*"></div>
+                <div class="form-group"><label>Video URL (YouTube / direct)</label><input type="text" id="locVideoUrl" placeholder="https://www.youtube.com/embed/..."></div>
+                <div class="form-group">
+                    <label>Gallery Images</label>
+                    <input type="file" id="locGalleryFiles" accept="image/*" multiple>
+                    <div class="gallery-preview" id="galleryPreview"></div>
+                </div>
+
+                <hr class="section-divider">
+                <div class="section-label">Details</div>
+                <div class="form-group"><label>Highlights (comma-separated)</label><textarea id="locHighlights" rows="2" placeholder="Cherry blossoms, Temple architecture, Mountain views"></textarea></div>
+                <div class="form-row-2">
+                    <div class="form-group"><label>Opening Hours</label><input type="text" id="locHours" placeholder="9:00 AM - 5:00 PM"></div>
+                    <div class="form-group"><label>Closed Days</label><input type="text" id="locClosed" placeholder="Mondays, Dec 31-Jan 3"></div>
+                </div>
+                <div class="form-row-2">
+                    <div class="form-group"><label>Admission Fee</label><input type="text" id="locFee" placeholder="¥500 adults / ¥200 children"></div>
+                    <div class="form-group"><label>Address</label><input type="text" id="locAddress" placeholder="Full address"></div>
+                </div>
+                <div class="form-row-2">
+                    <div class="form-group"><label>Latitude</label><input type="number" id="locLat" step="any" placeholder="35.0116"></div>
+                    <div class="form-group"><label>Longitude</label><input type="number" id="locLng" step="any" placeholder="135.7681"></div>
+                </div>
+                <div class="form-group"><label>Access / How to Get There</label><textarea id="locAccess" rows="2" placeholder="5 min walk from Inari Station (JR Nara Line)..."></textarea></div>
+                <div class="form-group"><label>Nearby Places (comma-separated)</label><textarea id="locNearby" rows="2" placeholder="Tofuku-ji Temple, Fushimi Sake District"></textarea></div>
+                <div class="form-group"><label>Additional Custom Details</label><textarea id="locCustom" rows="3" placeholder="Any extra info (tips, warnings, seasonal notes...)"></textarea></div>
+
+                <hr class="section-divider">
+                <div class="section-label">Settings</div>
+                <div class="form-row-2">
+                    <div class="form-group"><label>Sort Order</label><input type="number" id="locOrder" min="0" value="0"></div>
+                    <div class="form-group" style="display:flex;gap:20px;align-items:end;padding-bottom:10px;">
+                        <label><input type="checkbox" id="locActive" checked> Active</label>
+                        <label><input type="checkbox" id="locFeatured"> Featured Hero</label>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/config.js"></script>
+    <script src="/admin/admin.js"></script>
+    <script>
+        let allLocations = [];
+        let currentGallery = [];
+
+        function loadLocations() {
+            apiFetch('/locations').then(r => r.json()).then(data => {
+                allLocations = data;
+                renderTable();
+            }).catch(() => {
+                document.getElementById('locationsTable').innerHTML = '<tr><td colspan="6">Failed to load.</td></tr>';
+            });
+        }
+
+        function renderTable() {
+            document.getElementById('locationsTable').innerHTML = allLocations.map(l => `
+                <tr>
+                    <td>${l.imageUrl ? `<img class="loc-thumb" src="${l.imageUrl}" alt="">` : '-'}</td>
+                    <td><strong>${esc(l.name)}</strong><br><small style="color:#888">${esc(l.description || '').substring(0, 60)}</small></td>
+                    <td>${esc(l.city)}</td>
+                    <td>${l.sortOrder || 0}</td>
+                    <td><span class="badge ${l.active !== false ? 'badge-active' : 'badge-inactive'}">${l.active !== false ? 'Active' : 'Inactive'}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="editLoc(${l.id})">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteLoc(${l.id})">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+            if (!allLocations.length) {
+                document.getElementById('locationsTable').innerHTML = '<tr><td colspan="6" style="text-align:center;color:#999;padding:40px;">No locations yet.</td></tr>';
+            }
+        }
+
+        function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+
+        function openModal(id) {
+            document.getElementById('modalTitle').textContent = id ? 'Edit Location' : 'Add Location';
+            if (!id) {
+                document.getElementById('locId').value = '';
+                document.getElementById('locForm').reset();
+                document.getElementById('locActive').checked = true;
+                currentGallery = [];
+                renderGalleryPreview();
+            }
+            document.getElementById('modal').classList.add('open');
+        }
+
+        function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+        function editLoc(id) {
+            const l = allLocations.find(x => x.id === id);
+            if (!l) return;
+            document.getElementById('locId').value = l.id;
+            document.getElementById('locName').value = l.name || '';
+            document.getElementById('locCity').value = l.city || '';
+            document.getElementById('locDesc').value = l.description || '';
+            document.getElementById('locFullDesc').value = l.fullDescription || '';
+            document.getElementById('locImageUrl').value = l.imageUrl || '';
+            document.getElementById('locVideoUrl').value = l.videoUrl || '';
+            document.getElementById('locHighlights').value = (l.highlights || []).join(', ');
+            document.getElementById('locHours').value = l.openingHours || '';
+            document.getElementById('locClosed').value = l.closedDays || '';
+            document.getElementById('locFee').value = l.admissionFee || '';
+            document.getElementById('locAddress').value = l.address || '';
+            document.getElementById('locLat').value = l.latitude || '';
+            document.getElementById('locLng').value = l.longitude || '';
+            document.getElementById('locAccess').value = l.accessInfo || '';
+            document.getElementById('locNearby').value = (l.nearbyPlaces || []).join(', ');
+            document.getElementById('locCustom').value = l.customDetails || '';
+            document.getElementById('locOrder').value = l.sortOrder || 0;
+            document.getElementById('locActive').checked = l.active !== false;
+            document.getElementById('locFeatured').checked = l.featuredHero || false;
+            currentGallery = l.galleryImages || [];
+            renderGalleryPreview();
+            openModal(id);
+        }
+
+        function renderGalleryPreview() {
+            const el = document.getElementById('galleryPreview');
+            el.innerHTML = currentGallery.map((url, i) => `
+                <div class="remove-img">
+                    <img src="${url}" alt="">
+                    <button type="button" onclick="removeGalleryImg(${i})">&times;</button>
+                </div>
+            `).join('');
+        }
+
+        function removeGalleryImg(idx) {
+            currentGallery.splice(idx, 1);
+            renderGalleryPreview();
+        }
+
+        function deleteLoc(id) {
+            if (!confirm('Delete this location?')) return;
+            apiFetch('/locations/' + id, { method: 'DELETE' }).then(r => { if (r.ok) loadLocations(); }).catch(showError);
+        }
+
+        function splitField(val) {
+            if (!val || !val.trim()) return [];
+            return val.split(',').map(s => s.trim()).filter(s => s);
+        }
+
+        document.getElementById('locForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const id = document.getElementById('locId').value;
+            const dto = {
+                name: document.getElementById('locName').value,
+                city: document.getElementById('locCity').value,
+                description: document.getElementById('locDesc').value || null,
+                fullDescription: document.getElementById('locFullDesc').value || null,
+                imageUrl: document.getElementById('locImageUrl').value || null,
+                galleryImages: currentGallery,
+                videoUrl: document.getElementById('locVideoUrl').value || null,
+                highlights: splitField(document.getElementById('locHighlights').value),
+                openingHours: document.getElementById('locHours').value || null,
+                closedDays: document.getElementById('locClosed').value || null,
+                admissionFee: document.getElementById('locFee').value || null,
+                address: document.getElementById('locAddress').value || null,
+                latitude: parseFloat(document.getElementById('locLat').value) || null,
+                longitude: parseFloat(document.getElementById('locLng').value) || null,
+                accessInfo: document.getElementById('locAccess').value || null,
+                nearbyPlaces: splitField(document.getElementById('locNearby').value),
+                customDetails: document.getElementById('locCustom').value || null,
+                sortOrder: parseInt(document.getElementById('locOrder').value) || 0,
+                active: document.getElementById('locActive').checked,
+                featuredHero: document.getElementById('locFeatured').checked
+            };
+
+            const fd = new FormData();
+            fd.append('location', new Blob([JSON.stringify(dto)], { type: 'application/json' }));
+            const mainImg = document.getElementById('locImage').files[0];
+            if (mainImg) fd.append('image', mainImg);
+
+            const url = id ? '/locations/' + id : '/locations';
+            const method = id ? 'PUT' : 'POST';
+
+            try {
+                const res = await apiFetch(url, { method, body: fd });
+                const saved = await res.json();
+
+                const galleryFiles = document.getElementById('locGalleryFiles').files;
+                if (galleryFiles.length > 0) {
+                    const gfd = new FormData();
+                    for (let i = 0; i < galleryFiles.length; i++) gfd.append('images', galleryFiles[i]);
+                    await apiFetch('/locations/' + saved.id + '/gallery', { method: 'POST', body: gfd });
+                }
+
+                closeModal();
+                loadLocations();
+            } catch (err) {
+                showError('Failed to save location.');
+            }
+        };
+
+        loadLocations();
+    </script>
+</body>
+</html>

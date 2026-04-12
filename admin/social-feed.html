@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Feed - Admin</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+    <style>
+        .thumb { width: 56px; height: 56px; border-radius: 10px; object-fit: cover; border: 1px solid #eee; background: #f1f5f9; }
+        .tag-pill { display:inline-block; padding: 3px 8px; border-radius: 999px; background:#f1f5f9; color:#334155; font-weight:700; font-size:12px; margin: 2px 6px 2px 0; }
+        .tags-input { font-size: 13px; }
+        .file-row { display:flex; gap:10px; align-items:center; padding:10px 0; border-bottom: 1px solid #f1f5f9; }
+        .file-row:last-child { border-bottom: 0; }
+        .file-name { flex: 1; color:#334155; font-size: 13px; }
+        .file-row input { flex: 1.2; }
+        .help { color:#64748b; font-size: 13px; line-height: 1.5; margin-top: 8px; }
+    </style>
+</head>
+<body>
+<nav class="admin-nav">
+    <a href="/admin/dashboard" class="admin-brand"><img src="/imgs/logo.jpg" alt="Nijro Travel" class="admin-logo"></a>
+    <a href="/admin/dashboard">Dashboard</a>
+    <a href="/admin/hero">Hero Slides</a>
+    <a href="/admin/locations">Locations</a>
+    <a href="/admin/packages">Packages</a>
+    <a href="/admin/bookings">Bookings</a>
+    <a href="/admin/faqs">FAQs</a>
+    <a href="/admin/reviews">Reviews</a>
+    <a href="/admin/social-feed" class="active">Social Feed</a>
+    <a href="/" target="_blank">View Site</a>
+    <a href="/admin/logout" class="logout">Logout</a>
+</nav>
+
+<main class="admin-main">
+    <h1>Social Feed (#TravelJapan)</h1>
+    <button class="btn btn-primary" onclick="openModal()">Upload Photos</button>
+    <p class="help">Uploads appear automatically on the homepage Social Feed grid. Add hashtags per photo (comma or space separated, with or without <strong>#</strong>).</p>
+
+    <div class="table-wrap" style="margin-top: 18px;">
+        <table>
+            <thead>
+            <tr>
+                <th>Photo</th>
+                <th>Hashtags</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="photosTable"></tbody>
+        </table>
+    </div>
+</main>
+
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <h2>Upload Social Feed Photos</h2>
+        <form id="uploadForm">
+            <div class="form-group">
+                <label>Photos (multiple)</label>
+                <input type="file" id="images" accept="image/*" multiple required>
+            </div>
+            <div class="form-group">
+                <label>Hashtags per photo</label>
+                <div id="tagsList"></div>
+                <div class="help">Example: <strong>#tokyo #food night</strong></div>
+            </div>
+            <div class="form-row">
+                <button type="submit" class="btn btn-primary">Upload</button>
+                <button type="button" class="btn" onclick="closeModal()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/js/config.js"></script>
+<script src="/admin/admin.js"></script>
+<script>
+    loadPhotos();
+
+    function fmtTags(tags) {
+        if (!tags || !tags.length) return '-';
+        return tags.map(t => `<span class="tag-pill">#${escapeHtml(t)}</span>`).join('');
+    }
+
+    function escapeHtml(s) {
+        return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+
+    function loadPhotos() {
+        apiFetch('/social-feed').then(r => r.json()).then(items => {
+            const tbody = document.getElementById('photosTable');
+            if (!Array.isArray(items) || !items.length) {
+                tbody.innerHTML = '<tr><td colspan="4" style="color:#64748b;">No photos yet.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = items.map(p => `
+                <tr>
+                    <td><img class="thumb" src="${p.imageUrl}" alt="photo"></td>
+                    <td>
+                        <div style="margin-bottom:8px;">${fmtTags(p.tags)}</div>
+                        <input class="tags-input" type="text" id="tags-${p.id}" value="${(p.tags || []).map(t => '#' + t).join(' ')}" placeholder="#tokyo #food">
+                    </td>
+                    <td>${p.createdAt ? new Date(p.createdAt).toLocaleString() : '-'}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="saveTags(${p.id})">Save Tags</button>
+                        <button class="btn btn-sm btn-danger" onclick="deletePhoto(${p.id})">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }).catch(() => {
+            document.getElementById('photosTable').innerHTML = '<tr><td colspan="4">Failed to load. <a href="/admin/login">Login</a></td></tr>';
+        });
+    }
+
+    function saveTags(id) {
+        const raw = document.getElementById('tags-' + id).value || '';
+        apiFetch('/social-feed/' + id, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tagsRaw: raw })
+        }).then(r => {
+            if (!r.ok) throw new Error('failed');
+            return r.json();
+        }).then(() => loadPhotos()).catch(showError);
+    }
+
+    function deletePhoto(id) {
+        if (!confirm('Delete this photo?')) return;
+        apiFetch('/social-feed/' + id, { method: 'DELETE' }).then(r => {
+            if (r.ok) loadPhotos();
+        }).catch(showError);
+    }
+
+    function openModal() {
+        document.getElementById('uploadForm').reset();
+        document.getElementById('tagsList').innerHTML = '';
+        document.getElementById('modal').classList.add('open');
+    }
+
+    function closeModal() {
+        document.getElementById('modal').classList.remove('open');
+    }
+
+    document.getElementById('images').addEventListener('change', (e) => {
+        const files = Array.from(e.target.files || []);
+        const wrap = document.getElementById('tagsList');
+        wrap.innerHTML = files.map((f, idx) => `
+            <div class="file-row">
+                <div class="file-name">${escapeHtml(f.name)}</div>
+                <input type="text" data-idx="${idx}" placeholder="#tokyo #food">
+            </div>
+        `).join('');
+    });
+
+    document.getElementById('uploadForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const files = Array.from(document.getElementById('images').files || []);
+        if (!files.length) return;
+
+        const fd = new FormData();
+        files.forEach(f => fd.append('images', f));
+
+        const tagInputs = Array.from(document.querySelectorAll('#tagsList input[type="text"]'));
+        files.forEach((_, idx) => {
+            const input = tagInputs.find(x => parseInt(x.dataset.idx) === idx);
+            fd.append('tags', input ? (input.value || '') : '');
+        });
+
+        apiFetch('/social-feed', { method: 'POST', body: fd })
+            .then(r => { if (!r.ok) throw new Error('Upload failed'); return r.json(); })
+            .then(() => { closeModal(); loadPhotos(); })
+            .catch(showError);
+    });
+</script>
+</body>
+</html>
+
