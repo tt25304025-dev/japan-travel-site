@@ -1,0 +1,50 @@
+================================================================================
+PRODUCTION CLEANUP — WHAT CHANGED (summary)
+================================================================================
+
+FRONTEND
+- Added js/config.js: set window.__APP_CONFIG__.apiBase / adminApiBase if the API
+  lives on another host. Same-origin deployments need no change.
+- Updated js/api-integration.js, travel-redesign.js, js/seasonal-effect.js,
+  reviews.html, location.html, package.html to use configurable API URLs.
+- Admin pages load /js/config.js before /admin/admin.js; admin.js builds the
+  /admin/api prefix from config.
+- index.html: removed broken WordPress/WooCommerce/Contact Form 7 scripts and
+  dead <link> tags; fixed font-face to use Millanova.svg only; replaced missing
+  local images with HTTPS Unsplash URLs and imgs/1x1.png placeholder.
+- Removed css/webfont/Millanova.html (was a full saved HTML page, not a font).
+- Removed wp-content/cache (Autoptimize) folder.
+- Added imgs/1x1.png (tiny transparent PNG) for lazy-load placeholders.
+
+BACKEND
+- application.properties: environment variable placeholders for DB, JWT,
+  CORS, admin seed user, uploads, JPA. See env.example.
+- DataInitializer: admin email/password from app.admin.seed-* (env-driven).
+- WebConfig: CORS list from app.cors.allowed-origins (comma-separated or *).
+- GlobalExceptionHandler: consistent JSON errors for validation,
+  IllegalArgumentException, ResponseStatusException.
+- Services: "not found" uses ResponseStatusException (proper HTTP status).
+- UserService: login/register errors use IllegalArgumentException (400).
+- ApiController: removed duplicate @CrossOrigin; register/login use global handler.
+
+================================================================================
+MANUAL CHECKS BEFORE SHOWING CUSTOMERS
+================================================================================
+
+1. MySQL: create database travel_agency (or rely on createDatabaseIfNotExist).
+2. Set SPRING_DATASOURCE_PASSWORD (and URL/username) to match your DB.
+3. Set JWT_SECRET to a long random string (at least 32 characters).
+4. Set ADMIN_SEED_PASSWORD (and optionally ADMIN_SEED_EMAIL) before the first
+   run if the users table is empty — or change the password after login.
+5. If the public site is on a different domain than the API, set
+   window.__APP_CONFIG__ in a small inline script before js/config.js, or inject
+   apiBase in your hosting/CDN layer.
+6. For JAR-only deployment (no file:../), copy the frontend into
+   backend/src/main/resources/static/ and update spring.web.resources.static-locations
+   (see backend README).
+7. Replace placeholder Unsplash URLs in index.html with your own brand images
+   when ready.
+8. Test: start backend from backend folder, open http://localhost:8080 ,
+   admin at /admin/login , API at /api/hero .
+
+================================================================================

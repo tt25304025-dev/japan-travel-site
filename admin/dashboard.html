@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Admin</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+    <nav class="admin-nav">
+        <a href="/admin/dashboard" class="admin-brand"><img src="/imgs/logo.jpg" alt="Nijro Travel" class="admin-logo"></a>
+        <a href="/admin/dashboard" class="active">Dashboard</a>
+        <a href="/admin/hero">Hero Slides</a>
+        <a href="/admin/locations">Locations</a>
+        <a href="/admin/packages">Packages</a>
+        <a href="/admin/bookings">Bookings</a>
+        <a href="/admin/faqs">FAQs</a>
+        <a href="/admin/reviews">Reviews</a>
+        <a href="/admin/social-feed">Social Feed</a>
+        <a href="/" target="_blank">View Site</a>
+        <a href="/admin/logout" class="logout">Logout</a>
+    </nav>
+    <main class="admin-main">
+        <h1>Dashboard</h1>
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <span class="stat-value" id="totalPackages">-</span>
+                <span class="stat-label">Total Packages</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" id="totalLocations">-</span>
+                <span class="stat-label">Total Locations</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" id="bookingsToday">-</span>
+                <span class="stat-label">Bookings Today</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" id="visitorsToday">-</span>
+                <span class="stat-label">Visitors Today</span>
+            </div>
+        </div>
+        <div style="margin-top:36px;">
+            <h2 style="margin-bottom:16px;color:#333;">Seasonal Background Effect</h2>
+            <p style="color:#666;margin-bottom:16px;">Choose a seasonal effect to display on the website background. The effect appears behind all content.</p>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;" id="seasonPicker">
+                <button class="season-btn" data-season="none" title="No Effect">
+                    <span style="font-size:28px;">🚫</span><br><strong>None</strong>
+                </button>
+                <button class="season-btn" data-season="spring" title="Cherry Blossom Petals">
+                    <span style="font-size:28px;">🌸</span><br><strong>Spring</strong><small>Sakura petals</small>
+                </button>
+                <button class="season-btn" data-season="summer" title="Sunshine & Fireflies">
+                    <span style="font-size:28px;">☀️</span><br><strong>Summer</strong><small>Fireflies</small>
+                </button>
+                <button class="season-btn" data-season="autumn" title="Falling Leaves">
+                    <span style="font-size:28px;">🍂</span><br><strong>Autumn</strong><small>Falling leaves</small>
+                </button>
+                <button class="season-btn" data-season="winter" title="Snowfall">
+                    <span style="font-size:28px;">❄️</span><br><strong>Winter</strong><small>Snowfall</small>
+                </button>
+            </div>
+            <p id="seasonStatus" style="margin-top:12px;font-size:14px;color:#888;"></p>
+        </div>
+    </main>
+    <style>
+        .season-btn { background:#fff; border:2px solid #e2e8f0; border-radius:12px; padding:16px 20px; cursor:pointer; text-align:center; min-width:100px; transition:all .2s; }
+        .season-btn:hover { border-color:#40485e; background:#f8f9fa; }
+        .season-btn.active { border-color:#c0392b; background:#fff5f5; box-shadow:0 0 0 3px rgba(192,57,43,.15); }
+        .season-btn small { display:block; color:#888; font-size:11px; margin-top:2px; }
+    </style>
+    <script src="/js/config.js"></script>
+    <script src="/admin/admin.js"></script>
+    <script>
+        apiFetch('/dashboard/stats')
+            .then(r => r.json())
+            .then(d => {
+                document.getElementById('totalPackages').textContent = d.totalPackages;
+                document.getElementById('totalLocations').textContent = d.totalLocations;
+                document.getElementById('bookingsToday').textContent = d.bookingsToday;
+                document.getElementById('visitorsToday').textContent = d.visitorsToday;
+            })
+            .catch(() => {
+                document.getElementById('statsGrid').innerHTML = '<p class="error">Failed to load stats. <a href="/admin/login">Login</a></p>';
+            });
+
+        // Seasonal effect picker
+        const seasonBtns = document.querySelectorAll('.season-btn');
+        const seasonStatus = document.getElementById('seasonStatus');
+
+        apiFetch('/settings/season').then(r => r.json()).then(d => {
+            const current = d.season || 'none';
+            seasonBtns.forEach(b => b.classList.toggle('active', b.dataset.season === current));
+            seasonStatus.textContent = 'Current: ' + current.charAt(0).toUpperCase() + current.slice(1);
+        }).catch(() => {});
+
+        seasonBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const season = btn.dataset.season;
+                seasonStatus.textContent = 'Saving...';
+                apiFetch('/settings/season', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ season })
+                }).then(r => r.json()).then(d => {
+                    seasonBtns.forEach(b => b.classList.toggle('active', b.dataset.season === d.season));
+                    seasonStatus.textContent = 'Saved! Effect: ' + d.season.charAt(0).toUpperCase() + d.season.slice(1);
+                }).catch(() => { seasonStatus.textContent = 'Failed to save.'; });
+            });
+        });
+    </script>
+</body>
+</html>

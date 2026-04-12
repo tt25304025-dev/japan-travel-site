@@ -1,0 +1,3375 @@
+<!doctype html>
+<html dir="ltr" lang="en-US" prefix="og: https://ogp.me/ns#">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="profile" href="https://gmpg.org/xfn/11" />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+    <style>
+        @font-face {
+            font-family: 'Millanova';
+            src: url("wp-content/themes/toc/fonts/Millanova.svg#Millanova") format("svg");
+            font-weight: normal;
+            font-style: normal
+        }
+
+        .preloader {
+            position: fixed;
+            z-index: 888;
+            background: black;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+            -webkit-transition: .5s all;
+            transition: .5s all
+        }
+
+        .preloader .load {
+            width: 100px;
+            position: absolute;
+            height: 100px;
+            margin: auto;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0
+        }
+
+        .background {
+            height: 100%;
+            left: 0;
+            -o-object-fit: cover;
+            object-fit: cover;
+            top: 0;
+            -webkit-transform: none;
+            transform: none;
+            width: 100%;
+            position: absolute;
+            z-index: -1
+        }
+
+        .text-center {
+            text-align: center
+        }
+
+        .compat-object-fit {
+            background-size: cover;
+            background-position: center center
+        }
+
+        .compat-object-fit img {
+            opacity: 0
+        }
+
+        .grecaptcha-badge {
+            visibility: hidden
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+            font-family: 'Work Sans', sans-serif;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 1.6
+        }
+
+        body p,
+        body ol,
+        body ul {
+            color: #4c4c4c
+        }
+
+        a {
+            -webkit-transition: .3s all;
+            transition: .3s all;
+            color: #40485e
+        }
+
+        .hero-banner {
+            position: relative
+        }
+
+        .hero-banner .title,
+        .hero-banner .slider-trigger {
+            display: none
+        }
+
+        .hero-banner .item .layer.first_item {
+            display: none
+        }
+
+        .hero-banner .ex-journey {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            margin: auto;
+            width: 30px;
+            z-index: 5;
+            text-align: center;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            -webkit-animation-name: scroll;
+            animation-name: scroll;
+            -webkit-animation-duration: 1.5s;
+            animation-duration: 1.5s;
+            -webkit-animation-timing-function: cubic-bezier(0.15, 0.41, 0.69, 0.94);
+            animation-timing-function: cubic-bezier(0.15, 0.41, 0.69, 0.94);
+            -webkit-animation-iteration-count: infinite;
+            animation-iteration-count: infinite
+        }
+
+        @-webkit-keyframes scroll {
+            0% {
+                opacity: 0
+            }
+
+            10% {
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+                opacity: 1
+            }
+
+            100% {
+                -webkit-transform: translateY(20px);
+                transform: translateY(20px);
+                opacity: 0
+            }
+        }
+
+        @keyframes scroll {
+            0% {
+                opacity: 0
+            }
+
+            10% {
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+                opacity: 1
+            }
+
+            100% {
+                -webkit-transform: translateY(20px);
+                transform: translateY(20px);
+                opacity: 0
+            }
+        }
+
+        .hero-banner .ex-journey span {
+            display: inline-block;
+            vertical-align: top;
+            font-size: 10px;
+            cursor: pointer;
+            height: 30px;
+            line-height: 30px;
+            color: #fff
+        }
+
+        .hero-banner .ex-journey span svg {
+            display: inline-block;
+            vertical-align: top;
+            height: 100%;
+            fill: #fff
+        }
+
+        .top-menu {
+            position: fixed;
+            left: 0;
+            right: 0;
+            z-index: 88;
+            top: 0;
+            -webkit-transition: .8s all;
+            transition: .8s all;
+            text-align: center
+        }
+
+        .top-menu.hide {
+            top: -100%
+        }
+
+        .top-menu .desktop-menu {
+            display: none
+        }
+
+        .top-menu.on {
+            background: #40485e
+        }
+
+        .top-menu #logo {
+            display: inline-block;
+            width: 94px;
+            vertical-align: top;
+            padding: 15px 20px
+        }
+
+        .top-menu.toc #logo {
+            width: 120px
+        }
+
+        .top-menu .searchb {
+            width: 50px;
+            position: absolute;
+            left: 20px;
+            height: 50px;
+            border-radius: 100%;
+            z-index: 5;
+            top: 15px;
+            border-radius: 25px;
+            -webkit-transition: .4s all;
+            transition: .4s all;
+            background: rgba(255, 255, 255, 0.5)
+        }
+
+        .top-menu .searchb .autocomplete-results {
+            visibility: hidden;
+            z-index: -1;
+            padding: 30px;
+            position: absolute;
+            pointer-events: none;
+            top: 90px;
+            width: calc(100% - 60px);
+            left: 0;
+            right: 0;
+            border-radius: 15px;
+            opacity: 0;
+            background: #fff;
+            -webkit-box-shadow: 10px 10px 29px 0px rgba(0, 0, 0, 0.24);
+            box-shadow: 10px 10px 29px 0px rgba(0, 0, 0, 0.24)
+        }
+
+        .top-menu .searchb .autocomplete-results .wrap {
+            overflow: auto;
+            max-height: 350px
+        }
+
+        .top-menu .searchb .autocomplete-results .wrap ul {
+            padding: 0;
+            list-style-type: none;
+            margin: 0
+        }
+
+        .top-menu .searchb .autocomplete-results .wrap ul li {
+            display: block;
+            padding-left: 20px
+        }
+
+        .top-menu .searchb .autocomplete-results .wrap ul li.main-item {
+            padding-left: 0;
+            display: block !important
+        }
+
+        .top-menu .searchb .autocomplete-results .wrap ul li.main-item>a {
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #000
+        }
+
+        .top-menu .searchb .autocomplete-results .wrap ul li a {
+            font-size: 16px;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
+            color: #40485e;
+            display: block;
+            padding: 10px 0;
+            font-weight: 400;
+            text-decoration: none;
+            letter-spacing: 1px;
+            text-align: left;
+            text-transform: capitalize
+        }
+
+        .top-menu .searchb .autocomplete-results .wrap ul li a:hover {
+            color: #000
+        }
+
+        .top-menu .searchb .autocomplete-results:before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 5px 8px 5px;
+            border-color: transparent transparent #fff transparent;
+            top: -8px;
+            left: 20px;
+            pointer-events: none
+        }
+
+        .top-menu .searchb.active {
+            width: calc(100% - 39px);
+            max-width: 350px;
+            background: #fff
+        }
+
+        .top-menu .searchb.active .autocomplete-results {
+            -webkit-transition: .4s all;
+            transition: .4s all;
+            -webkit-transition-delay: .4s;
+            transition-delay: .4s;
+            opacity: 1;
+            visibility: visible;
+            z-index: 2;
+            pointer-events: all;
+            top: 70px
+        }
+
+        .top-menu .searchb.active form input {
+            width: calc(100% - 75px);
+            color: #000
+        }
+
+        .top-menu .searchb.active form input::-webkit-input-placeholder {
+            color: #000
+        }
+
+        .top-menu .searchb.active form input::-moz-placeholder {
+            color: #000
+        }
+
+        .top-menu .searchb.active form input:-ms-input-placeholder {
+            color: #000
+        }
+
+        .top-menu .searchb.active form input :-moz-placeholder {
+            color: #000
+        }
+
+        .top-menu .searchb.active form span svg {
+            fill: #000
+        }
+
+        .top-menu .searchb form input {
+            outline: none;
+            height: 50px;
+            border-radius: 25px;
+            border: none;
+            padding: 0 50px 0 25px;
+            background: none;
+            width: 0;
+            font-family: 'Raleway', sans-serif;
+            color: #fff;
+            font-size: 16px
+        }
+
+        .top-menu .searchb form input::-webkit-input-placeholder {
+            color: #fff;
+            letter-spacing: 1px
+        }
+
+        .top-menu .searchb form input::-moz-placeholder {
+            color: #fff;
+            letter-spacing: 1px
+        }
+
+        .top-menu .searchb form input:-ms-input-placeholder {
+            color: #fff;
+            letter-spacing: 1px
+        }
+
+        .top-menu .searchb form input :-moz-placeholder {
+            color: #fff;
+            letter-spacing: 1px
+        }
+
+        .top-menu .searchb form span {
+            display: block;
+            position: absolute;
+            right: 0;
+            width: 50px;
+            height: 50px;
+            top: 0
+        }
+
+        .top-menu .searchb form span svg {
+            height: 100%;
+            fill: #fff
+        }
+
+        .top-menu .menu-trigger {
+            width: 50px;
+            position: absolute;
+            right: 20px;
+            height: 50px;
+            cursor: pointer;
+            border-radius: 100%;
+            top: 15px;
+            text-align: right
+        }
+
+        .top-menu .menu-trigger svg {
+            fill: #fff
+        }
+
+        .top-menu .menu-wrapper {
+            display: none;
+            background: #fff;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 999
+        }
+
+        .top-menu .menu-wrapper .inner {
+            position: absolute;
+            top: 80px;
+            bottom: 80px;
+            left: 50px;
+            right: 50px;
+            overflow: auto;
+            text-align: left
+        }
+
+        .top-menu .menu-wrapper .inner ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0
+        }
+
+        .top-menu .menu-wrapper .inner ul li a {
+            font-family: 'Raleway', sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #40485e;
+            text-decoration: none;
+            display: block;
+            padding: 5px 0;
+            font-size: 18px;
+            text-transform: uppercase
+        }
+
+        .top-menu .menu-wrapper .inner ul li ul {
+            padding-left: 20px
+        }
+
+        .top-menu .menu-wrapper .inner ul li ul li a {
+            font-size: 14px;
+            color: #000;
+            text-transform: none;
+            font-weight: 400
+        }
+
+        .top-menu .menu-wrapper.active {
+            display: block
+        }
+
+        .top-menu .menu-wrapper span.close {
+            display: block;
+            width: 50px;
+            cursor: pointer;
+            height: 50px;
+            right: 20px;
+            top: 15px;
+            position: absolute
+        }
+
+        @media (min-width: 768px) {
+            .top-menu .menu-wrapper .inner {
+                text-align: center
+            }
+
+            .top-menu.toc .menu-wrapper .inner>ul {
+                font-size: 0;
+                text-align: left
+            }
+
+            .top-menu.toc .menu-wrapper .inner>ul>li {
+                display: inline-block;
+                vertical-align: top;
+                width: 50%
+            }
+        }
+
+        @media (min-width: 992px) {
+            .top-menu.toc .menu-wrapper .inner>ul>li {
+                width: 33.33%
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .logged-in .top-menu {
+                top: 32px
+            }
+
+            .logged-in .hero-banner.home {
+                height: calc(100vh - 32px)
+            }
+
+            .top-menu {
+                text-align: left
+            }
+
+            .top-menu #logo {
+                width: 8vw;
+                height: auto;
+                padding: 2.5vw 3vw 2.5vw 7vw
+            }
+
+            .top-menu #logo img {
+                width: 100%
+            }
+
+            .top-menu .menu-trigger {
+                display: none
+            }
+
+            .top-menu:not(.toc) .menu-wrapper {
+                display: inline-block;
+                vertical-align: top;
+                background: none;
+                position: relative;
+                top: auto;
+                bottom: auto;
+                left: auto;
+                right: auto
+            }
+
+            .top-menu:not(.toc) .menu-wrapper .inner {
+                position: relative;
+                top: auto;
+                bottom: auto;
+                left: auto;
+                right: auto;
+                overflow: visible;
+                padding-top: 4.1vw
+            }
+
+            .top-menu:not(.toc) .menu-wrapper .inner>ul {
+                font-size: 0
+            }
+
+            .top-menu:not(.toc) .menu-wrapper .inner>ul>li {
+                padding: 0 0 2vw;
+                display: inline-block;
+                vertical-align: top;
+                margin-right: 2vw
+            }
+
+            .top-menu:not(.toc) .menu-wrapper .inner>ul>li.menu-item-has-children {
+                padding-right: 1vw
+            }
+
+            .top-menu:not(.toc) .menu-wrapper .inner>ul>li.menu-item-has-children::after,
+            .top-menu:not(.toc) .menu-wrapper .inner>ul>li.menu-item-has-children:before {
+                content: '';
+                content: '';
+                position: absolute;
+                width: .4vw;
+                height: .15vw;
+                background: #fff;
+                top: .5vw;
+                pointer-events: none
+            }
+
+            .top-menu:not(.toc) .menu-wrapper .inner>ul>li.menu-item-has-children::after {
+                -webkit-transform: rotate(45deg);
+                transform: rotate(45deg);
+                right: .1vw
+            }
+
+            .top-menu:not(.toc) .menu-wrapper .inner>ul>li.menu-item-has-children::before {
+                -webkit-transform: rotate(-45deg);
+                transform: rotate(-45deg);
+                right: -.1vw
+            }
+
+            .top-menu:not(.toc) .menu-wrapper .inner>ul>li {
+                position: relative
+            }
+
+            .top-menu:not(.toc) .menu-wrapper .inner>ul>li a {
+                font-weight: 600;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                font-size: .8vw;
+                color: #fff;
+                text-decoration: none;
+                padding: 0
+            }
+
+            .top-menu:not(.toc) .menu-wrapper .inner>ul>li:hover>.sub-menu {
+                opacity: 1;
+                visibility: visible;
+                z-index: 2;
+                pointer-events: all;
+                top: 2vw
+            }
+
+            .top-menu:not(.toc) .menu-wrapper .inner>ul>li ul {
+                width: 10vw;
+                width: -webkit-max-content;
+                width: -moz-max-content;
+                width: max-content;
+                visibility: hidden;
+                z-index: -1;
+                padding: 1vw 0;
+                position: absolute;
+                pointer-events: none;
+                top: 4vw;
+                left: 0;
+                border-radius: 0.4vw;
+                opacity: 0;
+                background: #fff;
+                -webkit-transition: .4s all;
+                transition: .4s all;
+                -webkit-box-shadow: 10px 10px 29px 0px rgba(0, 0, 0, 0.24);
+                box-shadow: 10px 10px 29px 0px rgba(0, 0, 0, 0.24)
+            }
+
+            .top-menu:not(.toc) .menu-wrapper .inner>ul>li ul:before {
+                content: '';
+                position: absolute;
+                width: 0;
+                height: 0;
+                border-style: solid;
+                border-width: 0 .5vw .5vw .5vw;
+                border-color: transparent transparent #fff transparent;
+                top: -.4vw;
+                left: 1vw;
+                pointer-events: none
+            }
+
+            .top-menu:not(.toc) .menu-wrapper .inner>ul>li ul li {
+                display: block;
+                position: relative;
+                padding: 0 2vw
+            }
+
+            .top-menu:not(.toc) .menu-wrapper .inner>ul>li ul li a {
+                font-size: .8vw;
+                color: #40485e;
+                display: block;
+                padding: 0.5vw 0;
+                font-weight: 400;
+                text-align: left;
+                text-transform: capitalize
+            }
+
+            .top-menu:not(.toc) .menu-wrapper .inner>ul>li ul li a:hover {
+                color: #000
+            }
+
+            .top-menu:not(.toc) .menu-wrapper .inner>ul>li ul li ul {
+                left: 100%;
+                top: 2vw;
+                background: #e9e9e9
+            }
+
+            .top-menu:not(.toc) .menu-wrapper .inner>ul>li ul li ul:before {
+                border-width: .5vw .5vw .5vw 0;
+                border-color: transparent #e9e9e9 transparent transparent;
+                top: 1vw;
+                left: -.4vw;
+                pointer-events: none
+            }
+
+            .top-menu:not(.toc) .menu-wrapper .inner>ul>li ul li:hover>.sub-menu {
+                opacity: 1;
+                visibility: visible;
+                z-index: 2;
+                pointer-events: all;
+                top: 0
+            }
+
+            .top-menu:not(.toc) .menu-wrapper span.close {
+                display: none
+            }
+
+            .top-menu .searchb {
+                right: 7vw;
+                text-align: center;
+                left: auto;
+                top: 2.9vw;
+                height: 2.8vw;
+                border-radius: 1.8vw;
+                width: 18vw
+            }
+
+            .top-menu .searchb .autocomplete-results {
+                padding: 2vw;
+                top: 6vw;
+                border-radius: .8vw;
+                width: 100%
+            }
+
+            .top-menu .searchb .autocomplete-results .wrap {
+                max-height: 30vw
+            }
+
+            .top-menu .searchb .autocomplete-results .wrap ul li {
+                padding-left: 1vw
+            }
+
+            .top-menu .searchb .autocomplete-results .wrap ul li a {
+                font-size: .9vw;
+                padding: 0.5vw 0
+            }
+
+            .top-menu .searchb .autocomplete-results:before {
+                border-width: 0 .5vw .5vw .5vw;
+                top: -.4vw;
+                left: 1vw
+            }
+
+            .top-menu .searchb.highlight .autocomplete-results {
+                -webkit-transition: .4s all;
+                transition: .4s all;
+                opacity: 1;
+                visibility: visible;
+                z-index: 2;
+                pointer-events: all;
+                top: 4vw
+            }
+
+            .top-menu .searchb.highlight .autocomplete-results .wrap::-webkit-scrollbar {
+                width: .4vw
+            }
+
+            .top-menu .searchb.highlight .autocomplete-results .wrap::-webkit-scrollbar-track {
+                box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+                -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3)
+            }
+
+            .top-menu .searchb.highlight .autocomplete-results .wrap::-webkit-scrollbar-thumb {
+                background-color: darkgrey;
+                outline: 1px solid slategrey
+            }
+
+            .top-menu .searchb form input {
+                height: 2.8vw;
+                border-radius: 1.8vw;
+                padding: 0 3.6vw 0 1.8vw;
+                width: calc(100% - 5.4vw);
+                font-size: 1vw
+            }
+
+            .top-menu .searchb form input::-webkit-input-placeholder {
+                font-size: .9vw
+            }
+
+            .top-menu .searchb form input::-moz-placeholder {
+                font-size: .9vw
+            }
+
+            .top-menu .searchb form input:-ms-input-placeholder {
+                font-size: .9vw
+            }
+
+            .top-menu .searchb form input :-moz-placeholder {
+                font-size: .9vw
+            }
+
+            .top-menu .searchb form span {
+                height: 2.8vw;
+                width: 3.6vw
+            }
+
+            .top-menu .searchb form span svg {
+                width: 1vw
+            }
+
+            .top-menu.toc {
+                text-align: center
+            }
+
+            .top-menu.toc .menu-trigger {
+                width: 3.6vw;
+                display: block;
+                right: 7.5vw;
+                height: 2.8vw;
+                top: 2.8vw;
+                -webkit-transition: .3s all;
+                transition: .3s all
+            }
+
+            .top-menu.toc .menu-trigger svg {
+                width: 2vw;
+                height: 2.8vw
+            }
+
+            .top-menu.toc.on .menu-trigger,
+            .top-menu.toc.on .searchb {
+                top: 2.25vw
+            }
+
+            .top-menu.toc.on .desktop-menu {
+                top: 3.1vw
+            }
+
+            .top-menu.toc.on #logo {
+                width: 4vw;
+                padding: 1.2vw 0
+            }
+
+            .top-menu.toc .menu-wrapper:after {
+                content: '';
+                background: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0)), to(#fff));
+                background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #fff 100%);
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 7vw;
+                z-index: 5;
+                pointer-events: none
+            }
+
+            .top-menu.toc .menu-wrapper:before {
+                content: '';
+                background: url(https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1200&q=80) no-repeat;
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                width: 40%;
+                z-index: -1;
+                opacity: .4;
+                background-size: cover
+            }
+
+            .top-menu.toc .menu-wrapper span.close {
+                width: 3.6vw;
+                height: 3.6vw;
+                right: 2.5vw;
+                top: 1.8vw
+            }
+
+            .top-menu.toc .menu-wrapper span.close svg {
+                width: 1.8vw;
+                height: 3.6vw
+            }
+
+            .top-menu.toc .menu-wrapper .inner {
+                top: 5vw;
+                bottom: 5vw;
+                left: 8vw;
+                right: 8vw
+            }
+
+            .top-menu.toc .menu-wrapper .inner::-webkit-scrollbar {
+                width: .4vw
+            }
+
+            .top-menu.toc .menu-wrapper .inner::-webkit-scrollbar-track {
+                box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+                -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3)
+            }
+
+            .top-menu.toc .menu-wrapper .inner::-webkit-scrollbar-thumb {
+                background-color: darkgrey;
+                outline: 1px solid slategrey
+            }
+
+            .top-menu.toc .menu-wrapper .inner>ul>li>a {
+                display: inline-block;
+                vertical-align: top
+            }
+
+            .top-menu.toc .menu-wrapper .inner>ul>li>a:after {
+                content: '';
+                height: .2vw;
+                pointer-events: none;
+                width: 0;
+                -webkit-transition: .4s all;
+                transition: .4s all;
+                background: #40485e;
+                position: absolute;
+                left: 0;
+                bottom: 1vw
+            }
+
+            .top-menu.toc .menu-wrapper .inner>ul>li>a:hover:after {
+                width: 40%
+            }
+
+            .top-menu.toc .menu-wrapper .inner>ul li {
+                width: 25%
+            }
+
+            .top-menu.toc .menu-wrapper .inner>ul li a {
+                font-size: 2vw;
+                padding: 1vw 0;
+                position: relative
+            }
+
+            .top-menu.toc .menu-wrapper .inner>ul li ul {
+                padding: 0 0 1vw 2vw
+            }
+
+            .top-menu.toc .menu-wrapper .inner>ul li ul li {
+                width: 100%
+            }
+
+            .top-menu.toc .menu-wrapper .inner>ul li ul li a {
+                font-size: 1vw;
+                padding: .2vw 0
+            }
+
+            .top-menu.toc #logo {
+                width: 5vw;
+                height: auto;
+                padding: 1.5vw 0
+            }
+
+            .top-menu.toc .searchb {
+                right: 12vw
+            }
+
+            .top-menu.toc .desktop-menu {
+                display: block;
+                position: absolute;
+                left: 7.5vw;
+                top: 4.1vw;
+                -webkit-transition: .3s all;
+                transition: .3s all
+            }
+
+            .top-menu.toc .desktop-menu>ul {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+                font-size: 0
+            }
+
+            .top-menu.toc .desktop-menu>ul>li {
+                padding: 0 0 2vw;
+                display: inline-block;
+                vertical-align: top;
+                margin-right: 2vw
+            }
+
+            .top-menu.toc .desktop-menu>ul>li.menu-item-has-children {
+                padding-right: 1vw
+            }
+
+            .top-menu.toc .desktop-menu>ul>li.menu-item-has-children::after,
+            .top-menu.toc .desktop-menu>ul>li.menu-item-has-children:before {
+                content: '';
+                content: '';
+                position: absolute;
+                width: .4vw;
+                height: .15vw;
+                background: #fff;
+                top: .5vw;
+                pointer-events: none
+            }
+
+            .top-menu.toc .desktop-menu>ul>li.menu-item-has-children::after {
+                -webkit-transform: rotate(45deg);
+                transform: rotate(45deg);
+                right: .1vw
+            }
+
+            .top-menu.toc .desktop-menu>ul>li.menu-item-has-children::before {
+                -webkit-transform: rotate(-45deg);
+                transform: rotate(-45deg);
+                right: -.1vw
+            }
+
+            .top-menu.toc .desktop-menu>ul>li {
+                position: relative
+            }
+
+            .top-menu.toc .desktop-menu>ul>li a {
+                font-weight: 600;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                font-size: .8vw;
+                color: #fff;
+                text-decoration: none
+            }
+
+            .top-menu.toc .desktop-menu>ul>li:hover>.sub-menu {
+                opacity: 1;
+                visibility: visible;
+                z-index: 2;
+                pointer-events: all;
+                top: 2vw
+            }
+
+            .top-menu.toc .desktop-menu>ul>li .sub-menu {
+                width: -webkit-max-content;
+                width: -moz-max-content;
+                width: max-content;
+                visibility: hidden;
+                z-index: -1;
+                position: absolute;
+                pointer-events: none;
+                top: 4vw;
+                left: 0;
+                padding: 2vw 1vw 2vw 0;
+                border-radius: 0.5vw;
+                opacity: 0;
+                width: 62vw;
+                background: #fff;
+                -webkit-transition: .4s all;
+                transition: .4s all;
+                -webkit-box-shadow: 10px 10px 29px 0px rgba(0, 0, 0, 0.24);
+                box-shadow: 10px 10px 29px 0px rgba(0, 0, 0, 0.24)
+            }
+
+            .top-menu.toc .desktop-menu>ul>li .sub-menu .def-link-parent {
+                font-size: 1vw;
+                text-align: left;
+                padding: 0 0 0 2.4vw
+            }
+
+            .top-menu.toc .desktop-menu>ul>li .sub-menu .def-link-parent a {
+                color: #4c4c4c
+            }
+
+            .top-menu.toc .desktop-menu>ul>li .sub-menu .def-link-parent a svg {
+                fill: #40485e
+            }
+
+            .top-menu.toc .desktop-menu>ul>li .sub-menu:before {
+                content: '';
+                position: absolute;
+                width: 0;
+                height: 0;
+                border-style: solid;
+                border-width: 0 .5vw .5vw .5vw;
+                border-color: transparent transparent #fff transparent;
+                top: -.4vw;
+                left: 1vw;
+                pointer-events: none
+            }
+
+            .top-menu.toc .desktop-menu>ul>li .sub-menu .table-parent {
+                display: table;
+                width: 100%
+            }
+
+            .top-menu.toc .desktop-menu>ul>li .sub-menu .table-parent .menu-item-box {
+                display: table-cell;
+                vertical-align: top;
+                width: 20vw;
+                padding-bottom: 3vw
+            }
+
+            .top-menu.toc .desktop-menu>ul>li .sub-menu .table-parent .menu-item-box>h3 {
+                font-size: 1.5vw;
+                margin: 0 0 1.5vw;
+                text-align: left;
+                padding: 0 0 0 2.4vw
+            }
+
+            .top-menu.toc .desktop-menu>ul>li .sub-menu .table-parent .menu-item-box>ul {
+                padding: 0 0 0 2.4vw
+            }
+
+            .top-menu.toc .desktop-menu>ul>li .sub-menu .table-parent .feature-box {
+                display: table-cell;
+                vertical-align: top
+            }
+
+            .top-menu.toc .desktop-menu>ul>li .sub-menu .table-parent .feature-box .card-block {
+                display: inline-block;
+                vertical-align: top;
+                width: calc(50% - 20px);
+                margin-right: 20px;
+                font-size: 1.1vw
+            }
+
+            .top-menu.toc .desktop-menu>ul>li .sub-menu .table-parent .feature-box .card-block .desc {
+                letter-spacing: normal
+            }
+
+            .top-menu.toc .desktop-menu>ul>li .sub-menu .table-parent .feature-box .card-block .desc .light {
+                margin-top: .5vw
+            }
+
+            .top-menu.toc .desktop-menu>ul>li .sub-menu .table-parent .feature-box .card-block .desc h3 {
+                min-height: 4.6vw;
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                white-space: pre-wrap;
+                -webkit-box-orient: vertical
+            }
+
+            .top-menu.toc .desktop-menu>ul>li .sub-menu .table-parent .feature-box .card-block .desc p {
+                text-transform: none;
+                font-size: .9vw;
+                font-weight: normal
+            }
+
+            .top-menu.toc .desktop-menu>ul>li .sub-menu li {
+                display: block;
+                position: relative
+            }
+
+            .top-menu.toc .desktop-menu>ul>li .sub-menu li a {
+                font-size: .9vw;
+                color: #40485e;
+                display: block;
+                padding: 0.5vw 0;
+                font-weight: 400;
+                text-align: left;
+                text-transform: capitalize
+            }
+
+            .top-menu.toc .desktop-menu>ul>li .sub-menu li a:hover {
+                color: #000
+            }
+
+            .top-menu.toc .desktop-menu>ul>li .sub-menu li ul {
+                left: 100%;
+                top: 2vw;
+                background: #e9e9e9
+            }
+
+            .top-menu.toc .desktop-menu>ul>li .sub-menu li ul:before {
+                border-width: .5vw .5vw .5vw 0;
+                border-color: transparent #e9e9e9 transparent transparent;
+                top: 1vw;
+                left: -.5vw;
+                pointer-events: none
+            }
+
+            .top-menu.toc .desktop-menu>ul>li .sub-menu li:hover>.sub-menu {
+                opacity: 1;
+                visibility: visible;
+                z-index: 2;
+                pointer-events: all;
+                top: 0
+            }
+
+            .hero-banner {
+                overflow: hidden
+            }
+
+            .hero-banner .banner.home {
+                height: 100vh
+            }
+
+            .hero-banner .banner.home * {
+                height: 100vh
+            }
+
+            .hero-banner .banner.home img:not(.lazy) {
+                height: 100%;
+                left: 0;
+                -o-object-fit: cover;
+                object-fit: cover;
+                top: 0;
+                width: 100%;
+                position: absolute;
+                z-index: -1
+            }
+
+            .hero-banner .banner.home video {
+                display: none;
+                height: 100%;
+                left: 0;
+                -o-object-fit: cover;
+                object-fit: cover;
+                top: 0;
+                width: 100%;
+                position: absolute;
+                z-index: 1;
+                pointer-events: none
+            }
+
+            .hero-banner .banner img {
+                width: 100%
+            }
+
+            .hero-banner .owl-item {
+                overflow: hidden
+            }
+
+            .hero-banner .item .layer {
+                left: 0;
+                position: absolute;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                -webkit-transition: 1s all;
+                transition: 1s all
+            }
+
+            .hero-banner .item .layer img {
+                -webkit-transition: 0.8s cubic-bezier(0.01, 0.32, 0.52, 1.04) all;
+                transition: 0.8s cubic-bezier(0.01, 0.32, 0.52, 1.04) all
+            }
+
+            .hero-banner .item .layer.first_item {
+                display: block
+            }
+
+            .hero-banner .owl-grab .layer img {
+                -webkit-transform: scale(1.03);
+                transform: scale(1.03)
+            }
+
+            .hero-banner .slider-trigger {
+                position: absolute;
+                bottom: -5vw;
+                left: 8vw;
+                right: 8vw;
+                z-index: 86;
+                display: table;
+                opacity: 0;
+                visibility: hidden;
+                -webkit-transition: .3s all;
+                transition: .3s all;
+                width: calc(100% - 16vw)
+            }
+
+            .hero-banner .slider-trigger.showup {
+                bottom: 5vw;
+                opacity: 1;
+                visibility: visible;
+                height: 6vw
+            }
+
+            .hero-banner .slider-trigger .cilckelm {
+                display: table-cell;
+                vertical-align: middle
+            }
+
+            .hero-banner .slider-trigger .cilckelm.active .img-holder {
+                width: 4vw;
+                height: 4vw
+            }
+
+            .hero-banner .slider-trigger .cilckelm.active .img-holder:after {
+                animation-name: Rotate;
+                animation-duration: 10s;
+                animation-iteration-count: infinite;
+                animation-timing-function: linear;
+                -webkit-animation-name: Rotate;
+                -webkit-animation-duration: 10s;
+                -webkit-animation-iteration-count: infinite;
+                -webkit-animation-timing-function: linear;
+                -moz-animation-name: Rotate;
+                -moz-animation-duration: 10s;
+                -moz-animation-iteration-count: infinite;
+                -moz-animation-timing-function: linear;
+                -ms-animation-name: Rotate;
+                -ms-animation-duration: 10s;
+                -ms-animation-iteration-count: infinite;
+                -ms-animation-timing-function: linear
+            }
+
+            .hero-banner .slider-trigger .cilckelm.active .text {
+                font-size: .8vw
+            }
+
+            .hero-banner .slider-trigger .cilckelm.active .text span {
+                font-size: 1.8vw;
+                line-height: 1.8vw
+            }
+
+            .hero-banner .slider-trigger .cilckelm .img-holder {
+                width: 2vw;
+                display: inline-block;
+                vertical-align: middle;
+                height: 2vw;
+                -webkit-transition: .4s all;
+                transition: .4s all;
+                cursor: pointer;
+                position: relative
+            }
+
+            .hero-banner .slider-trigger .cilckelm .img-holder img {
+                border-radius: 50%;
+                overflow: hidden
+            }
+
+            .hero-banner .slider-trigger .cilckelm .img-holder:after {
+                content: '';
+                position: absolute;
+                top: -.5vw;
+                bottom: -.5vw;
+                left: -.5vw;
+                right: -.5vw;
+                background: transparent;
+                border-radius: 50%;
+                border: 1px dashed #fff
+            }
+
+            .hero-banner .slider-trigger .cilckelm .img-holder:hover:after {
+                animation-name: Rotate;
+                animation-duration: 10s;
+                animation-iteration-count: infinite;
+                animation-timing-function: linear;
+                -webkit-animation-name: Rotate;
+                -webkit-animation-duration: 10s;
+                -webkit-animation-iteration-count: infinite;
+                -webkit-animation-timing-function: linear;
+                -moz-animation-name: Rotate;
+                -moz-animation-duration: 10s;
+                -moz-animation-iteration-count: infinite;
+                -moz-animation-timing-function: linear;
+                -ms-animation-name: Rotate;
+                -ms-animation-duration: 10s;
+                -ms-animation-iteration-count: infinite;
+                -ms-animation-timing-function: linear
+            }
+
+            @keyframes Rotate {
+                from {
+                    -webkit-transform: rotate(0deg);
+                    transform: rotate(0deg)
+                }
+
+                to {
+                    -webkit-transform: rotate(360deg);
+                    transform: rotate(360deg)
+                }
+            }
+
+            @-webkit-keyframes Rotate {
+                from {
+                    -webkit-transform: rotate(0deg)
+                }
+
+                to {
+                    -webkit-transform: rotate(360deg)
+                }
+            }
+
+            .hero-banner .slider-trigger .cilckelm .text {
+                color: #fff;
+                text-transform: uppercase;
+                margin-left: 1vw;
+                text-align: left;
+                display: inline-block;
+                vertical-align: middle;
+                font-size: .7vw;
+                letter-spacing: 1px
+            }
+
+            .hero-banner .slider-trigger .cilckelm .text span {
+                display: block;
+                -webkit-transition: .4s all;
+                transition: .4s all;
+                font-size: 1vw;
+                line-height: 1vw;
+                font-weight: 700
+            }
+
+            .hero-banner .slider-trigger .cilckelm:nth-child(2) {
+                text-align: center
+            }
+
+            .hero-banner .slider-trigger .cilckelm:nth-child(3) {
+                text-align: right
+            }
+
+            .hero-banner .title {
+                font-family: 'Millanova';
+                display: block;
+                font-weight: normal;
+                position: absolute;
+                top: calc(50% + 3vw);
+                -webkit-transform: translateY(-50%);
+                transform: translateY(-50%);
+                text-align: center;
+                font-size: 2.5vw;
+                left: 0;
+                right: 0;
+                max-width: 54%;
+                margin: auto;
+                line-height: 1.8;
+                color: #FFF;
+                width: 100%
+            }
+
+            .hero-banner .ex-journey {
+                bottom: 2vw;
+                width: 1.7vw
+            }
+
+            .hero-banner .ex-journey span {
+                font-size: .8vw;
+                height: 1.7vw;
+                line-height: 1.7vw
+            }
+
+            .hero-banner .ex-journey span svg {
+                margin-left: .2vw;
+                width: 1.7vw
+            }
+        }
+
+        @media (min-width: 1920px) {
+            .hero-banner video {
+                -webkit-transform: scale(1.1);
+                transform: scale(1.1)
+            }
+        }
+
+        /*# sourceMappingURL=above_the_fold.min.css.map */
+        body.compensate-for-scrollbar {
+            overflow: hidden
+        }
+
+        .fancybox-active {
+            height: auto
+        }
+
+        .fancybox-is-hidden {
+            left: -9999px;
+            margin: 0;
+            position: absolute !important;
+            top: -9999px;
+            visibility: hidden
+        }
+
+        .fancybox-container {
+            -webkit-backface-visibility: hidden;
+            height: 100%;
+            left: 0;
+            outline: 0;
+            position: fixed;
+            -webkit-tap-highlight-color: transparent;
+            top: 0;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            transform: translateZ(0);
+            width: 100%;
+            z-index: 99992
+        }
+
+        .fancybox-container * {
+            box-sizing: border-box
+        }
+
+        .fancybox-bg,
+        .fancybox-inner,
+        .fancybox-outer,
+        .fancybox-stage {
+            bottom: 0;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0
+        }
+
+        .fancybox-outer {
+            -webkit-overflow-scrolling: touch;
+            overflow-y: auto
+        }
+
+        .fancybox-bg {
+            background: #1e1e1e;
+            opacity: 0;
+            transition-duration: inherit;
+            transition-property: opacity;
+            transition-timing-function: cubic-bezier(.47, 0, .74, .71)
+        }
+
+        .fancybox-is-open .fancybox-bg {
+            opacity: .9;
+            transition-timing-function: cubic-bezier(.22, .61, .36, 1)
+        }
+
+        .fancybox-caption,
+        .fancybox-infobar,
+        .fancybox-navigation .fancybox-button,
+        .fancybox-toolbar {
+            direction: ltr;
+            opacity: 0;
+            position: absolute;
+            transition: opacity .25s ease, visibility 0s ease .25s;
+            visibility: hidden;
+            z-index: 99997
+        }
+
+        .fancybox-show-caption .fancybox-caption,
+        .fancybox-show-infobar .fancybox-infobar,
+        .fancybox-show-nav .fancybox-navigation .fancybox-button,
+        .fancybox-show-toolbar .fancybox-toolbar {
+            opacity: 1;
+            transition: opacity .25s ease 0s, visibility 0s ease 0s;
+            visibility: visible
+        }
+
+        .fancybox-infobar {
+            color: #ccc;
+            font-size: 13px;
+            -webkit-font-smoothing: subpixel-antialiased;
+            height: 44px;
+            left: 0;
+            line-height: 44px;
+            min-width: 44px;
+            mix-blend-mode: difference;
+            padding: 0 10px;
+            pointer-events: none;
+            top: 0;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none
+        }
+
+        .fancybox-toolbar {
+            right: 0;
+            top: 0
+        }
+
+        .fancybox-stage {
+            direction: ltr;
+            overflow: visible;
+            transform: translateZ(0);
+            z-index: 99994
+        }
+
+        .fancybox-is-open .fancybox-stage {
+            overflow: hidden
+        }
+
+        .fancybox-slide {
+            -webkit-backface-visibility: hidden;
+            display: none;
+            height: 100%;
+            left: 0;
+            outline: 0;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 44px;
+            position: absolute;
+            text-align: center;
+            top: 0;
+            transition-property: transform, opacity;
+            white-space: normal;
+            width: 100%;
+            z-index: 99994
+        }
+
+        .fancybox-slide:before {
+            content: "";
+            display: inline-block;
+            font-size: 0;
+            height: 100%;
+            vertical-align: middle;
+            width: 0
+        }
+
+        .fancybox-is-sliding .fancybox-slide,
+        .fancybox-slide--current,
+        .fancybox-slide--next,
+        .fancybox-slide--previous {
+            display: block
+        }
+
+        .fancybox-slide--image {
+            overflow: hidden;
+            padding: 44px 0
+        }
+
+        .fancybox-slide--image:before {
+            display: none
+        }
+
+        .fancybox-slide--html {
+            padding: 6px
+        }
+
+        .fancybox-content {
+            background: #fff;
+            display: inline-block;
+            margin: 0;
+            max-width: 100%;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 44px;
+            position: relative;
+            text-align: left;
+            vertical-align: middle
+        }
+
+        .fancybox-slide--image .fancybox-content {
+            animation-timing-function: cubic-bezier(.5, 0, .14, 1);
+            -webkit-backface-visibility: hidden;
+            background: 0 0;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            left: 0;
+            max-width: none;
+            overflow: visible;
+            padding: 0;
+            position: absolute;
+            top: 0;
+            transform-origin: top left;
+            transition-property: transform, opacity;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            z-index: 99995
+        }
+
+        .fancybox-can-zoomOut .fancybox-content {
+            cursor: zoom-out
+        }
+
+        .fancybox-can-zoomIn .fancybox-content {
+            cursor: zoom-in
+        }
+
+        .fancybox-can-pan .fancybox-content,
+        .fancybox-can-swipe .fancybox-content {
+            cursor: grab
+        }
+
+        .fancybox-is-grabbing .fancybox-content {
+            cursor: grabbing
+        }
+
+        .fancybox-container [data-selectable=true] {
+            cursor: text
+        }
+
+        .fancybox-image,
+        .fancybox-spaceball {
+            background: 0 0;
+            border: 0;
+            height: 100%;
+            left: 0;
+            margin: 0;
+            max-height: none;
+            max-width: none;
+            padding: 0;
+            position: absolute;
+            top: 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            width: 100%
+        }
+
+        .fancybox-spaceball {
+            z-index: 1
+        }
+
+        .fancybox-slide--iframe .fancybox-content,
+        .fancybox-slide--map .fancybox-content,
+        .fancybox-slide--pdf .fancybox-content,
+        .fancybox-slide--video .fancybox-content {
+            height: 100%;
+            overflow: visible;
+            padding: 0;
+            width: 100%
+        }
+
+        .fancybox-slide--video .fancybox-content {
+            background: #000
+        }
+
+        .fancybox-slide--map .fancybox-content {
+            background: #e5e3df
+        }
+
+        .fancybox-slide--iframe .fancybox-content {
+            background: #fff
+        }
+
+        .fancybox-iframe,
+        .fancybox-video {
+            background: 0 0;
+            border: 0;
+            display: block;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            padding: 0;
+            width: 100%
+        }
+
+        .fancybox-iframe {
+            left: 0;
+            position: absolute;
+            top: 0
+        }
+
+        .fancybox-error {
+            background: #fff;
+            cursor: default;
+            max-width: 400px;
+            padding: 40px;
+            width: 100%
+        }
+
+        .fancybox-error p {
+            color: #444;
+            font-size: 16px;
+            line-height: 20px;
+            margin: 0;
+            padding: 0
+        }
+
+        .fancybox-button {
+            background: rgba(30, 30, 30, .6);
+            border: 0;
+            border-radius: 0;
+            box-shadow: none;
+            cursor: pointer;
+            display: inline-block;
+            height: 44px;
+            margin: 0;
+            padding: 10px;
+            position: relative;
+            transition: color .2s;
+            vertical-align: top;
+            visibility: inherit;
+            width: 44px
+        }
+
+        .fancybox-button,
+        .fancybox-button:link,
+        .fancybox-button:visited {
+            color: #ccc
+        }
+
+        .fancybox-button:hover {
+            color: #fff
+        }
+
+        .fancybox-button:focus {
+            outline: 0
+        }
+
+        .fancybox-button.fancybox-focus {
+            outline: 1px dotted
+        }
+
+        .fancybox-button[disabled],
+        .fancybox-button[disabled]:hover {
+            color: #888;
+            cursor: default;
+            outline: 0
+        }
+
+        .fancybox-button div {
+            height: 100%
+        }
+
+        .fancybox-button svg {
+            display: block;
+            height: 100%;
+            overflow: visible;
+            position: relative;
+            width: 100%
+        }
+
+        .fancybox-button svg path {
+            fill: currentColor;
+            stroke-width: 0
+        }
+
+        .fancybox-button--fsenter svg:nth-child(2),
+        .fancybox-button--fsexit svg:first-child,
+        .fancybox-button--pause svg:first-child,
+        .fancybox-button--play svg:nth-child(2) {
+            display: none
+        }
+
+        .fancybox-progress {
+            background: #ff5268;
+            height: 2px;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transform: scaleX(0);
+            transform-origin: 0;
+            transition-property: transform;
+            transition-timing-function: linear;
+            z-index: 99998
+        }
+
+        .fancybox-close-small {
+            background: 0 0;
+            border: 0;
+            border-radius: 0;
+            color: #ccc;
+            cursor: pointer;
+            opacity: .8;
+            padding: 8px;
+            position: absolute;
+            right: -12px;
+            top: -44px;
+            z-index: 401
+        }
+
+        .fancybox-close-small:hover {
+            color: #fff;
+            opacity: 1
+        }
+
+        .fancybox-slide--html .fancybox-close-small {
+            color: currentColor;
+            padding: 10px;
+            right: 0;
+            top: 0
+        }
+
+        .fancybox-slide--image.fancybox-is-scaling .fancybox-content {
+            overflow: hidden
+        }
+
+        .fancybox-is-scaling .fancybox-close-small,
+        .fancybox-is-zoomable.fancybox-can-pan .fancybox-close-small {
+            display: none
+        }
+
+        .fancybox-navigation .fancybox-button {
+            background-clip: content-box;
+            height: 100px;
+            opacity: 0;
+            position: absolute;
+            top: calc(50% - 50px);
+            width: 70px
+        }
+
+        .fancybox-navigation .fancybox-button div {
+            padding: 7px
+        }
+
+        .fancybox-navigation .fancybox-button--arrow_left {
+            left: 0;
+            left: env(safe-area-inset-left);
+            padding: 31px 26px 31px 6px
+        }
+
+        .fancybox-navigation .fancybox-button--arrow_right {
+            padding: 31px 6px 31px 26px;
+            right: 0;
+            right: env(safe-area-inset-right)
+        }
+
+        .fancybox-caption {
+            background: linear-gradient(0deg, rgba(0, 0, 0, .85) 0, rgba(0, 0, 0, .3) 50%, rgba(0, 0, 0, .15) 65%, rgba(0, 0, 0, .075) 75.5%, rgba(0, 0, 0, .037) 82.85%, rgba(0, 0, 0, .019) 88%, transparent);
+            bottom: 0;
+            color: #eee;
+            font-size: 14px;
+            font-weight: 400;
+            left: 0;
+            line-height: 1.5;
+            padding: 75px 44px 25px;
+            pointer-events: none;
+            right: 0;
+            text-align: center;
+            z-index: 99996
+        }
+
+        @supports (padding:max(0px)) {
+            .fancybox-caption {
+                padding: 75px max(44px, env(safe-area-inset-right)) max(25px, env(safe-area-inset-bottom)) max(44px, env(safe-area-inset-left))
+            }
+        }
+
+        .fancybox-caption--separate {
+            margin-top: -50px
+        }
+
+        .fancybox-caption__body {
+            max-height: 50vh;
+            overflow: auto;
+            pointer-events: all
+        }
+
+        .fancybox-caption a,
+        .fancybox-caption a:link,
+        .fancybox-caption a:visited {
+            color: #ccc;
+            text-decoration: none
+        }
+
+        .fancybox-caption a:hover {
+            color: #fff;
+            text-decoration: underline
+        }
+
+        .fancybox-loading {
+            animation: a 1s linear infinite;
+            background: 0 0;
+            border: 4px solid #888;
+            border-bottom-color: #fff;
+            border-radius: 50%;
+            height: 50px;
+            left: 50%;
+            margin: -25px 0 0 -25px;
+            opacity: .7;
+            padding: 0;
+            position: absolute;
+            top: 50%;
+            width: 50px;
+            z-index: 99999
+        }
+
+        @keyframes a {
+            to {
+                transform: rotate(1turn)
+            }
+        }
+
+        .fancybox-animated {
+            transition-timing-function: cubic-bezier(0, 0, .25, 1)
+        }
+
+        .fancybox-fx-slide.fancybox-slide--previous {
+            opacity: 0;
+            transform: translate3d(-100%, 0, 0)
+        }
+
+        .fancybox-fx-slide.fancybox-slide--next {
+            opacity: 0;
+            transform: translate3d(100%, 0, 0)
+        }
+
+        .fancybox-fx-slide.fancybox-slide--current {
+            opacity: 1;
+            transform: translateZ(0)
+        }
+
+        .fancybox-fx-fade.fancybox-slide--next,
+        .fancybox-fx-fade.fancybox-slide--previous {
+            opacity: 0;
+            transition-timing-function: cubic-bezier(.19, 1, .22, 1)
+        }
+
+        .fancybox-fx-fade.fancybox-slide--current {
+            opacity: 1
+        }
+
+        .fancybox-fx-zoom-in-out.fancybox-slide--previous {
+            opacity: 0;
+            transform: scale3d(1.5, 1.5, 1.5)
+        }
+
+        .fancybox-fx-zoom-in-out.fancybox-slide--next {
+            opacity: 0;
+            transform: scale3d(.5, .5, .5)
+        }
+
+        .fancybox-fx-zoom-in-out.fancybox-slide--current {
+            opacity: 1;
+            transform: scaleX(1)
+        }
+
+        .fancybox-fx-rotate.fancybox-slide--previous {
+            opacity: 0;
+            transform: rotate(-1turn)
+        }
+
+        .fancybox-fx-rotate.fancybox-slide--next {
+            opacity: 0;
+            transform: rotate(1turn)
+        }
+
+        .fancybox-fx-rotate.fancybox-slide--current {
+            opacity: 1;
+            transform: rotate(0)
+        }
+
+        .fancybox-fx-circular.fancybox-slide--previous {
+            opacity: 0;
+            transform: scale3d(0, 0, 0) translate3d(-100%, 0, 0)
+        }
+
+        .fancybox-fx-circular.fancybox-slide--next {
+            opacity: 0;
+            transform: scale3d(0, 0, 0) translate3d(100%, 0, 0)
+        }
+
+        .fancybox-fx-circular.fancybox-slide--current {
+            opacity: 1;
+            transform: scaleX(1) translateZ(0)
+        }
+
+        .fancybox-fx-tube.fancybox-slide--previous {
+            transform: translate3d(-100%, 0, 0) scale(.1) skew(-10deg)
+        }
+
+        .fancybox-fx-tube.fancybox-slide--next {
+            transform: translate3d(100%, 0, 0) scale(.1) skew(10deg)
+        }
+
+        .fancybox-fx-tube.fancybox-slide--current {
+            transform: translateZ(0) scale(1)
+        }
+
+        @media (max-height:576px) {
+            .fancybox-slide {
+                padding-left: 6px;
+                padding-right: 6px
+            }
+
+            .fancybox-slide--image {
+                padding: 6px 0
+            }
+
+            .fancybox-close-small {
+                right: -6px
+            }
+
+            .fancybox-slide--image .fancybox-close-small {
+                background: #4e4e4e;
+                color: #f2f4f6;
+                height: 36px;
+                opacity: 1;
+                padding: 6px;
+                right: 0;
+                top: 0;
+                width: 36px
+            }
+
+            .fancybox-caption {
+                padding-left: 12px;
+                padding-right: 12px
+            }
+
+            @supports (padding:max(0px)) {
+                .fancybox-caption {
+                    padding-left: max(12px, env(safe-area-inset-left));
+                    padding-right: max(12px, env(safe-area-inset-right))
+                }
+            }
+        }
+
+        .fancybox-share {
+            background: #f4f4f4;
+            border-radius: 3px;
+            max-width: 90%;
+            padding: 30px;
+            text-align: center
+        }
+
+        .fancybox-share h1 {
+            color: #222;
+            font-size: 35px;
+            font-weight: 700;
+            margin: 0 0 20px
+        }
+
+        .fancybox-share p {
+            margin: 0;
+            padding: 0
+        }
+
+        .fancybox-share__button {
+            border: 0;
+            border-radius: 3px;
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 40px;
+            margin: 0 5px 10px;
+            min-width: 130px;
+            padding: 0 15px;
+            text-decoration: none;
+            transition: all .2s;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            white-space: nowrap
+        }
+
+        .fancybox-share__button:link,
+        .fancybox-share__button:visited {
+            color: #fff
+        }
+
+        .fancybox-share__button:hover {
+            text-decoration: none
+        }
+
+        .fancybox-share__button--fb {
+            background: #3b5998
+        }
+
+        .fancybox-share__button--fb:hover {
+            background: #344e86
+        }
+
+        .fancybox-share__button--pt {
+            background: #bd081d
+        }
+
+        .fancybox-share__button--pt:hover {
+            background: #aa0719
+        }
+
+        .fancybox-share__button--tw {
+            background: #1da1f2
+        }
+
+        .fancybox-share__button--tw:hover {
+            background: #0d95e8
+        }
+
+        .fancybox-share__button svg {
+            height: 25px;
+            margin-right: 7px;
+            position: relative;
+            top: -1px;
+            vertical-align: middle;
+            width: 25px
+        }
+
+        .fancybox-share__button svg path {
+            fill: #fff
+        }
+
+        .fancybox-share__input {
+            background: 0 0;
+            border: 0;
+            border-bottom: 1px solid #d7d7d7;
+            border-radius: 0;
+            color: #5d5b5b;
+            font-size: 14px;
+            margin: 10px 0 0;
+            outline: 0;
+            padding: 10px 15px;
+            width: 100%
+        }
+
+        .fancybox-thumbs {
+            background: #ddd;
+            bottom: 0;
+            display: none;
+            margin: 0;
+            -webkit-overflow-scrolling: touch;
+            -ms-overflow-style: -ms-autohiding-scrollbar;
+            padding: 2px 2px 4px;
+            position: absolute;
+            right: 0;
+            -webkit-tap-highlight-color: transparent;
+            top: 0;
+            width: 212px;
+            z-index: 99995
+        }
+
+        .fancybox-thumbs-x {
+            overflow-x: auto;
+            overflow-y: hidden
+        }
+
+        .fancybox-show-thumbs .fancybox-thumbs {
+            display: block
+        }
+
+        .fancybox-show-thumbs .fancybox-inner {
+            right: 212px
+        }
+
+        .fancybox-thumbs__list {
+            font-size: 0;
+            height: 100%;
+            list-style: none;
+            margin: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+            padding: 0;
+            position: absolute;
+            position: relative;
+            white-space: nowrap;
+            width: 100%
+        }
+
+        .fancybox-thumbs-x .fancybox-thumbs__list {
+            overflow: hidden
+        }
+
+        .fancybox-thumbs-y .fancybox-thumbs__list::-webkit-scrollbar {
+            width: 7px
+        }
+
+        .fancybox-thumbs-y .fancybox-thumbs__list::-webkit-scrollbar-track {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: inset 0 0 6px rgba(0, 0, 0, .3)
+        }
+
+        .fancybox-thumbs-y .fancybox-thumbs__list::-webkit-scrollbar-thumb {
+            background: #2a2a2a;
+            border-radius: 10px
+        }
+
+        .fancybox-thumbs__list a {
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            background-color: rgba(0, 0, 0, .1);
+            background-position: 50%;
+            background-repeat: no-repeat;
+            background-size: cover;
+            cursor: pointer;
+            float: left;
+            height: 75px;
+            margin: 2px;
+            max-height: calc(100% - 8px);
+            max-width: calc(50% - 4px);
+            outline: 0;
+            overflow: hidden;
+            padding: 0;
+            position: relative;
+            -webkit-tap-highlight-color: transparent;
+            width: 100px
+        }
+
+        .fancybox-thumbs__list a:before {
+            border: 6px solid #ff5268;
+            bottom: 0;
+            content: "";
+            left: 0;
+            opacity: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: all .2s cubic-bezier(.25, .46, .45, .94);
+            z-index: 99991
+        }
+
+        .fancybox-thumbs__list a:focus:before {
+            opacity: .5
+        }
+
+        .fancybox-thumbs__list a.fancybox-thumbs-active:before {
+            opacity: 1
+        }
+
+        @media (max-width:576px) {
+            .fancybox-thumbs {
+                width: 110px
+            }
+
+            .fancybox-show-thumbs .fancybox-inner {
+                right: 110px
+            }
+
+            .fancybox-thumbs__list a {
+                max-width: calc(100% - 10px)
+            }
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" media="all" href="wp-content/themes/toc/scss/styles.min.css">
+    <title>Home - Travel Japan</title>
+    <meta name="description"
+        content="Your ultimate Japan travel guide. Explore Tokyo, Kyoto, Osaka, Mount Fuji and more. Plan flights, hotels, experiences and unforgettable adventures across Japan." />
+    <meta name="robots" content="max-image-preview:large" />
+    <link rel="canonical" href="index.html" />
+    <meta name="generator" content="All in One SEO (AIOSEO) 4.9.3" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="Travel Japan -" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Home - Travel Japan" />
+    <meta property="og:description"
+        content="Discover Japan like never before with ancient traditions, stunning temples and natural beauty. From Tokyo to Kyoto, Mount Fuji to historic Hiroshima, the land of the rising sun beckons." />
+    <meta property="og:url" content="" />
+    <meta property="article:published_time" content="2019-09-11T19:43:40+00:00" />
+    <meta property="article:modified_time" content="2019-10-08T08:14:28+00:00" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Home - Travel Japan" />
+    <meta name="twitter:description"
+        content="Discover Japan like never before with ancient traditions, stunning temples and natural beauty. From Tokyo to Kyoto, Mount Fuji to historic Hiroshima, the land of the rising sun beckons." />
+    <script type="application/ld+json"
+        class="aioseo-schema">{"@context":"https:\/\/schema.org","@graph":[{"@type":"BreadcrumbList","@id":"\/#breadcrumblist","itemListElement":[{"@type":"ListItem","@id":"#listItem","position":1,"name":"Home"}]},{"@type":"Organization","@id":"\/#organization","name":"Travel Japan","url":"\/"},{"@type":"WebPage","@id":"\/#webpage","url":"\/","name":"Home - Travel Japan","description":"Discover Japan like never before with intriguing stories and legends that have transcended through time. Couple that with exotic wildlife and lush greenery, this remarkable country beckons.","inLanguage":"en-US","isPartOf":{"@id":"\/#website"},"breadcrumb":{"@id":"\/#breadcrumblist"},"datePublished":"2019-09-11T19:43:40+00:00","dateModified":"2019-10-08T08:14:28+00:00"},{"@type":"WebSite","@id":"\/#website","url":"\/","name":"Travel Japan","inLanguage":"en-US","publisher":{"@id":"\/#organization"}}]}</script>
+    <link rel="alternate" type="application/rss+xml" title="Travel Japan &raquo; Feed" href="feed/index.html" />
+    <link rel="alternate" type="application/rss+xml" title="Travel Japan &raquo; Comments Feed"
+        href="comments/feed/index.html" />
+    <link rel="alternate" type="application/rss+xml" title="Travel Japan &raquo; Home Comments Feed"
+        href="home/feed/index.html" />
+    <style id='wp-img-auto-sizes-contain-inline-css' type='text/css'>
+        img:is([sizes=auto i], [sizes^="auto," i]) {
+            contain-intrinsic-size: 3000px 1500px
+        }
+
+        /*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+    </style>
+    <style id='classic-theme-styles-inline-css' type='text/css'>
+        /*! This file is auto-generated */
+        .wp-block-button__link {
+            color: #fff;
+            background-color: #32373c;
+            border-radius: 9999px;
+            box-shadow: none;
+            text-decoration: none;
+            padding: calc(.667em + 2px) calc(1.333em + 2px);
+            font-size: 1.125em
+        }
+
+        .wp-block-file__button {
+            background: #32373c;
+            color: #fff;
+            text-decoration: none
+        }
+
+        /*# sourceURL=/wp-includes/css/classic-themes.min.css */
+    </style>
+    <style id='global-styles-inline-css' type='text/css'>
+        :root {
+            --wp--preset--aspect-ratio--square: 1;
+            --wp--preset--aspect-ratio--4-3: 4/3;
+            --wp--preset--aspect-ratio--3-4: 3/4;
+            --wp--preset--aspect-ratio--3-2: 3/2;
+            --wp--preset--aspect-ratio--2-3: 2/3;
+            --wp--preset--aspect-ratio--16-9: 16/9;
+            --wp--preset--aspect-ratio--9-16: 9/16;
+            --wp--preset--color--black: #000000;
+            --wp--preset--color--cyan-bluish-gray: #abb8c3;
+            --wp--preset--color--white: #FFF;
+            --wp--preset--color--pale-pink: #f78da7;
+            --wp--preset--color--vivid-red: #cf2e2e;
+            --wp--preset--color--luminous-vivid-orange: #ff6900;
+            --wp--preset--color--luminous-vivid-amber: #fcb900;
+            --wp--preset--color--light-green-cyan: #7bdcb5;
+            --wp--preset--color--vivid-green-cyan: #00d084;
+            --wp--preset--color--pale-cyan-blue: #8ed1fc;
+            --wp--preset--color--vivid-cyan-blue: #0693e3;
+            --wp--preset--color--vivid-purple: #9b51e0;
+            --wp--preset--color--primary: #0073a8;
+            --wp--preset--color--secondary: #005075;
+            --wp--preset--color--dark-gray: #111;
+            --wp--preset--color--light-gray: #767676;
+            --wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg, rgb(6, 147, 227) 0%, rgb(155, 81, 224) 100%);
+            --wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg, rgb(122, 220, 180) 0%, rgb(0, 208, 130) 100%);
+            --wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg, rgb(252, 185, 0) 0%, rgb(255, 105, 0) 100%);
+            --wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg, rgb(255, 105, 0) 0%, rgb(207, 46, 46) 100%);
+            --wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg, rgb(238, 238, 238) 0%, rgb(169, 184, 195) 100%);
+            --wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg, rgb(74, 234, 220) 0%, rgb(151, 120, 209) 20%, rgb(207, 42, 186) 40%, rgb(238, 44, 130) 60%, rgb(251, 105, 98) 80%, rgb(254, 248, 76) 100%);
+            --wp--preset--gradient--blush-light-purple: linear-gradient(135deg, rgb(255, 206, 236) 0%, rgb(152, 150, 240) 100%);
+            --wp--preset--gradient--blush-bordeaux: linear-gradient(135deg, rgb(254, 205, 165) 0%, rgb(254, 45, 45) 50%, rgb(107, 0, 62) 100%);
+            --wp--preset--gradient--luminous-dusk: linear-gradient(135deg, rgb(255, 203, 112) 0%, rgb(199, 81, 192) 50%, rgb(65, 88, 208) 100%);
+            --wp--preset--gradient--pale-ocean: linear-gradient(135deg, rgb(255, 245, 203) 0%, rgb(182, 227, 212) 50%, rgb(51, 167, 181) 100%);
+            --wp--preset--gradient--electric-grass: linear-gradient(135deg, rgb(202, 248, 128) 0%, rgb(113, 206, 126) 100%);
+            --wp--preset--gradient--midnight: linear-gradient(135deg, rgb(2, 3, 129) 0%, rgb(40, 116, 252) 100%);
+            --wp--preset--font-size--small: 19.5px;
+            --wp--preset--font-size--medium: 20px;
+            --wp--preset--font-size--large: 36.5px;
+            --wp--preset--font-size--x-large: 42px;
+            --wp--preset--font-size--normal: 22px;
+            --wp--preset--font-size--huge: 49.5px;
+            --wp--preset--spacing--20: 0.44rem;
+            --wp--preset--spacing--30: 0.67rem;
+            --wp--preset--spacing--40: 1rem;
+            --wp--preset--spacing--50: 1.5rem;
+            --wp--preset--spacing--60: 2.25rem;
+            --wp--preset--spacing--70: 3.38rem;
+            --wp--preset--spacing--80: 5.06rem;
+            --wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);
+            --wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);
+            --wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);
+            --wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);
+            --wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);
+        }
+
+        :where(.is-layout-flex) {
+            gap: 0.5em;
+        }
+
+        :where(.is-layout-grid) {
+            gap: 0.5em;
+        }
+
+        body .is-layout-flex {
+            display: flex;
+        }
+
+        .is-layout-flex {
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .is-layout-flex> :is(*, div) {
+            margin: 0;
+        }
+
+        body .is-layout-grid {
+            display: grid;
+        }
+
+        .is-layout-grid> :is(*, div) {
+            margin: 0;
+        }
+
+        :where(.wp-block-columns.is-layout-flex) {
+            gap: 2em;
+        }
+
+        :where(.wp-block-columns.is-layout-grid) {
+            gap: 2em;
+        }
+
+        :where(.wp-block-post-template.is-layout-flex) {
+            gap: 1.25em;
+        }
+
+        :where(.wp-block-post-template.is-layout-grid) {
+            gap: 1.25em;
+        }
+
+        .has-black-color {
+            color: var(--wp--preset--color--black) !important;
+        }
+
+        .has-cyan-bluish-gray-color {
+            color: var(--wp--preset--color--cyan-bluish-gray) !important;
+        }
+
+        .has-white-color {
+            color: var(--wp--preset--color--white) !important;
+        }
+
+        .has-pale-pink-color {
+            color: var(--wp--preset--color--pale-pink) !important;
+        }
+
+        .has-vivid-red-color {
+            color: var(--wp--preset--color--vivid-red) !important;
+        }
+
+        .has-luminous-vivid-orange-color {
+            color: var(--wp--preset--color--luminous-vivid-orange) !important;
+        }
+
+        .has-luminous-vivid-amber-color {
+            color: var(--wp--preset--color--luminous-vivid-amber) !important;
+        }
+
+        .has-light-green-cyan-color {
+            color: var(--wp--preset--color--light-green-cyan) !important;
+        }
+
+        .has-vivid-green-cyan-color {
+            color: var(--wp--preset--color--vivid-green-cyan) !important;
+        }
+
+        .has-pale-cyan-blue-color {
+            color: var(--wp--preset--color--pale-cyan-blue) !important;
+        }
+
+        .has-vivid-cyan-blue-color {
+            color: var(--wp--preset--color--vivid-cyan-blue) !important;
+        }
+
+        .has-vivid-purple-color {
+            color: var(--wp--preset--color--vivid-purple) !important;
+        }
+
+        .has-black-background-color {
+            background-color: var(--wp--preset--color--black) !important;
+        }
+
+        .has-cyan-bluish-gray-background-color {
+            background-color: var(--wp--preset--color--cyan-bluish-gray) !important;
+        }
+
+        .has-white-background-color {
+            background-color: var(--wp--preset--color--white) !important;
+        }
+
+        .has-pale-pink-background-color {
+            background-color: var(--wp--preset--color--pale-pink) !important;
+        }
+
+        .has-vivid-red-background-color {
+            background-color: var(--wp--preset--color--vivid-red) !important;
+        }
+
+        .has-luminous-vivid-orange-background-color {
+            background-color: var(--wp--preset--color--luminous-vivid-orange) !important;
+        }
+
+        .has-luminous-vivid-amber-background-color {
+            background-color: var(--wp--preset--color--luminous-vivid-amber) !important;
+        }
+
+        .has-light-green-cyan-background-color {
+            background-color: var(--wp--preset--color--light-green-cyan) !important;
+        }
+
+        .has-vivid-green-cyan-background-color {
+            background-color: var(--wp--preset--color--vivid-green-cyan) !important;
+        }
+
+        .has-pale-cyan-blue-background-color {
+            background-color: var(--wp--preset--color--pale-cyan-blue) !important;
+        }
+
+        .has-vivid-cyan-blue-background-color {
+            background-color: var(--wp--preset--color--vivid-cyan-blue) !important;
+        }
+
+        .has-vivid-purple-background-color {
+            background-color: var(--wp--preset--color--vivid-purple) !important;
+        }
+
+        .has-black-border-color {
+            border-color: var(--wp--preset--color--black) !important;
+        }
+
+        .has-cyan-bluish-gray-border-color {
+            border-color: var(--wp--preset--color--cyan-bluish-gray) !important;
+        }
+
+        .has-white-border-color {
+            border-color: var(--wp--preset--color--white) !important;
+        }
+
+        .has-pale-pink-border-color {
+            border-color: var(--wp--preset--color--pale-pink) !important;
+        }
+
+        .has-vivid-red-border-color {
+            border-color: var(--wp--preset--color--vivid-red) !important;
+        }
+
+        .has-luminous-vivid-orange-border-color {
+            border-color: var(--wp--preset--color--luminous-vivid-orange) !important;
+        }
+
+        .has-luminous-vivid-amber-border-color {
+            border-color: var(--wp--preset--color--luminous-vivid-amber) !important;
+        }
+
+        .has-light-green-cyan-border-color {
+            border-color: var(--wp--preset--color--light-green-cyan) !important;
+        }
+
+        .has-vivid-green-cyan-border-color {
+            border-color: var(--wp--preset--color--vivid-green-cyan) !important;
+        }
+
+        .has-pale-cyan-blue-border-color {
+            border-color: var(--wp--preset--color--pale-cyan-blue) !important;
+        }
+
+        .has-vivid-cyan-blue-border-color {
+            border-color: var(--wp--preset--color--vivid-cyan-blue) !important;
+        }
+
+        .has-vivid-purple-border-color {
+            border-color: var(--wp--preset--color--vivid-purple) !important;
+        }
+
+        .has-vivid-cyan-blue-to-vivid-purple-gradient-background {
+            background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;
+        }
+
+        .has-light-green-cyan-to-vivid-green-cyan-gradient-background {
+            background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;
+        }
+
+        .has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background {
+            background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;
+        }
+
+        .has-luminous-vivid-orange-to-vivid-red-gradient-background {
+            background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;
+        }
+
+        .has-very-light-gray-to-cyan-bluish-gray-gradient-background {
+            background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;
+        }
+
+        .has-cool-to-warm-spectrum-gradient-background {
+            background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;
+        }
+
+        .has-blush-light-purple-gradient-background {
+            background: var(--wp--preset--gradient--blush-light-purple) !important;
+        }
+
+        .has-blush-bordeaux-gradient-background {
+            background: var(--wp--preset--gradient--blush-bordeaux) !important;
+        }
+
+        .has-luminous-dusk-gradient-background {
+            background: var(--wp--preset--gradient--luminous-dusk) !important;
+        }
+
+        .has-pale-ocean-gradient-background {
+            background: var(--wp--preset--gradient--pale-ocean) !important;
+        }
+
+        .has-electric-grass-gradient-background {
+            background: var(--wp--preset--gradient--electric-grass) !important;
+        }
+
+        .has-midnight-gradient-background {
+            background: var(--wp--preset--gradient--midnight) !important;
+        }
+
+        .has-small-font-size {
+            font-size: var(--wp--preset--font-size--small) !important;
+        }
+
+        .has-medium-font-size {
+            font-size: var(--wp--preset--font-size--medium) !important;
+        }
+
+        .has-large-font-size {
+            font-size: var(--wp--preset--font-size--large) !important;
+        }
+
+        .has-x-large-font-size {
+            font-size: var(--wp--preset--font-size--x-large) !important;
+        }
+
+        /*# sourceURL=global-styles-inline-css */
+    </style>
+    <style type="text/css">
+        .recentcomments a {
+            display: inline !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+    </style>
+    <link rel="stylesheet" href="travel-redesign.css">
+</head>
+
+<body
+    class="home wp-singular page-template-default page page-id-2 wp-embed-responsive wp-theme-toc singular image-filters-enabled">
+    <div class="top-menu toc">
+        <div class="desktop-menu">
+            <ul id="menu-desktop-menu">
+                <li class="menu-item "> <a href="index.html">Home</a></li>
+                <li class="menu-item "> <a href="#locations-section">Locations</a></li>
+                <li class="menu-item "> <a href="#packages">Packages</a></li>
+                <li class="menu-item "> <a href="#trip-builder-section">Custom Trip</a></li>
+            </ul>
+        </div>
+        <div class="header-login-wrap">
+            <a href="#" class="header-login-btn" id="header-login-btn" title="User Login">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span id="header-login-text">Login</span>
+            </a>
+        </div> <a href="index.html" id="logo" title="Nijro Travel">
+            <img src="/imgs/logo.jpg" alt="Nijro Travel & Tours" fetchpriority="high" width="120" height="auto" decoding="async">
+        </a>
+        <div class="mobile-nav-dropdown" id="mobile-nav-dropdown">
+            <div class="menu-trigger" role="button" tabindex="0" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav-panel"> <svg width="30" height="50" aria-hidden="true">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-menu"></use>
+                </svg></div>
+            <div class="menu-wrapper" id="mobile-nav-panel" role="menu" aria-label="Site navigation"> <span class="close" role="button" tabindex="0" aria-label="Close menu"> <svg width="20" height="50" aria-hidden="true">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-close"></use>
+                    </svg> </span>
+                <div class="inner">
+                    <ul id="menu-main-menu" class="nijo-mobile-nav">
+                        <li class="menu-item"><a href="index.html">Home</a></li>
+                        <li class="menu-item"><a href="#locations-section">Locations</a></li>
+                        <li class="menu-item"><a href="#packages">Japan Travel Packages</a></li>
+                        <li class="menu-item"><a href="#trip-builder-section">Custom Trip Builder</a></li>
+                        <li class="menu-item"><a href="#inquiry-section">Book / Inquiry Form</a></li>
+                        <li class="menu-item"><a href="#logistics-section">Visa &amp; Travel Tips</a></li>
+                        <li class="menu-item"><a href="#testimonials-section">Reviews</a></li>
+                        <li class="menu-item"><a href="/reviews">All Reviews</a></li>
+                        <li class="menu-item"><a href="#faq-section">FAQs</a></li>
+                        <li class="menu-item"><a href="#social-feed-section">Social Feed</a></li>
+                        <li class="menu-item"><a href="#contact-section">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-banner home  post__image-container">
+        <div class="owl-carousel banner home owl-grab" style="display:block;">
+            <div class="item">
+                <picture>
+                    <source media="(max-width: 767px)"
+                        srcset="https://images.unsplash.com/photo-1578637387939-43c525550085?w=768">
+                    <source media="(max-width: 1199px)"
+                        srcset="https://images.unsplash.com/photo-1578637387939-43c525550085?w=1200"> <img
+                        src="https://images.unsplash.com/photo-1578637387939-43c525550085?w=1920"
+                        alt="Mount Fuji - Tales of Japan" title="Mount Fuji">
+                </picture>
+                <div class="layer first_item"> <img
+                        src="https://images.unsplash.com/photo-1578637387939-43c525550085?w=1920" alt="Mount Fuji">
+                </div>
+            </div>
+        </div>
+        <script>var slider_items = [{ "desktop_image": "https://images.unsplash.com/photo-1578637387939-43c525550085?w=1920", "desktop_layer": "https://images.unsplash.com/photo-1578637387939-43c525550085?w=1920", "thumb_image": "https://images.unsplash.com/photo-1578637387939-43c525550085?w=400", "sub_title": "Iconic Peak of", "thumb_title": "Mount Fuji" }, { "desktop_image": "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=1920", "desktop_layer": "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=1920", "thumb_image": "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400", "sub_title": "Experience", "thumb_title": "Tokyo" }, { "desktop_image": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1920", "desktop_layer": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1920", "thumb_image": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400", "sub_title": "Discover Ancient Temples of", "thumb_title": "Kyoto" }, { "desktop_image": "https://images.unsplash.com/photo-1589452271712-64b8a66c7b71?w=800&auto=format", "desktop_layer": "https://images.unsplash.com/photo-1589452271712-64b8a66c7b71?w=800&auto=format", "thumb_image": "https://images.unsplash.com/photo-1589452271712-64b8a66c7b71?w=800&auto=format", "sub_title": "Vibrant City of", "thumb_title": "Osaka" }, { "desktop_image": "https://images.unsplash.com/photo-1719360569943-310d65648d37?w=800&auto=format", "desktop_layer": "https://images.unsplash.com/photo-1719360569943-310d65648d37?w=800&auto=format", "thumb_image": "https://images.unsplash.com/photo-1719360569943-310d65648d37?w=800&auto=format", "sub_title": "Peace and Heritage in", "thumb_title": "Hiroshima" }, { "desktop_image": "https://images.unsplash.com/photo-1530708780517-cc640cf05561?w=800&auto=format", "desktop_layer": "https://images.unsplash.com/photo-1530708780517-cc640cf05561?w=800&auto=format", "thumb_image": "https://images.unsplash.com/photo-1530708780517-cc640cf05561?w=800&auto=format", "sub_title": "Sacred Deer and Temples of", "thumb_title": "Nara" }, { "desktop_image": "https://images.unsplash.com/photo-1735472436886-712aae78144d?w=800&auto=format", "desktop_layer": "https://images.unsplash.com/photo-1735472436886-712aae78144d?w=800&auto=format", "thumb_image": "https://images.unsplash.com/photo-1735472436886-712aae78144d?w=800&auto=format", "sub_title": "Snow and Culture in", "thumb_title": "Sapporo" }, { "desktop_image": "https://images.unsplash.com/photo-1618897037073-5edb010d92f5?w=800&auto=format", "desktop_layer": "https://images.unsplash.com/photo-1618897037073-5edb010d92f5?w=800&auto=format", "thumb_image": "https://images.unsplash.com/photo-1618897037073-5edb010d92f5?w=800&auto=format", "sub_title": "Gateway to Asia in", "thumb_title": "Fukuoka" }, { "desktop_image": "https://images.unsplash.com/photo-1735034757679-326e2c678979?w=800&auto=format", "desktop_layer": "https://images.unsplash.com/photo-1735034757679-326e2c678979?w=800&auto=format", "thumb_image": "https://images.unsplash.com/photo-1735034757679-326e2c678979?w=800&auto=format", "sub_title": "Shrines and Nature in", "thumb_title": "Nikko" }, { "desktop_image": "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=1920", "desktop_layer": "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=1920", "thumb_image": "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=400", "sub_title": "Traditional Beauty of", "thumb_title": "Japan" }];
+            var slider_itemscount = 10;</script> <span class="ex-journey"> <span> <svg width="30" aria-hidden="true">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-mouse"></use>
+                </svg> </span> </span>
+        <div class="slider-trigger"></div>
+    </div>
+    <style>
+        /* Hero: Mount Fuji first + new image-changing (slider trigger) design */
+        .hero-banner .banner.home .item img {
+            object-position: center center !important;
+        }
+
+        .hero-banner .banner.home .item .layer img {
+            object-position: center center !important;
+        }
+
+        .hero-banner .slider-trigger {
+            display: flex !important;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            align-items: stretch;
+            width: 94%;
+            left: 3%;
+            right: 3%;
+            gap: 0.4vw;
+            padding: 0.8vw 1.2vw;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-banner .slider-trigger .cilckelm {
+            display: flex !important;
+            flex-direction: column;
+            flex: 0 1 auto;
+            min-width: 0;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            padding: 0.4vw 0.5vw;
+            border-radius: 8px;
+            transition: background 0.25s ease, transform 0.2s ease;
+        }
+
+        .hero-banner .slider-trigger .cilckelm:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .hero-banner .slider-trigger .cilckelm.active {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .hero-banner .slider-trigger .cilckelm .img-holder {
+            flex-shrink: 0;
+            width: 2.2vw !important;
+            height: 2.2vw !important;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+
+        .hero-banner .slider-trigger .cilckelm .img-holder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-banner .slider-trigger .cilckelm .img-holder:after {
+            display: none !important;
+        }
+
+        .hero-banner .slider-trigger .cilckelm.active .img-holder {
+            border-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3), 0 2px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-banner .slider-trigger .cilckelm .text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+            margin-left: 0 !important;
+            margin-top: 0.3vw;
+            letter-spacing: 0.02em;
+        }
+
+        .hero-banner .slider-trigger .cilckelm .text span {
+            display: block !important;
+        }
+
+        @media (min-width: 1200px) {
+            .hero-banner .slider-trigger .cilckelm .text {
+                font-size: .5vw !important;
+            }
+
+            .hero-banner .slider-trigger .cilckelm .text span {
+                font-size: .7vw !important;
+                line-height: 1.25 !important;
+                font-weight: 700;
+            }
+
+            .hero-banner .slider-trigger .cilckelm.active .img-holder {
+                width: 2.6vw !important;
+                height: 2.6vw !important;
+            }
+
+            .hero-banner .slider-trigger .cilckelm.active .text span {
+                font-size: .85vw !important;
+            }
+        }
+    </style>
+    <style>
+        .things-to-do .map-holder:before {
+            background-image: url(https://images.unsplash.com/photo-1524413840807-9470bcff6bc5?w=1600&q=80);
+            background-size: cover;
+            background-position: center;
+        }
+
+        .things-to-do .inner-map {
+            aspect-ratio: 1/1;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .things-to-do .inner-map img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .things-to-do .inner-map .marker[data-marker="1"] {
+            left: 57%;
+            bottom: 78%;
+        }
+
+        /* Sapporo */
+        .things-to-do .inner-map .marker[data-marker="2"] {
+            left: 70%;
+            bottom: 45%;
+        }
+
+        /* Tokyo */
+        .things-to-do .inner-map .marker[data-marker="3"] {
+            left: 70%;
+            bottom: 42%;
+        }
+
+        /* Yokohama */
+        .things-to-do .inner-map .marker[data-marker="4"] {
+            left: 63%;
+            bottom: 44%;
+        }
+
+        /* Mount Fuji */
+        .things-to-do .inner-map .marker[data-marker="11"] {
+            left: 66%;
+            bottom: 43%;
+        }
+
+        /* Hakone */
+        .things-to-do .inner-map .marker[data-marker="10"] {
+            left: 67%;
+            bottom: 51%;
+        }
+
+        /* Nikko */
+        .things-to-do .inner-map .marker[data-marker="5"] {
+            left: 48%;
+            bottom: 41%;
+        }
+
+        /* Kyoto */
+        .things-to-do .inner-map .marker[data-marker="6"] {
+            left: 50%;
+            bottom: 39%;
+        }
+
+        /* Nara */
+        .things-to-do .inner-map .marker[data-marker="7"] {
+            left: 47%;
+            bottom: 38%;
+        }
+
+        /* Osaka */
+        .things-to-do .inner-map .marker[data-marker="8"] {
+            left: 34%;
+            bottom: 37%;
+        }
+
+        /* Hiroshima */
+        .things-to-do .inner-map .marker[data-marker="9"] {
+            left: 24%;
+            bottom: 34%;
+        }
+
+        /* Fukuoka */
+    </style>
+    <section class="welcome-text white explore-top">
+        <div class="inner">
+            <div class="wrapper hero-welcome-copy">
+                <p class="welcome-hero-brand">NIJO&nbsp;TOURS</p>
+                <p>Unlock the magic of Japan.</p>
+                <p>From historic shrines and cultural experiences to modern city adventures, your perfect journey starts
+                    here.</p>
+                <p>Let us craft a seamless and unforgettable travel experience for you.</p>
+            </div>
+        </div>
+        <div class="post__image-container">
+            <picture>
+                <source media="(max-width:767px)" data-srcset="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80">
+                <source media="(max-width: 1199px)" data-srcset="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=1200&q=80"> <img
+                    class="background lazy" src="imgs/1x1.png"
+                    data-src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=1600&q=80" alt="Travel Japan" title="Travel Japan">
+            </picture>
+        </div>
+    </section>
+    <section>
+        <section class="discover-around common-home">
+            <div class="text-wrapper">
+                <h2>Discover<span class="script">Japan</span></h2>
+                <p>The diverse landscape of Japan can take you from ancient temples to neon cities, from snow-capped
+                    peaks to cherry blossom gardens, from serene shrines to bustling nightlife in just a matter of
+                    hours.</p> <a href="#" class="def-link">Find out more<span> <svg width="15" height="15"
+                            aria-hidden="true">
+                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-right-arrow"></use>
+                        </svg> </span> </a>
+            </div>
+            <div class="destination-slider owl-carousel autoplaycarousel"> </div>
+        </section>
+        <section class="discover-toc">
+            <div class="img-holder">
+                <picture>
+                    <source media="(max-width:1199px)" data-srcset="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&q=80"> <img
+                        class="img-fluid lazy" src="imgs/1x1.png"
+                        data-src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1200&q=80" alt="Discover Japan" title="Discover Japan">
+                </picture>
+            </div>
+            <div class="text-wrapper">
+                <div class="inner">
+                    <h2 class="script">â€œLegends of Old, Wonders Anewâ€</h2>
+                    <h3>Discover Japan</h3>
+                    <p>Japanâ€™s rich and diverse past has many intriguing tales that narrate the colourful history of
+                        this ancient land. Explore tales from the eras of monarchic and colonial rule, as well as from
+                        popular myths and legends to learn more about the countryâ€™s dramatic and enchanting past.</p>
+                    <a href="#" class="def-link">Find out more<span> <svg width="15" height="15" aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-right-arrow"></use>
+                            </svg> </span> </a>
+                </div>
+            </div>
+        </section>
+        <section class="things-to-do common-home clearfix">
+            <div class="text-wrapper">
+                <h2>Your<br /> Holiday in <span class="script">Japan</span></h2>
+                <p>Japan is a great place to visit with your family, your partner or even on your own. Thereâ€™s
+                    something to interest and excite every type of traveller.</p>
+            </div>
+            <div class="wrapper">
+                <div class="img-holder map-holder">
+                    <div class="inner-map"> <img class="lazy" src="imgs/1x1.png"
+                            data-src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&q=80" alt="Japan Map"> <span class="marker active" data-marker="1">
+                            <span class="number">1</span><span class="title">Sapporo</span> <svg width="35" height="40"
+                                aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-map-marker"></use>
+                            </svg> </span> <span class="marker " data-marker="2"> <span class="number">2</span><span
+                                class="title">Tokyo</span> <svg width="35" height="40" aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-map-marker"></use>
+                            </svg> </span> <span class="marker " data-marker="3"> <span class="number">3</span><span
+                                class="title">Yokohama</span> <svg width="35" height="40" aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-map-marker"></use>
+                            </svg> </span> <span class="marker " data-marker="4"> <span class="number">4</span><span
+                                class="title">Mount Fuji</span> <svg width="35" height="40" aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-map-marker"></use>
+                            </svg> </span> <span class="marker " data-marker="5"> <span class="number">5</span><span
+                                class="title">Kyoto</span> <svg width="35" height="40" aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-map-marker"></use>
+                            </svg> </span> <span class="marker " data-marker="6"> <span class="number">6</span><span
+                                class="title">Nara</span> <svg width="35" height="40" aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-map-marker"></use>
+                            </svg> </span> <span class="marker " data-marker="7"> <span class="number">7</span><span
+                                class="title">Osaka</span> <svg width="35" height="40" aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-map-marker"></use>
+                            </svg> </span> <span class="marker " data-marker="8"> <span class="number">8</span><span
+                                class="title">Hiroshima</span> <svg width="35" height="40" aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-map-marker"></use>
+                            </svg> </span> <span class="marker " data-marker="9"> <span class="number">9</span><span
+                                class="title">Fukuoka</span> <svg width="35" height="40" aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-map-marker"></use>
+                            </svg> </span> <span class="marker " data-marker="10"> <span class="number">10</span><span
+                                class="title">Nikko</span> <svg width="35" height="40" aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-map-marker"></use>
+                            </svg> </span> <span class="marker " data-marker="11"> <span class="number">11</span><span
+                                class="title">Hakone</span> <svg width="35" height="40" aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-map-marker"></use>
+                            </svg> </span></div>
+                </div>
+                <div class="thingstodo-slider owl-carousel autoplaycarousel">
+
+
+
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+        </section>
+        <div class="video-block"> <a data-fancybox href="https://vimeo.com/364873402" class="img-holder">
+                <picture>
+                    <source media="(max-width:767px)" data-srcset="https://images.unsplash.com/photo-1578637387939-43c525550085?w=800&q=80">
+                    <source media="(max-width: 1199px)" data-srcset="https://images.unsplash.com/photo-1578637387939-43c525550085?w=1200&q=80">
+                    <img class="img-fluid lazy" src="imgs/1x1.png"
+                        data-src="https://images.unsplash.com/photo-1578637387939-43c525550085?w=1600&q=80" alt="Video Kyotory Section">
+                </picture>
+                <div class="play-blue"> <img class="lazy" src="imgs/1x1.png"
+                        data-src="https://images.unsplash.com/photo-1578637387939-43c525550085?w=120&q=80" alt=""></div> <span> <svg width="15"
+                        height="50" aria-hidden="true">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-play"></use>
+                    </svg> </span>
+            </a>
+            <div class="background-bg post__image-container"> <img class="lazy"
+                    src="imgs/1x1.png" data-src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=1200&q=80"
+                    alt=""></div>
+        </div>
+        <div class="travel-stories card-layout-home">
+            <h2>Experiences</h2>
+            <a href="#" class="def-link">Find out more<span> <svg width="15" height="15" aria-hidden="true">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-right-arrow"></use>
+                    </svg> </span> </a>
+            <div class="wrapper clearfix">
+                <a href="#" class="item card-block">
+                    <div class="img-holder post__image-container"> <img class="lazy"
+                            src="imgs/1x1.png"
+                            data-src="https://images.unsplash.com/photo-1568430462989-44136eb7e70d?w=800&q=80" alt="Whale Watching"></div>
+                    <div class="desc">
+                        <h3>Whale Watching</h3> <span class="light">Coastal adventures</span>
+                        <p>From Hokkaido to Okinawa, Japanâ€™s seas offer memorable wildlife encounters during the right
+                            seasons.</p>
+                        <div class="def-link">Read More <span> <svg width="15" height="15" aria-hidden="true">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-right-arrow">
+                                    </use>
+                                </svg> </span></div>
+                    </div>
+                </a>
+                <a href="#" class="item card-block">
+                    <div class="img-holder post__image-container"> <img class="lazy"
+                            src="imgs/1x1.png"
+                            data-src="https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=800&q=80" alt="Wildlife and Nature">
+                    </div>
+                    <div class="desc">
+                        <h3>Wildlife &amp; Nature</h3> <span class="light">National parks and trails</span>
+                        <p>Explore Japanâ€™s forests, mountains, and islandsâ€”perfect for hiking, birdwatching, and
+                            scenic escapes.</p>
+                        <div class="def-link">Read More <span> <svg width="15" height="15" aria-hidden="true">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-right-arrow">
+                                    </use>
+                                </svg> </span></div>
+                    </div>
+                </a>
+                <a href="#" class="item card-block">
+                    <div class="img-holder post__image-container"> <img class="lazy"
+                            src="imgs/1x1.png"
+                            data-src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80"
+                            alt="Diving and Snorkelling"></div>
+                    <div class="desc">
+                        <h3>Diving and Snorkelling</h3> <span class="light">Colourful marine life</span>
+                        <p>Discover Japanâ€™s underwater worldâ€”especially around the southern islands where visibility
+                            can be stunning.</p>
+                        <div class="def-link">Read More <span> <svg width="15" height="15" aria-hidden="true">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-right-arrow">
+                                    </use>
+                                </svg> </span></div>
+                    </div>
+                </a>
+                <a href="#" class="item card-block">
+                    <div class="img-holder post__image-container"> <img class="lazy"
+                            src="imgs/1x1.png"
+                            data-src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=800&q=80" alt="Surfing in Japan"></div>
+                    <div class="desc">
+                        <h3>Surfing in Japan</h3> <span class="light">Exhilarating water sports</span>
+                        <p>Chiba, Shonan, and beyondâ€”Japanâ€™s coastlines have great breaks for beginners and
+                            experienced surfers.</p>
+                        <div class="def-link">Read More <span> <svg width="15" height="15" aria-hidden="true">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-right-arrow">
+                                    </use>
+                                </svg> </span></div>
+                    </div>
+                </a>
+                <a href="#" class="item card-block">
+                    <div class="img-holder post__image-container"> <img class="lazy"
+                            src="imgs/1x1.png"
+                            data-src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80" alt="Wellness"></div>
+                    <div class="desc">
+                        <h3>Wellness</h3> <span class="light">Relax and recharge</span>
+                        <p>Unwind with onsen towns, spa stays, and slow travel experiences across Japan.</p>
+                        <div class="def-link">Read More <span> <svg width="15" height="15" aria-hidden="true">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-right-arrow">
+                                    </use>
+                                </svg> </span></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="updates card-layout-home">
+            <h2>Plan Your Visit to Japan</h2> <a href="#" class="def-link">Find out more<span> <svg width="15"
+                        height="15" aria-hidden="true">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-right-arrow"></use>
+                    </svg> </span> </a>
+            <div class="wrapper clearfix"> <a href="#" class="item card-block">
+                    <div class="img-holder post__image-container"> <img class="lazy"
+                            src="imgs/1x1.png"
+                            data-src="https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80"
+                            alt="Where to go in Japan for a honeymoon?"></div>
+                    <div class="desc">
+                        <h3>Where to go in Japan for a honeymoon?</h3> <span class="light">A guide to planning the
+                            perfect trip</span>
+                        <p>From city lights to quiet onsen towns, Japan offers romantic experiences for every style of
+                            couple.</p>
+                        <div class="def-link">Read More <span> <svg width="15" height="15" aria-hidden="true">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-right-arrow">
+                                    </use>
+                                </svg> </span></div>
+                    </div>
+                </a> <a href="#" class="item card-block">
+                    <div class="img-holder post__image-container"> <img class="lazy"
+                            src="imgs/1x1.png"
+                            data-src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&q=80"
+                            alt="What are some unique experiences in Japan?"></div>
+                    <div class="desc">
+                        <h3>What are some unique experiences in Japan?</h3> <span class="light">A quick guide</span>
+                        <p>Food alleys, festivals, shrines, scenic rail journeys, and hidden neighborhoodsâ€”Japan has
+                            endless surprises.</p>
+                        <div class="def-link">Read More <span> <svg width="15" height="15" aria-hidden="true">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-right-arrow">
+                                    </use>
+                                </svg> </span></div>
+                    </div>
+                </a></div>
+        </div>
+        <footer class="footer text-center">
+            <div class="newsletter">
+                <h4>Sign up for updates</h4>
+                <div role="form" class="_wpcf7">
+                    <form action="sign-up-for-updates/" method="post"> <input type="email" name="your-email" value=""
+                            size="40" placeholder="ENTER YOUR EMAIL ADDRESS" required> <button type="submit"><svg
+                                width="15" height="15" aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-right-arrow"></use>
+                            </svg> </button></form>
+                </div>
+            </div>
+            <div class="footer-menu">
+                <ul id="menu-footer-menu" class="">
+                    <li id="menu-item-208"
+                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-2 current_page_item menu-item-208">
+                        <a href="index.html" aria-current="page">Home</a></li>
+                    <li id="menu-item-1397"
+                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1397"><a href="#">Plan
+                            Your Visit to Japan</a></li>
+                    <li id="menu-item-311"
+                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-311"><a
+                            href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="contact-parent">
+                <div class="box">
+                    <h5>connect with us</h5>
+                    <div class="smo-wrapper"> <a href="https://www.facebook.com/TravelJapanOfficial/" class="smo"
+                            target="_blank"> <svg width="15" height="15" aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-facebook"></use>
+                            </svg> </a> <a href="https://www.instagram.com/travel_japan/" class="smo" target="_blank">
+                            <svg width="15" height="15" aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-instagram"></use>
+                            </svg> </a> <a href="https://www.pinterest.com/traveljapan/" class="smo" target="_blank">
+                            <svg width="15" height="15" aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-pinterest"></use>
+                            </svg> </a> <a
+                            href="https://www.youtube.com/channel/UCq8Ioxnw7s6UBe375d34DGA?disable_polymer=true"
+                            class="smo" target="_blank"> <svg width="15" height="15" aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-youtube"></use>
+                            </svg> </a></div>
+                </div>
+                <div class="box">
+                    <h5>contact us</h5>
+                    <p>Travel Japan <br /> Shibuya, Tokyo 150-0002<br />Japan</p>
+                </div>
+                <div class="box telephone">
+                    <div class="clearfix phone"> <a href="tel:+81312345678"><svg width="24" height="24"
+                                aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-phone"></use>
+                            </svg>+81 3-1234-5678</a></div> <a
+                        href="mailto:hello@traveljapan.com">hello@traveljapan.com</a>
+                </div>
+            </div>
+            <div class="contact-parent credit-wrapper">
+                <div class="credit"> <span></span></div>
+            </div>
+            <div class="img-holder">
+                <picture>
+                    <source media="(max-width:1023px)" data-srcset="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80">
+                    <img class="background lazy" src="imgs/1x1.png"
+                        data-src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="footer-bg" title="footer-bg">
+                </picture>
+            </div>
+        </footer>
+        <div class="clouds active">
+            <div class="left-cloud"> <img class="lazy" src="imgs/1x1.png"
+                    data-src="https://images.unsplash.com/photo-1513002749550-c59d786b8e6c?w=600&q=80" alt=""></div>
+            <div class="right-cloud"> <img class="lazy" src="imgs/1x1.png"
+                    data-src="https://images.unsplash.com/photo-1513002749550-c59d786b8e6c?w=600&q=80" alt=""></div>
+        </div>
+        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload%4012.0.0/dist/lazyload.min.js"></script>
+        <script defer
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script>
+        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.5/waypoints.min.js"></script>
+        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+        <script defer src="wp-content/themes/toc/js/functions.min.js"></script> <svg xmlns="http://www.w3.org/2000/svg"
+            style="display:none" aria-hidden="true">
+            <symbol id="icon-right-arrow" viewBox="0 0 426.667 426.667">
+                <path d="M212.789,0C102.347,0,11.275,84.352,0.544,192h246.165l-49.003-48.896l30.144-30.208l100.437,100.245L227.893,313.728
+ l-30.208-30.123l48.853-48.939H0.544c10.731,107.648,101.803,192,212.245,192c117.632,0,213.333-95.701,213.333-213.333
+ S330.421,0,212.789,0z" />
+            </symbol>
+            <symbol id="icon-map-marker" viewBox="0 0 480.18 493.34">
+                <path
+                    d="M440.85,174.29c46.38-24.8,8.43-138.62,8.43-138.62S483.45,150.91,275,31.25C117.9-58.94,48.68,96.79,42.43,110.88l-.47-.73-2.91-4.54L37,107,31.89,88.78,10.34,72.24l8.9,26.27,14.33,10.86-1.42,1,3.6,5.64c-4.11,7.15-6.31,14-2.25,19.76l1.28-9.22L36,117.41c-.15,7.65,1.24,14.12,7,17.06L40,125.72l-2.38-6.81L189,355.63c-3.84,6.92-5.84,13.53-1.89,19.12l1.27-9.22,1.23-8.95,0,0c-.12,7.58,1.31,13.95,7.1,16.82l-3.08-8.75-1.42-4,86.93,136,6.9-4.78L196.75,352.24c1.82-11.29,18.72-79.55,148.54-63.38,140.53,17.51,145.23-119.38,145.23-119.38C463.87,195.36,440.85,174.29,440.85,174.29Z"
+                    transform="translate(-10.34 -3.31)" />
+            </symbol>
+            <symbol id="icon-play" viewBox="0 0 41.999 41.999">
+                <path d="M36.068,20.176l-29-20C6.761-0.035,6.363-0.057,6.035,0.114C5.706,0.287,5.5,0.627,5.5,0.999v40
+ c0,0.372,0.206,0.713,0.535,0.886c0.146,0.076,0.306,0.114,0.465,0.114c0.199,0,0.397-0.06,0.568-0.177l29-20
+ c0.271-0.187,0.432-0.494,0.432-0.823S36.338,20.363,36.068,20.176z" />
+            </symbol>
+            <symbol id="icon-close" viewBox="0 0 512 512">
+                <path d="M505.943,6.058c-8.077-8.077-21.172-8.077-29.249,0L6.058,476.693c-8.077,8.077-8.077,21.172,0,29.249
+ C10.096,509.982,15.39,512,20.683,512c5.293,0,10.586-2.019,14.625-6.059L505.943,35.306
+ C514.019,27.23,514.019,14.135,505.943,6.058z" />
+                <path
+                    d="M505.942,476.694L35.306,6.059c-8.076-8.077-21.172-8.077-29.248,0c-8.077,8.076-8.077,21.171,0,29.248l470.636,470.636
+ c4.038,4.039,9.332,6.058,14.625,6.058c5.293,0,10.587-2.019,14.624-6.057C514.018,497.866,514.018,484.771,505.942,476.694z" />
+            </symbol>
+            <symbol id="icon-phone" viewBox="0 0 35 35">
+                <path d="M25.302,0H9.698c-1.3,0-2.364,1.063-2.364,2.364v30.271C7.334,33.936,8.398,35,9.698,35h15.604
+ c1.3,0,2.364-1.062,2.364-2.364V2.364C27.666,1.063,26.602,0,25.302,0z M15.004,1.704h4.992c0.158,0,0.286,0.128,0.286,0.287
+ c0,0.158-0.128,0.286-0.286,0.286h-4.992c-0.158,0-0.286-0.128-0.286-0.286C14.718,1.832,14.846,1.704,15.004,1.704z M17.5,33.818
+ c-0.653,0-1.182-0.529-1.182-1.183s0.529-1.182,1.182-1.182s1.182,0.528,1.182,1.182S18.153,33.818,17.5,33.818z M26.021,30.625
+ H8.979V3.749h17.042V30.625z" />
+            </symbol>
+            <symbol id="icon-right" viewBox="0 0 52 52">
+                <path d="M46,0H6C2.691,0,0,2.691,0,6v40c0,3.309,2.691,6,6,6h40c3.309,0,6-2.691,6-6V6C52,2.691,49.309,0,46,0z M50,46
+ c0,2.206-1.794,4-4,4H6c-2.206,0-4-1.794-4-4V6c0-2.206,1.794-4,4-4h40c2.206,0,4,1.794,4,4V46z" />
+                <path d="M34.443,25.032l-14-6.928c-0.309-0.154-0.676-0.136-0.971,0.047C19.179,18.333,19,18.654,19,19v13.856
+ c0,0.346,0.179,0.667,0.473,0.85c0.161,0.1,0.344,0.15,0.527,0.15c0.151,0,0.304-0.034,0.443-0.104l14-6.928
+ C34.784,26.656,35,26.309,35,25.928S34.784,25.201,34.443,25.032z M21,31.246V20.611l10.745,5.317L21,31.246z" />
+            </symbol>
+            <symbol id="icon-instagram" viewBox="0 0 169.063 169.063">
+                <path d="M122.406,0H46.654C20.929,0,0,20.93,0,46.655v75.752c0,25.726,20.929,46.655,46.654,46.655h75.752
+ c25.727,0,46.656-20.93,46.656-46.655V46.655C169.063,20.93,148.133,0,122.406,0z M154.063,122.407
+ c0,17.455-14.201,31.655-31.656,31.655H46.654C29.2,154.063,15,139.862,15,122.407V46.655C15,29.201,29.2,15,46.654,15h75.752
+ c17.455,0,31.656,14.201,31.656,31.655V122.407z" />
+                <path d="M84.531,40.97c-24.021,0-43.563,19.542-43.563,43.563c0,24.02,19.542,43.561,43.563,43.561s43.563-19.541,43.563-43.561
+ C128.094,60.512,108.552,40.97,84.531,40.97z M84.531,113.093c-15.749,0-28.563-12.812-28.563-28.561
+ c0-15.75,12.813-28.563,28.563-28.563s28.563,12.813,28.563,28.563C113.094,100.281,100.28,113.093,84.531,113.093z" />
+                <path d="M129.921,28.251c-2.89,0-5.729,1.17-7.77,3.22c-2.051,2.04-3.23,4.88-3.23,7.78c0,2.891,1.18,5.73,3.23,7.78
+ c2.04,2.04,4.88,3.22,7.77,3.22c2.9,0,5.73-1.18,7.78-3.22c2.05-2.05,3.22-4.89,3.22-7.78c0-2.9-1.17-5.74-3.22-7.78
+ C135.661,29.421,132.821,28.251,129.921,28.251z" />
+            </symbol>
+            <symbol id="icon-facebook" viewBox="0 0 470.513 470.513">
+                <path
+                    d="M271.521,154.17v-40.541c0-6.086,0.28-10.8,0.849-14.13c0.567-3.335,1.857-6.615,3.859-9.853
+ c1.999-3.236,5.236-5.47,9.706-6.708c4.476-1.24,10.424-1.858,17.85-1.858h40.539V0h-64.809c-37.5,0-64.433,8.897-80.803,26.691
+ c-16.368,17.798-24.551,44.014-24.551,78.658v48.82h-48.542v81.086h48.539v235.256h97.362V235.256h64.805l8.566-81.086H271.521z" />
+            </symbol>
+            <symbol id="icon-twitter" viewBox="0 0 512 512">
+                <path d="M512,97.248c-19.04,8.352-39.328,13.888-60.48,16.576c21.76-12.992,38.368-33.408,46.176-58.016
+ c-20.288,12.096-42.688,20.64-66.56,25.408C411.872,60.704,384.416,48,354.464,48c-58.112,0-104.896,47.168-104.896,104.992
+ c0,8.32,0.704,16.32,2.432,23.936c-87.264-4.256-164.48-46.08-216.352-109.792c-9.056,15.712-14.368,33.696-14.368,53.056
+ c0,36.352,18.72,68.576,46.624,87.232c-16.864-0.32-33.408-5.216-47.424-12.928c0,0.32,0,0.736,0,1.152
+ c0,51.008,36.384,93.376,84.096,103.136c-8.544,2.336-17.856,3.456-27.52,3.456c-6.72,0-13.504-0.384-19.872-1.792
+ c13.6,41.568,52.192,72.128,98.08,73.12c-35.712,27.936-81.056,44.768-130.144,44.768c-8.608,0-16.864-0.384-25.12-1.44
+ C46.496,446.88,101.6,464,161.024,464c193.152,0,298.752-160,298.752-298.688c0-4.64-0.16-9.12-0.384-13.568
+ C480.224,136.96,497.728,118.496,512,97.248z" />
+            </symbol>
+            <symbol id="icon-pinterest" viewBox="0 0 511.977 511.977">
+                <path d="M262.948,0C122.628,0,48.004,89.92,48.004,187.968c0,45.472,25.408,102.176,66.08,120.16
+ c6.176,2.784,9.536,1.6,10.912-4.128c1.216-4.352,6.56-25.312,9.152-35.2c0.8-3.168,0.384-5.92-2.176-8.896
+ c-13.504-15.616-24.224-44.064-24.224-70.752c0-68.384,54.368-134.784,146.88-134.784c80,0,135.968,51.968,135.968,126.304
+ c0,84-44.448,142.112-102.208,142.112c-31.968,0-55.776-25.088-48.224-56.128c9.12-36.96,27.008-76.704,27.008-103.36
+ c0-23.904-13.504-43.68-41.088-43.68c-32.544,0-58.944,32.224-58.944,75.488c0,27.488,9.728,46.048,9.728,46.048
+ S144.676,371.2,138.692,395.488c-10.112,41.12,1.376,107.712,2.368,113.44c0.608,3.168,4.16,4.16,6.144,1.568
+ c3.168-4.16,42.08-59.68,52.992-99.808c3.968-14.624,20.256-73.92,20.256-73.92c10.72,19.36,41.664,35.584,74.624,35.584
+ c98.048,0,168.896-86.176,168.896-193.12C463.62,76.704,375.876,0,262.948,0z" />
+            </symbol>
+            <symbol id="icon-youtube" viewBox="0 0 310 310">
+                <path d="M297.917,64.645c-11.19-13.302-31.85-18.728-71.306-18.728H83.386c-40.359,0-61.369,5.776-72.517,19.938
+ C0,79.663,0,100.008,0,128.166v53.669c0,54.551,12.896,82.248,83.386,82.248h143.226c34.216,0,53.176-4.788,65.442-16.527
+ C304.633,235.518,310,215.863,310,181.835v-53.669C310,98.471,309.159,78.006,297.917,64.645z M199.021,162.41l-65.038,33.991
+ c-1.454,0.76-3.044,1.137-4.632,1.137c-1.798,0-3.592-0.484-5.181-1.446c-2.992-1.813-4.819-5.056-4.819-8.554v-67.764
+ c0-3.492,1.822-6.732,4.808-8.546c2.987-1.814,6.702-1.938,9.801-0.328l65.038,33.772c3.309,1.718,5.387,5.134,5.392,8.861
+ C204.394,157.263,202.325,160.684,199.021,162.41z" />
+            </symbol>
+            <symbol id="icon-down-arrow" viewBox="0 0 284.929 284.929">
+                <path d="M282.082,76.511l-14.274-14.273c-1.902-1.906-4.093-2.856-6.57-2.856c-2.471,0-4.661,0.95-6.563,2.856L142.466,174.441
+ L30.262,62.241c-1.903-1.906-4.093-2.856-6.567-2.856c-2.475,0-4.665,0.95-6.567,2.856L2.856,76.515C0.95,78.417,0,80.607,0,83.082
+ c0,2.473,0.953,4.663,2.856,6.565l133.043,133.046c1.902,1.903,4.093,2.854,6.567,2.854s4.661-0.951,6.562-2.854L282.082,89.647
+ c1.902-1.903,2.847-4.093,2.847-6.565C284.929,80.607,283.984,78.417,282.082,76.511z" />
+            </symbol>
+            <symbol id="icon-mouse" viewBox="0 0 210.414 210.414">
+                <path d="M105.207,0C66.532,0,35.069,31.45,35.069,70.104v70.21c0,38.653,31.463,70.1,70.138,70.1
+ c38.675,0,70.138-31.446,70.138-70.1v-70.21C175.345,31.45,143.881,0,105.207,0z M167.552,140.314
+ c0,34.357-27.968,62.307-62.345,62.307c-34.377,0-62.345-27.95-62.345-62.307v-70.21c0-34.357,27.968-62.311,62.345-62.311
+ c34.377,0,62.345,27.953,62.345,62.311V140.314z" />
+                <path d="M105.207,23.379c-2.152,0-3.897,1.743-3.897,3.897v35.286c0,2.154,1.745,3.897,3.897,3.897
+ c2.152,0,3.897-1.743,3.897-3.897V27.276C109.103,25.122,107.359,23.379,105.207,23.379z" />
+            </symbol>
+            <symbol id="icon-menu" viewBox="0 0 384.97 384.97">
+                <path d="M12.03,120.303h360.909c6.641,0,12.03-5.39,12.03-12.03c0-6.641-5.39-12.03-12.03-12.03H12.03
+ c-6.641,0-12.03,5.39-12.03,12.03C0,114.913,5.39,120.303,12.03,120.303z" />
+                <path d="M372.939,180.455H12.03c-6.641,0-12.03,5.39-12.03,12.03s5.39,12.03,12.03,12.03h360.909c6.641,0,12.03-5.39,12.03-12.03
+ S379.58,180.455,372.939,180.455z" />
+                <path d="M372.939,264.667H132.333c-6.641,0-12.03,5.39-12.03,12.03c0,6.641,5.39,12.03,12.03,12.03h240.606
+ c6.641,0,12.03-5.39,12.03-12.03C384.97,270.056,379.58,264.667,372.939,264.667z" />
+            </symbol>
+            <symbol id="icon-enter" viewBox="0 0 489.4 489.4">
+                <path d="M407,0H82.4C37,0,0,37,0,82.6v162.1c0,9.9,8.1,18,18,18h276.7L255,302.4c-7,7-7,18.4,0,25.5c3.5,3.5,8.1,5.3,12.7,5.3
+ c4.6,0,9.2-1.8,12.7-5.3l70.4-70.4c7-7,7-18.4,0-25.5l-70.4-70.4c-7-7-18.4-7-25.5,0c-7,7-7,18.4,0,25.5l39.8,39.6H36V82.6
+ C36,56.9,56.8,36,82.4,36H407c25.6,0,46.4,20.9,46.4,46.6v324.2c0,25.7-20.8,46.6-46.4,46.6H82.4c-25.6,0-46.4-20.9-46.4-46.6v-42
+ c0-9.9-8.1-18-18-18c-9.9,0-18,8.1-18,18v42c0,45.5,37,82.6,82.4,82.6H407c45.4,0,82.4-37,82.4-82.6V82.6
+ C489.4,37.1,452.4,0,407,0z" />
+            </symbol>
+            <symbol id="icon-search" viewBox="0 0 475.084 475.084">
+                <path d="M464.524,412.846l-97.929-97.925c23.6-34.068,35.406-72.047,35.406-113.917c0-27.218-5.284-53.249-15.852-78.087
+ c-10.561-24.842-24.838-46.254-42.825-64.241c-17.987-17.987-39.396-32.264-64.233-42.826
+ C254.246,5.285,228.217,0.003,200.999,0.003c-27.216,0-53.247,5.282-78.085,15.847C98.072,26.412,76.66,40.689,58.673,58.676
+ c-17.989,17.987-32.264,39.403-42.827,64.241C5.282,147.758,0,173.786,0,201.004c0,27.216,5.282,53.238,15.846,78.083
+ c10.562,24.838,24.838,46.247,42.827,64.234c17.987,17.993,39.403,32.264,64.241,42.832c24.841,10.563,50.869,15.844,78.085,15.844
+ c41.879,0,79.852-11.807,113.922-35.405l97.929,97.641c6.852,7.231,15.406,10.849,25.693,10.849
+ c9.897,0,18.467-3.617,25.694-10.849c7.23-7.23,10.848-15.796,10.848-25.693C475.088,428.458,471.567,419.889,464.524,412.846z
+ M291.363,291.358c-25.029,25.033-55.148,37.549-90.364,37.549c-35.21,0-65.329-12.519-90.36-37.549
+ c-25.031-25.029-37.546-55.144-37.546-90.36c0-35.21,12.518-65.334,37.546-90.36c25.026-25.032,55.15-37.546,90.36-37.546
+ c35.212,0,65.331,12.519,90.364,37.546c25.033,25.026,37.548,55.15,37.548,90.36C328.911,236.214,316.392,266.329,291.363,291.358z
+ " />
+            </symbol>
+        </svg>
+        <script>WebFontConfig = {
+                google: {
+                    families: ['Work+Sans:400,600,700&display=swap', 'Raleway:400,600,700&display=swap']
+                }
+            };
+            (function () {
+                var wf = document.createElement('script');
+                wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+                wf.type = 'text/javascript';
+                wf.async = 'true';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(wf, s);
+            })();
+        </script>
+        <script defer src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+        <script defer src="js/config.js"></script>
+        <script defer src="js/api-integration.js"></script>
+        <script defer src="travel-redesign.js"></script>
+        <script defer src="js/seasonal-effect.js"></script>
+</body>
+
+</html>

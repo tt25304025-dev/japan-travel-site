@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookings - Admin</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+    <style>
+        .booking-detail { background: #f8f9fa; padding: 16px; border-radius: 8px; margin-top: 8px; font-size: 13px; line-height: 1.6; display: none; }
+        .booking-detail.open { display: block; }
+        .booking-detail p { margin: 4px 0; }
+        .booking-detail strong { color: #333; }
+        .btn-toggle { background: #e0e0e0; color: #333; }
+        .btn-toggle:hover { background: #ccc; }
+        .status-pending { color: #f39c12; font-weight: 600; }
+        .status-confirmed { color: #27ae60; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <nav class="admin-nav">
+        <a href="/admin/dashboard">Dashboard</a>
+        <a href="/admin/hero">Hero Slides</a>
+        <a href="/admin/locations">Locations</a>
+        <a href="/admin/packages">Packages</a>
+        <a href="/admin/bookings" class="active">Bookings</a>
+        <a href="/admin/faqs">FAQs</a>
+        <a href="/admin/reviews">Reviews</a>
+        <a href="/admin/social-feed">Social Feed</a>
+        <a href="/" target="_blank">View Site</a>
+        <a href="/admin/logout" class="logout">Logout</a>
+    </nav>
+    <main class="admin-main">
+        <h1>Booking / Inquiry Requests</h1>
+        <p style="color:#666; margin-bottom: 20px;">All traveler inquiries and booking requests are listed below. Click "Details" to see full information.</p>
+        <div class="table-wrap" style="margin-top: 20px;">
+            <table>
+                <thead><tr><th>Name</th><th>Email</th><th>Country</th><th>People</th><th>Packages</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+                <tbody id="bookingsTable"></tbody>
+            </table>
+        </div>
+    </main>
+    <div class="modal" id="detailModal">
+        <div class="modal-content" style="max-width: 600px;">
+            <h2>Booking Details</h2>
+            <div id="bookingDetail"></div>
+            <div class="form-row" style="margin-top: 20px;">
+                <button type="button" class="btn" onclick="closeDetail()">Close</button>
+                <a id="whatsappLink" href="#" target="_blank" class="btn btn-primary" style="background:#25D366;text-decoration:none;color:#fff;text-align:center;">Reply on WhatsApp</a>
+            </div>
+        </div>
+    </div>
+    <script src="/admin/admin.js"></script>
+    <script>
+        function loadBookings() {
+            apiFetch('/bookings').then(r => r.json()).then(data => {
+                document.getElementById('bookingsTable').innerHTML = data.map(b => `
+                    <tr>
+                        <td>${b.name}</td>
+                        <td>${b.email}</td>
+                        <td>${b.country || '-'}</td>
+                        <td>${b.peopleCount || '-'}</td>
+                        <td>${b.selectedPackageIds || (b.packageTitle || '-')}</td>
+                        <td><span class="status-${(b.status || 'pending').toLowerCase()}">${b.status}</span></td>
+                        <td>${b.createdAt ? new Date(b.createdAt).toLocaleDateString() : '-'}</td>
+                        <td><button class="btn btn-sm btn-primary" onclick='viewDetail(${JSON.stringify(b).replace(/'/g, "&#39;")})'>Details</button></td>
+                    </tr>
+                `).join('');
+            }).catch(() => { document.getElementById('bookingsTable').innerHTML = '<tr><td colspan="8">Failed to load.</td></tr>'; });
+        }
+        loadBookings();
+
+        function viewDetail(b) {
+            let html = '';
+            html += `<p><strong>Full Name:</strong> ${b.name}</p>`;
+            html += `<p><strong>Email:</strong> ${b.email}</p>`;
+            html += `<p><strong>Phone:</strong> ${b.phone || 'Not provided'}</p>`;
+            html += `<p><strong>Date of Birth:</strong> ${b.dateOfBirth || 'Not provided'}</p>`;
+            html += `<p><strong>Country:</strong> ${b.country || 'Not provided'}</p>`;
+            html += `<p><strong>Number of People:</strong> ${b.peopleCount || 'Not specified'}</p>`;
+            if (b.hasChildrenUnder18) {
+                html += `<p><strong>Children Under 18:</strong> Yes (${b.childrenUnder18Count || 0} children)</p>`;
+            }
+            html += `<p><strong>Selected Package IDs:</strong> ${b.selectedPackageIds || 'None'}</p>`;
+            html += `<p><strong>Package:</strong> ${b.packageTitle || 'Custom / None'}</p>`;
+            html += `<p><strong>Special Places Request:</strong> ${b.specialPlaces || 'None'}</p>`;
+            html += `<p><strong>Message:</strong> ${b.message || 'None'}</p>`;
+            html += `<p><strong>Status:</strong> ${b.status}</p>`;
+            html += `<p><strong>Submitted:</strong> ${b.createdAt ? new Date(b.createdAt).toLocaleString() : '-'}</p>`;
+
+            document.getElementById('bookingDetail').innerHTML = html;
+
+            const phone = b.phone ? b.phone.replace(/[^0-9+]/g, '') : '';
+            const waLink = document.getElementById('whatsappLink');
+            if (phone) {
+                const waNum = phone.startsWith('+') ? phone.substring(1) : phone;
+                waLink.href = `https://wa.me/${waNum}?text=${encodeURIComponent('Hi ' + b.name + '! Thank you for your inquiry about Japan travel with Nijo Travel & Tours. We are reviewing your request and will provide details shortly.')}`;
+                waLink.style.display = 'inline-block';
+            } else {
+                waLink.style.display = 'none';
+            }
+
+            document.getElementById('detailModal').classList.add('open');
+        }
+
+        function closeDetail() {
+            document.getElementById('detailModal').classList.remove('open');
+        }
+    </script>
+</body>
+</html>

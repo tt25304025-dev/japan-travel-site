@@ -1,0 +1,218 @@
+================================================================================
+  TRAVEL AGENCY PROJECT — FILE STRUCTURE & FREE HOSTING GUIDE
+================================================================================
+
+This document describes how the main-page-only project is organized on disk and
+gives practical free (or free-tier) ways to host the site when you are ready.
+
+
+--------------------------------------------------------------------------------
+PART 1 — HOW THE FILE STRUCTURE IS ORGANIZED
+--------------------------------------------------------------------------------
+
+ROOT FOLDER: main-page-only
+  This is the whole project. The public website files live here. The Java API
+  lives in backend/. When you run Spring Boot from backend/, it can serve these
+  static files from the parent folder (see application.properties).
+
+  index.html
+    Main landing page for the travel agency site.
+
+  travel-redesign.css
+    Main stylesheet for the public pages.
+
+  travel-redesign.js
+    Client-side behavior: dynamic content, trip builder, and related UI logic.
+
+  reviews.html, location.html, package.html
+    Additional public HTML pages (reviews, location detail, package detail).
+
+  js/
+    api-integration.js   — Calls the REST API for hero, packages, locations,
+                           bookings, etc., when the backend is running.
+    seasonal-effect.js   — Optional visual/seasonal effects.
+
+  imgs/
+    Images referenced by the site (logos, maps, hero assets, etc.), when present.
+
+  wp-content/
+    WordPress-style paths for themes, fonts, uploads (if used by your assets).
+
+  css/webfont/
+    Web font files used by the stylesheet.
+
+  admin/
+    Static admin panel pages (HTML/CSS/JS) for managing the site when connected
+    to the backend:
+      login.html, dashboard.html, hero.html, locations.html, packages.html,
+      bookings.html, reviews.html, faqs.html, social-feed.html
+      admin.css, admin.js
+
+  start-backend.cmd
+    Convenience script at project root to start the backend (if present).
+
+  README.md
+    Short overview: static mode vs full backend mode, admin URL, credentials.
+
+  backend/
+    Spring Boot application (see below).
+
+
+FOLDER: backend
+  Maven-based Java server. It exposes REST APIs, admin routes, JWT security,
+  and can serve the parent folder as static web content.
+
+  backend/pom.xml
+    Maven dependencies (Spring Boot, JPA, Security, MySQL driver, etc.).
+
+  backend/README.md
+    Setup: MySQL, application.properties, mvn spring-boot:run, API table,
+    admin routes, backend-only project structure.
+
+  backend/run.cmd, backend/reset-db.cmd, backend/one-click.cmd
+    Helper scripts for running or resetting the database locally.
+
+  backend/mvnw.cmd and backend/.mvn/
+    Maven Wrapper so you can build without a global Maven install.
+
+  backend/src/main/resources/application.properties
+    Port (default 8080), MySQL connection, JPA, JWT, file uploads, and:
+    spring.web.resources.static-locations includes file:../
+    That line makes the server serve files from main-page-only (parent of backend/).
+
+  backend/src/main/java/com/nijro/travel/
+    TravelAgencyApplication.java  — Spring Boot entry point.
+
+    config/
+      SecurityConfig.java, WebConfig.java, DataInitializer.java
+      — Security rules, CORS/static config, seed data.
+
+    controller/
+      ApiController.java      — Public JSON APIs (/api/...).
+      AdminController.java    — Protected admin APIs.
+      PageController.java     — Serves HTML routes like /admin/login.
+
+    dto/
+      Data transfer objects for requests and responses.
+
+    entity/
+      JPA entities (User, Booking, TravelPackage, Location, Review, etc.).
+
+    repository/
+      Spring Data JPA repositories.
+
+    service/
+      Business logic (bookings, packages, reviews, dashboard, etc.).
+
+    security/
+      JwtService.java, CustomUserDetailsService.java — auth helpers.
+
+    filter/
+      JwtAuthenticationFilter.java, VisitorTrackingFilter.java.
+
+  backend/uploads/ (runtime)
+    May be created at runtime for uploaded images (see file.upload-dir).
+
+
+HOW THE PIECES FIT TOGETHER
+  • Static-only: Open index.html in a browser or use any static file server.
+    Some features use built-in static data until the API is available.
+
+  • Full stack: Start MySQL, run the backend from backend/ with Maven.
+    Browser: http://localhost:8080 — Spring serves HTML/CSS/JS from the parent
+    folder and handles /api/* and /admin/*.
+
+  • The frontend JavaScript (js/api-integration.js) points to the same origin
+    when served by Spring; if you host static files elsewhere, you must align
+    API base URLs and CORS with your deployment.
+
+
+--------------------------------------------------------------------------------
+PART 2 — FREE (OR FREE-TIER) WAYS TO HOST THIS PROJECT
+--------------------------------------------------------------------------------
+
+You have two main hosting paths: (A) static site only, or (B) full site with
+API + database. This project needs MySQL and a long-running Java process for (B).
+
+
+--- A) HOST ONLY THE STATIC WEBSITE (SIMPLEST, OFTEN 100% FREE) ---
+
+Use this if you only need the HTML/CSS/JS pages without live bookings/API.
+
+  1) GitHub Pages
+     - Push the repo to GitHub.
+     - In the repository Settings → Pages, choose a branch/folder to publish.
+     - Your site gets a URL like: https://YOUR_USERNAME.github.io/REPO_NAME/
+     - Limitation: API calls to localhost will not work; admin and dynamic data
+       need a separate backend URL or mock data.
+
+  2) Netlify (free tier)
+     - Drag-and-drop the folder or connect GitHub; build command can be empty
+       for a static site.
+     - Custom domain and HTTPS included on free tier.
+
+  3) Cloudflare Pages (free)
+     - Connect a Git repo or upload; fast global CDN, free SSL.
+
+  4) Vercel (free hobby tier)
+     - Good for static sites from Git; similar to Netlify.
+
+For static hosting, upload or deploy the root of main-page-only (the folder
+that contains index.html), not only the backend folder.
+
+
+--- B) HOST THE FULL STACK (SPRING BOOT + MYSQL) ---
+
+Free tiers change over time; always read each provider’s current pricing page.
+
+  1) Render (render.com) — free tier for web services (with limitations)
+     - Deploy the Spring Boot app as a Web Service from your Git repository.
+     - Add a MySQL instance (Render or external) — check whether free MySQL is
+       still offered or use a low-cost or trial database.
+     - Set environment variables for DATABASE_URL, JWT secret, and Spring
+       profiles; do not commit real passwords to Git.
+     - You must change spring.web.resources.static-locations or build the
+       frontend into src/main/resources/static for production so the JAR does
+       not rely on file:../ on the server.
+
+  2) Railway (railway.app) — often has trial credit or limited free usage
+     - Can run a Dockerized Spring Boot app and a MySQL plugin.
+     - Good for prototypes; verify current free limits.
+
+  3) Fly.io (fly.io) — free allowance (check current limits)
+     - Deploy a container with your app; attach a managed or external MySQL.
+
+  4) Oracle Cloud Free Tier (Always Free)
+     - Two small VMs forever free (region dependent). You install Java, MySQL,
+       and run the app yourself. More setup, but can be $0 for learning.
+
+  5) Split hosting (common pattern)
+     - Static frontend: Netlify / Cloudflare Pages / GitHub Pages (free).
+     - Backend: Render / Railway / Fly.io on free or low tier.
+     - Database: PlanetScale (MySQL-compatible; verify compatibility with your
+       SQL), or a provider’s MySQL, or Oracle Cloud MySQL.
+     - You must configure CORS in SecurityConfig/WebConfig for your frontend
+       origin and set the API base URL in your JavaScript.
+
+IMPORTANT FOR PRODUCTION
+  • Never commit real database passwords or jwt.secret from application.properties.
+    Use environment variables or a secrets manager.
+  • Replace default admin credentials after first login.
+  • The line file:../ in application.properties assumes local folder layout;
+    for cloud deploys, copy the frontend into the JAR (e.g. src/main/resources/static)
+    or use a CDN for static assets.
+
+
+--------------------------------------------------------------------------------
+QUICK REFERENCE — LOCAL URLS (DEFAULT)
+--------------------------------------------------------------------------------
+
+  Public site (with backend):     http://localhost:8080
+  Admin login:                      http://localhost:8080/admin/login
+  Default admin (from README):    admin@travel.com / admin123
+  (Change password in production.)
+
+
+================================================================================
+  End of PROJECT_STRUCTURE_AND_HOSTING.txt
+================================================================================
