@@ -1,20 +1,27 @@
-# Backend
+# Backend build artifacts
 backend/target/
 backend/.mvn/wrapper/maven-wrapper.jar
 
-# Local overrides (optional)
-application-local.properties
+# Frontend files bundled into JAR during build (generated — do not commit)
+backend/src/main/resources/static/
+
+# Local environment secrets — NEVER commit
 .env
 .env.local
+application-local.properties
 
-# Uploads created at runtime
+# Uploads created at runtime (ephemeral on Render)
 uploads/
 backend/uploads/
 
 # IDE
 .idea/
 *.iml
+.vscode/
 
 # OS
 Thumbs.db
 .DS_Store
+
+# Quarantine — review before deleting permanently
+# quarantine/    (uncomment to exclude from git; keep for now to review)

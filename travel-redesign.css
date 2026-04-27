@@ -481,6 +481,7 @@ body.home .welcome-text.explore-top .def-link span svg { fill: #fff !important; 
 .nijo-follow-wa { background: #25D366; color: #fff; box-shadow: 0 4px 20px rgba(37,211,102,.3); }
 .nijo-follow-email { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2); color: #fff; box-shadow: 0 4px 20px rgba(0,0,0,.15); }
 .nijo-follow-form-link { background: var(--brand); color: #fff; box-shadow: 0 4px 20px rgba(192,57,43,.3); }
+.nijo-follow-threads { background: #0d0d0d; color: #fff; box-shadow: 0 4px 20px rgba(0,0,0,.35); border: 1px solid rgba(255,255,255,.12); }
 
 /* ===== FLOATING WHATSAPP BUTTON ===== */
 .whatsapp-float { position: fixed; bottom: 100px; right: 28px; width: 60px; height: 60px; border-radius: 50%; background: #25D366; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 24px rgba(37,211,102,.4); z-index: 9997; transition: transform .25s, box-shadow .25s; text-decoration: none; }
@@ -518,19 +519,174 @@ body.home .welcome-text.explore-top .def-link span svg { fill: #fff !important; 
 .login-field input:focus { outline: none; border-color: var(--brand); }
 .login-box .login-close { position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 26px; cursor: pointer; color: var(--muted); }
 
-/* Header login button */
-.header-login-wrap { position: absolute; right: 80px; top: 50%; transform: translateY(-50%); z-index: 10; }
+/* Header sits above hero / carousels so controls stay clickable */
+.top-menu.toc {
+  z-index: 10050;
+}
+.top-menu.toc .desktop-menu {
+  pointer-events: none;
+}
+.top-menu.toc .desktop-menu > ul,
+.top-menu.toc .desktop-menu a {
+  pointer-events: auto;
+}
+
+/* Header: Login + menu — one flex row, vertically centered (overrides legacy absolute menu-trigger) */
+.top-menu .top-menu-actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  padding-right: 10px;
+  padding-left: 8px;
+  z-index: 10055;
+  pointer-events: none;
+}
+.top-menu .top-menu-actions > * {
+  pointer-events: auto;
+}
+.top-menu .top-menu-actions .header-login-wrap {
+  position: static;
+  transform: none;
+  margin: 0;
+}
+/* Top-right hamburger (new component — avoids theme .menu-trigger / sprite SVG conflicts) */
+.top-menu .top-menu-actions .nijo-hamburger {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  z-index: 10060;
+}
+.top-menu .top-menu-actions .nijo-hamburger-btn {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  border-radius: 50%;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer !important;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+  pointer-events: auto !important;
+  z-index: 10065;
+  overflow: visible;
+  transition: background 0.2s ease;
+}
+.top-menu .top-menu-actions .nijo-hamburger-btn .nijo-hamburger-box {
+  width: 22px;
+  height: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  pointer-events: none;
+}
+.top-menu .top-menu-actions .nijo-hamburger-btn .nijo-hamburger-line {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background: #fff;
+  border-radius: 1px;
+  transition: transform 0.28s ease, opacity 0.22s ease;
+  transform-origin: center;
+}
+.top-menu .top-menu-actions .nijo-hamburger-btn.is-open .nijo-hamburger-line:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.top-menu .top-menu-actions .nijo-hamburger-btn.is-open .nijo-hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+.top-menu .top-menu-actions .nijo-hamburger-btn.is-open .nijo-hamburger-line:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+.top-menu .top-menu-actions .nijo-hamburger-btn:hover,
+.top-menu .top-menu-actions .nijo-hamburger-btn:focus-visible {
+  background: rgba(255, 255, 255, 0.15);
+  outline: none;
+}
+@media (min-width: 1200px) {
+  .top-menu.toc .nijo-hamburger .nijo-hamburger-btn {
+    display: flex !important;
+  }
+}
+
 .header-login-btn { display: inline-flex; align-items: center; gap: 7px; padding: 8px 20px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25); border-radius: 50px; color: #fff; font-size: 13px; font-weight: 700; text-decoration: none; cursor: pointer; transition: all .25s; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); font-family: 'Raleway', sans-serif; white-space: nowrap; }
 .header-login-btn:hover { background: var(--brand); border-color: var(--brand); color: #fff; box-shadow: 0 4px 16px rgba(192,57,43,.3); text-decoration: none; }
 .header-login-btn.logged-in { background: var(--brand); border-color: var(--brand); }
 .header-login-btn svg { stroke: currentColor; flex-shrink: 0; }
 @media (min-width: 1200px) {
-  .header-login-wrap { right: 14vw; top: 50%; }
-  .header-login-btn { padding: 0.5vw 1.4vw; font-size: 0.8vw; }
+  .top-menu .top-menu-actions {
+    padding-right: max(12px, 2vw);
+    gap: 16px;
+  }
+  .top-menu-actions .header-login-btn { padding: 0.5vw 1.4vw; font-size: 0.8vw; }
+  /* Primary bar: four items, single row, stable next to logo */
+  .top-menu.toc .desktop-menu > ul.nijo-desktop-nav-primary,
+  .top-menu.toc .desktop-menu > ul {
+    display: flex !important;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    column-gap: clamp(10px, 1.1vw, 20px);
+    max-width: min(46vw, 480px);
+    row-gap: 0;
+  }
+  .top-menu.toc .desktop-menu > ul > li {
+    margin-right: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    flex-shrink: 0;
+  }
+  .top-menu.toc .desktop-menu > ul > li > a,
+  .top-menu.toc .desktop-menu > ul > li > .nijo-scroll-nav {
+    white-space: nowrap;
+  }
+}
+
+/* Primary nav: scroll buttons match bar link look (theme ul has font-size:0 — do not inherit) */
+.top-menu.toc .desktop-menu > ul > li > .nijo-scroll-nav {
+  display: inline-block;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font-family: 'Raleway', 'Segoe UI', sans-serif;
+  font-size: clamp(12px, 2.2vw, 15px);
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #fff;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+@media (min-width: 1200px) {
+  .top-menu.toc .desktop-menu > ul.nijo-desktop-nav-primary > li > .nijo-scroll-nav {
+    font-size: 0.8vw;
+  }
+}
+.top-menu.toc .desktop-menu > ul > li > .nijo-scroll-nav:hover,
+.top-menu.toc .desktop-menu > ul > li > .nijo-scroll-nav:focus-visible {
+  color: #fff;
+  opacity: 0.92;
+  outline: none;
 }
 @media (max-width: 600px) {
-  .header-login-wrap { right: 60px; }
-  .header-login-btn { padding: 6px 14px; font-size: 12px; }
+  .top-menu-actions .header-login-btn { padding: 6px 14px; font-size: 12px; }
   .header-login-btn span { display: none; }
 }
 
@@ -664,7 +820,11 @@ body.sf-modal-open { overflow: hidden; }
 .tf-col ul li { margin-bottom: 10px; }
 .tf-col ul li a { color: rgba(255,255,255,.6); text-decoration: none; font-size: 14px; transition: color .2s; }
 .tf-col ul li a:hover { color: var(--gold); }
-.tf-bottom { max-width: 1200px; margin: 0 auto; padding: 0; border: none; display: none; }
+.tf-bottom { max-width: 1200px; margin: 0 auto; padding: 28px 0 0; border-top: 1px solid rgba(255,255,255,.1); display: flex; justify-content: center; align-items: center; text-align: center; }
+.tf-credit-link { color: rgba(255,255,255,.5); font-size: 13px; line-height: 1.55; text-decoration: none; transition: color .2s; }
+.tf-credit-link:hover { color: rgba(255,255,255,.85); }
+.tf-credit-sub { display: block; font-size: 12px; color: rgba(255,255,255,.38); margin-top: 2px; }
+.tf-credit-link:hover .tf-credit-sub { color: rgba(255,255,255,.55); }
 .tf-socials { display: flex; gap: 12px; }
 .tf-socials a { width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px; text-decoration: none; transition: all .2s; }
 .tf-socials a:hover { background: var(--brand); border-color: var(--brand); }
@@ -738,6 +898,178 @@ body.sf-modal-open { overflow: hidden; }
   .nijo-service { padding: 8px 14px; font-size: 13px; }
 }
 
-/* ===== DROPDOWN MENU BG ===== */
-.menu-wrapper { background-color: #f5f5f5 !important; background-image: url('imgs/dropdown-bg.png') !important; background-size: cover !important; background-position: center center !important; background-repeat: no-repeat !important; }
-.menu-wrapper img.background, .menu-wrapper img.lazy, .menu-wrapper > .img-holder, .menu-wrapper .img-holder > picture, .menu-wrapper > picture { opacity: 0 !important; visibility: hidden !important; }
+/* ===== DROPDOWN MENU BG (legacy full-screen menus only) ===== */
+.menu-wrapper:not(.nijo-menu-panel) { background-color: #f5f5f5 !important; background-image: url('imgs/dropdown-bg.png') !important; background-size: cover !important; background-position: center center !important; background-repeat: no-repeat !important; }
+.menu-wrapper:not(.nijo-menu-panel) img.background, .menu-wrapper:not(.nijo-menu-panel) img.lazy, .menu-wrapper:not(.nijo-menu-panel) > .img-holder, .menu-wrapper:not(.nijo-menu-panel) .img-holder > picture, .menu-wrapper:not(.nijo-menu-panel) > picture { opacity: 0 !important; visibility: hidden !important; }
+
+/* ===== HAMBURGER: compact top-right popup (~90% transparent glass) ===== */
+.top-menu.toc .nijo-hamburger-panel {
+  display: block;
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  left: auto;
+  width: min(300px, calc(100vw - 20px));
+  max-height: min(72vh, 520px);
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 16px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  z-index: 10070;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-8px) scale(0.98);
+  pointer-events: none;
+  transition: opacity 0.28s ease, transform 0.28s ease, visibility 0.28s step-end;
+  /* ~90% transparent: ~10% tint + blur so links stay readable */
+  background: rgba(11, 15, 26, 0.1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.top-menu.toc .nijo-hamburger-panel.active {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  transition: opacity 0.28s ease, transform 0.28s ease, visibility 0s step-start;
+}
+.top-menu.toc .nijo-hamburger-panel .nijo-hamburger-panel-bg {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  z-index: 0;
+  pointer-events: none;
+}
+.top-menu.toc .nijo-hamburger-panel .nijo-hamburger-panel-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.06) 0%, rgba(11, 15, 26, 0.08) 100%);
+  z-index: 1;
+}
+.top-menu.toc .nijo-hamburger-panel-head {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+}
+.top-menu.toc .nijo-hamburger-panel-title {
+  font-family: 'Raleway', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+.top-menu.toc .nijo-hamburger-close {
+  position: static;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 22px;
+  line-height: 1;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.top-menu.toc .nijo-hamburger-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+.top-menu.toc .nijo-hamburger-panel-body {
+  position: relative;
+  z-index: 2;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  max-height: calc(min(72vh, 520px) - 58px);
+  padding: 12px 10px 16px;
+  text-align: left;
+}
+.top-menu.toc ul.nijo-hamburger-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 15px;
+  line-height: 1.45;
+  display: block;
+  width: 100%;
+}
+.top-menu.toc ul.nijo-hamburger-list > li {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+.top-menu.toc ul.nijo-hamburger-list > li > .nijo-scroll-nav {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px 16px;
+  margin: 4px 0;
+  border-radius: 12px;
+  font-family: 'Raleway', 'Segoe UI', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  text-align: left;
+  color: #f8fafc;
+  text-decoration: none;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+.top-menu.toc ul.nijo-hamburger-list > li > .nijo-scroll-nav:hover {
+  background: rgba(192, 57, 43, 0.35);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.28);
+}
+.top-menu.toc ul.nijo-hamburger-list > li > .nijo-scroll-nav:focus-visible {
+  outline: 2px solid #f8fafc;
+  outline-offset: 2px;
+}
+.top-menu.toc ul.nijo-hamburger-list > li > .nijo-scroll-nav:active {
+  transform: scale(0.99);
+}
+@media (min-width: 1200px) {
+  .top-menu.toc ul.nijo-hamburger-list > li > .nijo-scroll-nav {
+    font-size: 15px;
+    padding: 14px 18px;
+  }
+  .top-menu.toc .nijo-hamburger-panel {
+    width: min(320px, calc(100vw - 32px));
+    top: calc(100% + 12px);
+  }
+}
+@media (max-width: 480px) {
+  .top-menu.toc ul.nijo-hamburger-list > li > .nijo-scroll-nav {
+    font-size: 16px;
+    padding: 14px 14px;
+  }
+}
+@media (max-width: 380px) {
+  .top-menu.toc .nijo-hamburger-panel {
+    width: calc(100vw - 16px);
+    right: max(-6px, calc(env(safe-area-inset-right, 0px) - 4px));
+  }
+}

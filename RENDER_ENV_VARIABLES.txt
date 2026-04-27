@@ -1,0 +1,98 @@
+================================================================================
+  RENDER ENVIRONMENT VARIABLES — nijoTravel (nijotours.com)
+  Set ALL of these in: Render Dashboard → Your Service → Environment
+  Do NOT commit real secrets to git.
+================================================================================
+
+REQUIRED — must be set before first deploy
+--------------------------------------------------
+
+PORT
+  Value : 10000
+  Note  : Render sets this automatically. You do NOT need to add it manually.
+          It is pre-configured in render.yaml.
+
+SPRING_DATASOURCE_URL
+  Value : jdbc:mysql://<your-planetscale-or-mysql-host>:3306/travel_agency?useSSL=true&serverTimezone=UTC&allowPublicKeyRetrieval=true
+  Note  : Use PlanetScale (free MySQL-compatible cloud DB) or any external MySQL.
+          Render's free plan does NOT include a MySQL service.
+          PlanetScale free tier works well: https://planetscale.com
+
+SPRING_DATASOURCE_USERNAME
+  Value : your_database_username
+  Note  : Provided by your MySQL host (e.g. PlanetScale username).
+
+SPRING_DATASOURCE_PASSWORD
+  Value : your_database_password
+  Note  : Provided by your MySQL host. Keep secret.
+
+JWT_SECRET
+  Value : (generate a strong random string, at least 32 characters)
+  Note  : Run in terminal to generate:
+            node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+          Or use any online base64 random generator.
+  Example (DO NOT USE IN PRODUCTION): SB9BESEvvar956EPgme/fApr7/DdmHMsBoJQKQ63zBQ=
+
+ADMIN_SEED_EMAIL
+  Value : admin@nijotours.com  (or any email you prefer)
+  Note  : This is the login email for the admin dashboard.
+          Only used when the users table is empty (first deploy).
+
+ADMIN_SEED_PASSWORD
+  Value : your_strong_admin_password
+  Note  : Choose a strong password. Only used on first deploy to seed the admin.
+
+
+OPTIONAL — have defaults but recommended to set explicitly
+--------------------------------------------------
+
+CORS_ALLOWED_ORIGINS
+  Value : https://nijotours.com,https://www.nijotours.com
+  Note  : Pre-set in render.yaml. Update if you use additional subdomains.
+
+JPA_DDL_AUTO
+  Value : update
+  Note  : Use "update" for first deploy (auto-creates tables).
+          After the first successful deploy you can change to "validate".
+
+JWT_EXPIRATION_MS
+  Value : 86400000
+  Note  : Token lifetime in milliseconds. 86400000 = 24 hours.
+
+REVIEWS_REQUIRE_APPROVAL
+  Value : false
+  Note  : Set to "true" if you want admin to approve reviews before they appear.
+
+FILE_UPLOAD_DIR
+  Value : uploads
+  Note  : Directory where uploaded images (hero, packages, locations) are stored.
+          WARNING: Render's free plan has an ephemeral filesystem.
+          Uploaded files will be LOST when the service restarts.
+          For persistent uploads, use an S3-compatible service (e.g. Cloudflare R2).
+
+
+================================================================================
+  EXTERNAL DATABASE RECOMMENDATION
+================================================================================
+
+Render's FREE plan does NOT include MySQL.
+
+Recommended free external MySQL options:
+  1. PlanetScale  — https://planetscale.com  (MySQL-compatible, generous free tier)
+  2. Aiven        — https://aiven.io         (MySQL, 1 free instance)
+  3. Railway      — https://railway.app      (MySQL add-on, limited free credits)
+
+After creating your database, copy the connection string into SPRING_DATASOURCE_URL.
+Make sure SSL is enabled (useSSL=true in the JDBC URL).
+
+
+================================================================================
+  HOW TO ADD VARIABLES IN RENDER DASHBOARD
+================================================================================
+
+1. Go to https://dashboard.render.com
+2. Click your service: nijotours-web
+3. Click "Environment" in the left menu
+4. Click "Add Environment Variable"
+5. Enter the key and value for each variable above
+6. Click "Save Changes" — Render will restart and redeploy automatically

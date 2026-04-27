@@ -1,7 +1,7 @@
 /**
  * Production: set before other scripts (optional).
  * Example when the API is on another host:
- *   window.__APP_CONFIG__ = { apiBase: 'https://api.yourdomain.com', adminApiBase: 'https://api.yourdomain.com' };
+ *   window.__APP_CONFIG__ = { apiBase: 'https://nijotours.com', adminApiBase: 'https://nijotours.com' };
  * Leave empty when the site and API share the same origin (typical Spring Boot setup).
  */
 (function () {

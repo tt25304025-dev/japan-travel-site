@@ -24,6 +24,6 @@ A dynamic travel agency platform with admin panel, hero slider, packages, locati
 2. **Configure**: Set `SPRING_DATASOURCE_PASSWORD`, `JWT_SECRET`, and `ADMIN_SEED_PASSWORD` (see `env.example`). Defaults in `application.properties` are for local dev only.
 3. **Run backend** (from `backend/`): `mvnw.cmd spring-boot:run` (Windows) or `./mvnw spring-boot:run` (Mac/Linux)
 4. **Open**: http://localhost:8080
-5. **Admin**: http://localhost:8080/admin/login — use `ADMIN_SEED_EMAIL` / `ADMIN_SEED_PASSWORD` (defaults: `admin@travel.com` / `admin123` if unset)
+5. **Admin**: http://localhost:8080/admin/login — use `ADMIN_SEED_EMAIL` / `ADMIN_SEED_PASSWORD` (defaults: `nijojapan@gmail.com` / `nijo@123` if unset)
 
 When the backend runs, the frontend fetches hero slides, packages, locations from the API and submits bookings to `POST /api/bookings`. See `backend/README.md` and `DEPLOYMENT_NOTES.txt` for production details.

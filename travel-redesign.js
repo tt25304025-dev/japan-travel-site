@@ -1,8 +1,9 @@
 (function () {
   "use strict";
 
-  var WHATSAPP_NUMBER = "818084752765";
+  var WHATSAPP_NUMBER = "818056707000";
   var WHATSAPP_URL = "https://wa.me/" + WHATSAPP_NUMBER;
+  var THREADS_URL = "https://www.threads.com/@nijojapan?igshid=NTc4MTIwNjQ2YQ==";
 
   var C = {
     brand: "#c0392b",
@@ -38,6 +39,42 @@
   function escAttr(s) {
     if (s == null) return "";
     return String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "");
+  }
+
+  function closeNijoHamburgerMenu() {
+    var panel = document.getElementById("nijo-hamburger-panel");
+    var trigger = document.getElementById("nijo-hamburger-btn");
+    if (panel) panel.classList.remove("active");
+    if (trigger) {
+      trigger.classList.remove("is-open");
+      trigger.setAttribute("aria-expanded", "false");
+      trigger.setAttribute("aria-label", "Open menu");
+    }
+  }
+
+  function scrollToNijoNavTarget(target) {
+    var t = (target || "").trim();
+    if (!t || t === "top" || t === "home") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    var el = document.getElementById(t);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  /** Header + hamburger: no href — smooth scroll to section id (or top). */
+  function initNijoHeaderScrollNav() {
+    if (initNijoHeaderScrollNav._done) return;
+    initNijoHeaderScrollNav._done = true;
+    document.addEventListener("click", function (e) {
+      var btn = e.target.closest("#menu-desktop-menu .nijo-scroll-nav, #nijo-hamburger-list .nijo-scroll-nav");
+      if (!btn) return;
+      e.preventDefault();
+      scrollToNijoNavTarget(btn.getAttribute("data-nijo-scroll"));
+      closeNijoHamburgerMenu();
+      var topMenu = document.querySelector(".top-menu");
+      if (topMenu && topMenu.classList.contains("on")) topMenu.classList.remove("on");
+    });
   }
 
   var cityImages = {
@@ -153,7 +190,7 @@
     { q: "When is the best time to visit Japan?", a: "Japan is beautiful year-round! Cherry blossom season (late March\u2013April) and autumn leaves (October\u2013November) are most popular. Summer has festivals, and winter offers skiing and hot springs." },
     { q: "Can I customize a travel package?", a: "Absolutely! Use our inquiry form or contact us on WhatsApp to tell us your preferences. We\u2019ll create a personalized itinerary just for you." },
     { q: "Do I need to sign in to make a booking inquiry?", a: "No! You can submit an inquiry or booking form without signing in. Simply fill out the form and we\u2019ll get back to you via email or WhatsApp." },
-    { q: "How do I contact you for urgent help during my trip?", a: "You can reach us 24/7 via WhatsApp at +81 80-8475-2765. We also provide a local emergency support number with all our packages." },
+    { q: "How do I contact you for urgent help during my trip?", a: "You can reach us 24/7 via WhatsApp at +81 80-5670-7000. We also provide a local emergency support number with all our packages." },
     { q: "Is Japan safe for families with children?", a: "Japan is one of the safest countries in the world for travelers, including families with children. Public transport is clean and efficient, and people are very helpful." },
   ];
 
@@ -337,7 +374,7 @@
     h += '</div></div>';
 
     // === NIJO TRAVEL SECTION ===
-    h += '<div class="jtr-section nijo-section"><div class="jtr-inner">';
+    h += '<div class="jtr-section nijo-section" id="about-us-section"><div class="jtr-inner">';
     h += '<div class="nijo-header fade-up">';
     h += '<div class="nijo-brand">';
     h += '<div class="nijo-logo-wrap"><img src="/imgs/logo.jpg" alt="Nijro Travel & Tours"></div>';
@@ -396,7 +433,8 @@
     h += '<p>Contact us today and let our team craft the perfect Japanese adventure for you.</p>';
     h += '<div class="nijo-cta-btns">';
     h += '<a href="' + WHATSAPP_URL + '?text=' + encodeURIComponent("Hi! I'm interested in booking a Japan travel package with Nijo Travel & Tours.") + '" target="_blank" class="nijo-follow-btn nijo-follow-wa"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 0 0 .612.616l4.52-1.468A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.94 9.94 0 0 1-5.292-1.519l-.379-.227-2.678.87.894-2.634-.25-.393A9.96 9.96 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg> Chat on WhatsApp</a>';
-    h += '<a href="mailto:info@nijotraveltours.com" class="nijo-follow-btn nijo-follow-email"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Email Us</a>';
+    h += '<a href="mailto:nijojapan@gmail.com" class="nijo-follow-btn nijo-follow-email"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Email Us</a>';
+    h += '<a href="' + THREADS_URL + '" target="_blank" rel="noopener noreferrer" class="nijo-follow-btn nijo-follow-threads"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"/></svg> Threads</a>';
     h += '<a href="#inquiry-section" class="nijo-follow-btn nijo-follow-form-link">Book Now</a>';
     h += '</div></div></div>';
 
@@ -422,7 +460,7 @@
     h += '<div class="tf-col"><h4>Support</h4><ul><li><a href="#contact-section">Contact Us</a></li><li><a href="#faq-section">FAQs</a></li><li><a href="#logistics-section">Visa Guide</a></li><li><a href="' + WHATSAPP_URL + '" target="_blank">WhatsApp Support</a></li></ul></div>';
     h += '<div class="tf-col"><h4>Newsletter</h4><p>Get the latest Japan travel deals and tips.</p><div style="display:flex;gap:8px"><input id="nl-email" type="email" placeholder="Your email" style="flex:1;padding:10px 14px;border:1px solid rgba(255,255,255,.2);border-radius:50px;background:rgba(255,255,255,.08);color:#fff;font-size:14px;font-family:inherit"><button class="jbtn jbtn-primary jbtn-sm" id="nl-btn">\u2192</button></div></div>';
     h += "</div>";
-    h += '<div class="tf-bottom"><span></span><span></span></div>';
+    h += '<div class="tf-bottom tf-credit-wrap"><a href="tel:+817091200705" class="tf-credit-link">Created by TTSE<br><span class="tf-credit-sub">(Tech Titans Software Solutions)</span></a></div>';
     h += "</footer>";
 
     // === FLOATING WHATSAPP BUTTON ===
@@ -517,6 +555,7 @@
       initSocialFeed();
       initNavScroll();
       applyPreselectPackage();
+      ensurePrimaryNavLists();
     };
 
     if (window.TravelAPI && window.TravelAPI.waitForPackages) {
@@ -1034,18 +1073,13 @@
     var updateGuides = function () {
       var desktopBox = document.querySelector("#menu-desktop-menu .table-parent .menu-item-box:first-child");
       if (desktopBox) desktopBox.innerHTML = buildGuidesHtml();
-      var mobileSub = document.querySelector("#menu-main-menu li:nth-child(2) .sub-menu");
-      if (mobileSub) {
-        var locs = getLocations();
-        mobileSub.innerHTML = locs.map(function (n) { return '<li><a href="#locations-section" class="nav-scroll">Explore ' + n + "</a></li>"; }).join("");
-      }
     };
     updateGuides();
     window.addEventListener("travelLocationsReady", updateGuides);
   }
 
   function initNavScroll() {
-    var sectionIds = ["locations-section", "packages", "trip-builder-section", "logistics-section", "inquiry-section", "testimonials-section", "faq-section", "contact-section", "social-feed-section"];
+    var sectionIds = ["locations-section", "packages", "trip-builder-section", "logistics-section", "inquiry-section", "testimonials-section", "faq-section", "contact-section", "social-feed-section", "about-us-section"];
     document.addEventListener("click", function (e) {
       var a = e.target.closest("a[href^='#']");
       if (!a) return;
@@ -1054,8 +1088,7 @@
       if (sectionIds.indexOf(id) !== -1 && document.getElementById(id)) {
         e.preventDefault();
         document.getElementById(id).scrollIntoView({ behavior: "smooth", block: "start" });
-        var menuWrap = document.querySelector(".menu-wrapper");
-        if (menuWrap && (menuWrap.classList.contains("open") || menuWrap.classList.contains("active"))) menuWrap.classList.remove("open", "active");
+        closeNijoHamburgerMenu();
         var topMenu = document.querySelector(".top-menu");
         if (topMenu && topMenu.classList.contains("on")) topMenu.classList.remove("on");
       }
@@ -1772,56 +1805,173 @@
     }
   }
 
-  /** Compact hamburger menu: close on outside click / Escape; keep aria-expanded in sync with .active */
+  /** `scroll` = element id on the home page (from mount), or "top" for top of page. */
+  var DESKTOP_HEADER_NAV_ITEMS = [
+    { scroll: "top", text: "Home" },
+    { scroll: "locations-section", text: "Locations" },
+    { scroll: "packages", text: "Packages" },
+    { scroll: "trip-builder-section", text: "Custom Trip" },
+  ];
+
+  var HAMBURGER_NAV_ITEMS = [
+    { scroll: "top", text: "Home" },
+    { scroll: "locations-section", text: "Locations" },
+    { scroll: "packages", text: "Packages" },
+    { scroll: "trip-builder-section", text: "Custom Trip" },
+    { scroll: "inquiry-section", text: "Book / Inquiry" },
+    { scroll: "logistics-section", text: "Travel Tips" },
+    { scroll: "social-feed-section", text: "Traveler Photos" },
+    { scroll: "faq-section", text: "FAQs" },
+    { scroll: "about-us-section", text: "About Us" },
+    { scroll: "contact-section", text: "Contact Us" },
+  ];
+
+  function navScrollButtonLi(it) {
+    return (
+      '<li class="menu-item"><button type="button" class="nijo-scroll-nav" data-nijo-scroll="' +
+      escAttr(it.scroll) +
+      '">' +
+      escHtml(it.text) +
+      "</button></li>"
+    );
+  }
+
+  function ensureDesktopNavList() {
+    var ul = document.getElementById("menu-desktop-menu");
+    if (!ul) return;
+    ul.innerHTML = DESKTOP_HEADER_NAV_ITEMS.map(navScrollButtonLi).join("");
+  }
+
+  function ensureHamburgerNavList() {
+    var ul = document.getElementById("nijo-hamburger-list");
+    if (!ul) return;
+    ul.className = "nijo-hamburger-list";
+    ul.setAttribute("aria-label", "Site pages");
+    ul.innerHTML = HAMBURGER_NAV_ITEMS.map(navScrollButtonLi).join("");
+  }
+
+  function ensurePrimaryNavLists() {
+    ensureDesktopNavList();
+    ensureHamburgerNavList();
+  }
+
+  /** Clone node to drop theme jQuery click handlers that can fight our toggle. */
+  function replaceNodePreservingParent(node) {
+    if (!node || !node.parentNode) return node;
+    var next = node.cloneNode(true);
+    node.parentNode.replaceChild(next, node);
+    return next;
+  }
+
+  /** New hamburger: toggle .active on #nijo-hamburger-panel; .is-open on button for icon. */
   function initMobileNavDropdown() {
     if (initMobileNavDropdown._done) return;
-    var root = document.querySelector(".top-menu.toc .mobile-nav-dropdown");
-    if (!root) return;
+
+    var trigger = document.getElementById("nijo-hamburger-btn");
+    var panel = document.getElementById("nijo-hamburger-panel");
+    var root = document.getElementById("nijo-hamburger-root");
+
+    if (!trigger || !panel || !root) return;
+
     initMobileNavDropdown._done = true;
-    var panel = root.querySelector(".menu-wrapper");
-    var trigger = root.querySelector(".menu-trigger");
-    function syncAria() {
-      if (trigger && panel) trigger.setAttribute("aria-expanded", panel.classList.contains("active") ? "true" : "false");
+
+    var freshTrigger = trigger.cloneNode(true);
+    trigger.parentNode.replaceChild(freshTrigger, trigger);
+    trigger = freshTrigger;
+
+    var closeBtn = document.getElementById("nijo-hamburger-close");
+    if (closeBtn) {
+      var freshClose = closeBtn.cloneNode(true);
+      closeBtn.parentNode.replaceChild(freshClose, closeBtn);
+      closeBtn = freshClose;
     }
-    root.addEventListener("click", function () {
-      requestAnimationFrame(syncAria);
-    });
-    document.addEventListener("click", function (e) {
-      if (!panel || !panel.classList.contains("active")) return;
-      if (root.contains(e.target)) return;
-      panel.classList.remove("active");
+
+    function syncAria() {
+      var open = panel.classList.contains("active");
+      trigger.setAttribute("aria-expanded", open ? "true" : "false");
+      trigger.classList.toggle("is-open", open);
+      trigger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    }
+    function closePanel() {
+      closeNijoHamburgerMenu();
       syncAria();
-    });
-    document.addEventListener("keydown", function (e) {
-      if (e.key !== "Escape") return;
-      if (!panel || !panel.classList.contains("active")) return;
-      panel.classList.remove("active");
+    }
+    function togglePanel(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      panel.classList.toggle("active");
       syncAria();
-      if (trigger) trigger.focus();
-    });
-    if (trigger) {
-      trigger.addEventListener("keydown", function (e) {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          trigger.click();
-        }
+    }
+
+    trigger.addEventListener("click", togglePanel);
+
+    if (closeBtn) {
+      closeBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        closePanel();
       });
     }
-    var closeBtn = root.querySelector(".menu-wrapper .close");
+
+    panel.addEventListener("click", function (e) {
+      if (e.target.closest && e.target.closest(".nijo-scroll-nav")) {
+        window.requestAnimationFrame(closeNijoHamburgerMenu);
+      }
+    });
+
+    document.addEventListener("click", function (e) {
+      if (!panel.classList.contains("active")) return;
+      if (root.contains(e.target)) return;
+      closePanel();
+    }, true);
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "Escape" || !panel.classList.contains("active")) return;
+      closePanel();
+      trigger.focus();
+    });
+    trigger.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        panel.classList.toggle("active");
+        syncAria();
+      }
+    });
     if (closeBtn) {
       closeBtn.addEventListener("keydown", function (e) {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          closeBtn.click();
-        }
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); closePanel(); }
       });
     }
+
+    var navResizeTimer;
+    function onNavViewportChange() {
+      if (panel.classList.contains("active")) closePanel();
+    }
+    window.addEventListener("resize", function () {
+      window.clearTimeout(navResizeTimer);
+      navResizeTimer = window.setTimeout(onNavViewportChange, 120);
+    });
+    if (window.matchMedia) {
+      var mqNav = window.matchMedia("(min-width: 1200px)");
+      if (mqNav.addEventListener) mqNav.addEventListener("change", onNavViewportChange);
+      else if (mqNav.addListener) mqNav.addListener(onNavViewportChange);
+    }
+
+    syncAria();
   }
 
   // === INIT ===
   function boot() {
-    mount();
-    initMobileNavDropdown();
+    ensurePrimaryNavLists();
+    window.setTimeout(function () {
+      initNijoHeaderScrollNav();
+      initMobileNavDropdown();
+      try {
+        mount();
+      } catch (err) {
+        if (typeof console !== "undefined" && console.warn) console.warn("mount:", err);
+      }
+    }, 0);
   }
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", boot);

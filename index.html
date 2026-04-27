@@ -478,12 +478,12 @@
                 text-align: center
             }
 
-            .top-menu.toc .menu-wrapper .inner>ul {
+            .top-menu.toc .menu-wrapper:not(.nijo-menu-panel) .inner>ul {
                 font-size: 0;
                 text-align: left
             }
 
-            .top-menu.toc .menu-wrapper .inner>ul>li {
+            .top-menu.toc .menu-wrapper:not(.nijo-menu-panel) .inner>ul>li {
                 display: inline-block;
                 vertical-align: top;
                 width: 50%
@@ -491,7 +491,7 @@
         }
 
         @media (min-width: 992px) {
-            .top-menu.toc .menu-wrapper .inner>ul>li {
+            .top-menu.toc .menu-wrapper:not(.nijo-menu-panel) .inner>ul>li {
                 width: 33.33%
             }
         }
@@ -811,7 +811,7 @@
                 padding: 1.2vw 0
             }
 
-            .top-menu.toc .menu-wrapper:after {
+            .top-menu.toc .menu-wrapper:not(.nijo-menu-panel):after {
                 content: '';
                 background: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0)), to(#fff));
                 background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #fff 100%);
@@ -824,7 +824,7 @@
                 pointer-events: none
             }
 
-            .top-menu.toc .menu-wrapper:before {
+            .top-menu.toc .menu-wrapper:not(.nijo-menu-panel):before {
                 content: '';
                 background: url(https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1200&q=80) no-repeat;
                 position: absolute;
@@ -837,45 +837,45 @@
                 background-size: cover
             }
 
-            .top-menu.toc .menu-wrapper span.close {
+            .top-menu.toc .menu-wrapper:not(.nijo-menu-panel) span.close {
                 width: 3.6vw;
                 height: 3.6vw;
                 right: 2.5vw;
                 top: 1.8vw
             }
 
-            .top-menu.toc .menu-wrapper span.close svg {
+            .top-menu.toc .menu-wrapper:not(.nijo-menu-panel) span.close svg {
                 width: 1.8vw;
                 height: 3.6vw
             }
 
-            .top-menu.toc .menu-wrapper .inner {
+            .top-menu.toc .menu-wrapper:not(.nijo-menu-panel) .inner {
                 top: 5vw;
                 bottom: 5vw;
                 left: 8vw;
                 right: 8vw
             }
 
-            .top-menu.toc .menu-wrapper .inner::-webkit-scrollbar {
+            .top-menu.toc .menu-wrapper:not(.nijo-menu-panel) .inner::-webkit-scrollbar {
                 width: .4vw
             }
 
-            .top-menu.toc .menu-wrapper .inner::-webkit-scrollbar-track {
+            .top-menu.toc .menu-wrapper:not(.nijo-menu-panel) .inner::-webkit-scrollbar-track {
                 box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
                 -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3)
             }
 
-            .top-menu.toc .menu-wrapper .inner::-webkit-scrollbar-thumb {
+            .top-menu.toc .menu-wrapper:not(.nijo-menu-panel) .inner::-webkit-scrollbar-thumb {
                 background-color: darkgrey;
                 outline: 1px solid slategrey
             }
 
-            .top-menu.toc .menu-wrapper .inner>ul>li>a {
+            .top-menu.toc .menu-wrapper:not(.nijo-menu-panel) .inner>ul>li>a {
                 display: inline-block;
                 vertical-align: top
             }
 
-            .top-menu.toc .menu-wrapper .inner>ul>li>a:after {
+            .top-menu.toc .menu-wrapper:not(.nijo-menu-panel) .inner>ul>li>a:after {
                 content: '';
                 height: .2vw;
                 pointer-events: none;
@@ -888,29 +888,29 @@
                 bottom: 1vw
             }
 
-            .top-menu.toc .menu-wrapper .inner>ul>li>a:hover:after {
+            .top-menu.toc .menu-wrapper:not(.nijo-menu-panel) .inner>ul>li>a:hover:after {
                 width: 40%
             }
 
-            .top-menu.toc .menu-wrapper .inner>ul li {
+            .top-menu.toc .menu-wrapper:not(.nijo-menu-panel) .inner>ul li {
                 width: 25%
             }
 
-            .top-menu.toc .menu-wrapper .inner>ul li a {
+            .top-menu.toc .menu-wrapper:not(.nijo-menu-panel) .inner>ul li a {
                 font-size: 2vw;
                 padding: 1vw 0;
                 position: relative
             }
 
-            .top-menu.toc .menu-wrapper .inner>ul li ul {
+            .top-menu.toc .menu-wrapper:not(.nijo-menu-panel) .inner>ul li ul {
                 padding: 0 0 1vw 2vw
             }
 
-            .top-menu.toc .menu-wrapper .inner>ul li ul li {
+            .top-menu.toc .menu-wrapper:not(.nijo-menu-panel) .inner>ul li ul li {
                 width: 100%
             }
 
-            .top-menu.toc .menu-wrapper .inner>ul li ul li a {
+            .top-menu.toc .menu-wrapper:not(.nijo-menu-panel) .inner>ul li ul li a {
                 font-size: 1vw;
                 padding: .2vw 0
             }
@@ -2265,15 +2265,15 @@
     <meta name="description"
         content="Your ultimate Japan travel guide. Explore Tokyo, Kyoto, Osaka, Mount Fuji and more. Plan flights, hotels, experiences and unforgettable adventures across Japan." />
     <meta name="robots" content="max-image-preview:large" />
-    <link rel="canonical" href="index.html" />
-    <meta name="generator" content="All in One SEO (AIOSEO) 4.9.3" />
+    <link rel="canonical" href="https://nijotours.com/" />
     <meta property="og:locale" content="en_US" />
-    <meta property="og:site_name" content="Travel Japan -" />
+    <meta property="og:site_name" content="Travel Japan" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content="Home - Travel Japan" />
     <meta property="og:description"
         content="Discover Japan like never before with ancient traditions, stunning temples and natural beauty. From Tokyo to Kyoto, Mount Fuji to historic Hiroshima, the land of the rising sun beckons." />
-    <meta property="og:url" content="" />
+    <meta property="og:url" content="https://nijotours.com/" />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1578637387939-43c525550085?w=1200&q=80" />
     <meta property="article:published_time" content="2019-09-11T19:43:40+00:00" />
     <meta property="article:modified_time" content="2019-10-08T08:14:28+00:00" />
     <meta name="twitter:card" content="summary" />
@@ -2281,12 +2281,7 @@
     <meta name="twitter:description"
         content="Discover Japan like never before with ancient traditions, stunning temples and natural beauty. From Tokyo to Kyoto, Mount Fuji to historic Hiroshima, the land of the rising sun beckons." />
     <script type="application/ld+json"
-        class="aioseo-schema">{"@context":"https:\/\/schema.org","@graph":[{"@type":"BreadcrumbList","@id":"\/#breadcrumblist","itemListElement":[{"@type":"ListItem","@id":"#listItem","position":1,"name":"Home"}]},{"@type":"Organization","@id":"\/#organization","name":"Travel Japan","url":"\/"},{"@type":"WebPage","@id":"\/#webpage","url":"\/","name":"Home - Travel Japan","description":"Discover Japan like never before with intriguing stories and legends that have transcended through time. Couple that with exotic wildlife and lush greenery, this remarkable country beckons.","inLanguage":"en-US","isPartOf":{"@id":"\/#website"},"breadcrumb":{"@id":"\/#breadcrumblist"},"datePublished":"2019-09-11T19:43:40+00:00","dateModified":"2019-10-08T08:14:28+00:00"},{"@type":"WebSite","@id":"\/#website","url":"\/","name":"Travel Japan","inLanguage":"en-US","publisher":{"@id":"\/#organization"}}]}</script>
-    <link rel="alternate" type="application/rss+xml" title="Travel Japan &raquo; Feed" href="feed/index.html" />
-    <link rel="alternate" type="application/rss+xml" title="Travel Japan &raquo; Comments Feed"
-        href="comments/feed/index.html" />
-    <link rel="alternate" type="application/rss+xml" title="Travel Japan &raquo; Home Comments Feed"
-        href="home/feed/index.html" />
+        class="aioseo-schema">{"@context":"https:\/\/schema.org","@graph":[{"@type":"BreadcrumbList","@id":"https:\/\/nijotours.com\/#breadcrumblist","itemListElement":[{"@type":"ListItem","@id":"#listItem","position":1,"name":"Home"}]},{"@type":"Organization","@id":"https:\/\/nijotours.com\/#organization","name":"Travel Japan","url":"https:\/\/nijotours.com\/"},{"@type":"WebPage","@id":"https:\/\/nijotours.com\/#webpage","url":"https:\/\/nijotours.com\/","name":"Home - Travel Japan","description":"Discover Japan like never before with intriguing stories and legends that have transcended through time. Couple that with exotic wildlife and lush greenery, this remarkable country beckons.","inLanguage":"en-US","isPartOf":{"@id":"https:\/\/nijotours.com\/#website"},"breadcrumb":{"@id":"https:\/\/nijotours.com\/#breadcrumblist"},"datePublished":"2019-09-11T19:43:40+00:00","dateModified":"2019-10-08T08:14:28+00:00"},{"@type":"WebSite","@id":"https:\/\/nijotours.com\/#website","url":"https:\/\/nijotours.com\/","name":"Travel Japan","inLanguage":"en-US","publisher":{"@id":"https:\/\/nijotours.com\/#organization"}}]}</script>
     <style id='wp-img-auto-sizes-contain-inline-css' type='text/css'>
         img:is([sizes=auto i], [sizes^="auto," i]) {
             contain-intrinsic-size: 3000px 1500px
@@ -2634,49 +2629,51 @@
         }
     </style>
     <link rel="stylesheet" href="travel-redesign.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="icon" type="image/jpeg" href="imgs/logo.jpg">
 </head>
 
 <body
     class="home wp-singular page-template-default page page-id-2 wp-embed-responsive wp-theme-toc singular image-filters-enabled">
     <div class="top-menu toc">
         <div class="desktop-menu">
-            <ul id="menu-desktop-menu">
-                <li class="menu-item "> <a href="index.html">Home</a></li>
-                <li class="menu-item "> <a href="#locations-section">Locations</a></li>
-                <li class="menu-item "> <a href="#packages">Packages</a></li>
-                <li class="menu-item "> <a href="#trip-builder-section">Custom Trip</a></li>
+            <ul id="menu-desktop-menu" class="nijo-desktop-nav-primary">
+                <li class="menu-item"><button type="button" class="nijo-scroll-nav" data-nijo-scroll="top">Home</button></li>
+                <li class="menu-item"><button type="button" class="nijo-scroll-nav" data-nijo-scroll="locations-section">Locations</button></li>
+                <li class="menu-item"><button type="button" class="nijo-scroll-nav" data-nijo-scroll="packages">Packages</button></li>
+                <li class="menu-item"><button type="button" class="nijo-scroll-nav" data-nijo-scroll="trip-builder-section">Custom Trip</button></li>
             </ul>
         </div>
-        <div class="header-login-wrap">
-            <a href="#" class="header-login-btn" id="header-login-btn" title="User Login">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                <span id="header-login-text">Login</span>
-            </a>
-        </div> <a href="index.html" id="logo" title="Nijro Travel">
-            <img src="/imgs/logo.jpg" alt="Nijro Travel & Tours" fetchpriority="high" width="120" height="auto" decoding="async">
+        <a href="index.html" id="logo" title="Nijro Travel">
+            <img src="imgs/logo.jpg" alt="Nijro Travel & Tours" fetchpriority="high" width="120" height="120" decoding="async" style="height:auto">
         </a>
-        <div class="mobile-nav-dropdown" id="mobile-nav-dropdown">
-            <div class="menu-trigger" role="button" tabindex="0" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav-panel"> <svg width="30" height="50" aria-hidden="true">
-                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-menu"></use>
-                </svg></div>
-            <div class="menu-wrapper" id="mobile-nav-panel" role="menu" aria-label="Site navigation"> <span class="close" role="button" tabindex="0" aria-label="Close menu"> <svg width="20" height="50" aria-hidden="true">
-                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-close"></use>
-                    </svg> </span>
-                <div class="inner">
-                    <ul id="menu-main-menu" class="nijo-mobile-nav">
-                        <li class="menu-item"><a href="index.html">Home</a></li>
-                        <li class="menu-item"><a href="#locations-section">Locations</a></li>
-                        <li class="menu-item"><a href="#packages">Japan Travel Packages</a></li>
-                        <li class="menu-item"><a href="#trip-builder-section">Custom Trip Builder</a></li>
-                        <li class="menu-item"><a href="#inquiry-section">Book / Inquiry Form</a></li>
-                        <li class="menu-item"><a href="#logistics-section">Visa &amp; Travel Tips</a></li>
-                        <li class="menu-item"><a href="#testimonials-section">Reviews</a></li>
-                        <li class="menu-item"><a href="/reviews">All Reviews</a></li>
-                        <li class="menu-item"><a href="#faq-section">FAQs</a></li>
-                        <li class="menu-item"><a href="#social-feed-section">Social Feed</a></li>
-                        <li class="menu-item"><a href="#contact-section">Contact Us</a></li>
-                    </ul>
-                </div>
+        <div class="top-menu-actions">
+            <div class="header-login-wrap">
+                <a href="#" class="header-login-btn" id="header-login-btn" title="User Login">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <span id="header-login-text">Login</span>
+                </a>
+            </div>
+            <div class="nijo-hamburger" id="nijo-hamburger-root">
+                <button type="button" class="nijo-hamburger-btn" id="nijo-hamburger-btn" aria-label="Open menu" aria-expanded="false" aria-haspopup="true" aria-controls="nijo-hamburger-panel">
+                    <span class="nijo-hamburger-box" aria-hidden="true">
+                        <span class="nijo-hamburger-line"></span>
+                        <span class="nijo-hamburger-line"></span>
+                        <span class="nijo-hamburger-line"></span>
+                    </span>
+                </button>
+                <nav class="nijo-hamburger-panel" id="nijo-hamburger-panel" aria-label="Site navigation">
+                    <div class="nijo-hamburger-panel-bg" aria-hidden="true"></div>
+                    <div class="nijo-hamburger-panel-head">
+                        <span class="nijo-hamburger-panel-title" id="nijo-hamburger-panel-title">Menu</span>
+                        <button type="button" class="nijo-hamburger-close" id="nijo-hamburger-close" aria-label="Close menu">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="nijo-hamburger-panel-body">
+                        <ul id="nijo-hamburger-list" class="nijo-hamburger-list"></ul>
+                    </div>
+                </nav>
             </div>
         </div>
     </div>
@@ -3108,8 +3105,8 @@
                 </a>
             </div>
         </div>
-        <div class="updates card-layout-home">
-            <h2>Plan Your Visit to Japan</h2> <a href="#" class="def-link">Find out more<span> <svg width="15"
+        <div class="updates card-layout-home" id="plan-visit-japan-section">
+            <h2>Plan Your Visit to Japan</h2> <a href="#trip-builder-section" class="def-link">Find out more<span> <svg width="15"
                         height="15" aria-hidden="true">
                         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-right-arrow"></use>
                     </svg> </span> </a>
@@ -3148,7 +3145,7 @@
             <div class="newsletter">
                 <h4>Sign up for updates</h4>
                 <div role="form" class="_wpcf7">
-                    <form action="sign-up-for-updates/" method="post"> <input type="email" name="your-email" value=""
+                    <form id="newsletter-form" action="#" method="post" onsubmit="(function(e){e.preventDefault();var f=e.target,i=f.querySelector('input[type=email]'),b=f.querySelector('button[type=submit]');if(i&&i.value){b.disabled=true;var m=document.createElement('p');m.style.cssText='color:#fff;margin-top:8px;font-size:14px;';m.textContent='Thank you! We\u2019ll be in touch.';f.parentNode.appendChild(m);f.style.display='none';}})(event)"> <input type="email" name="your-email" value=""
                             size="40" placeholder="ENTER YOUR EMAIL ADDRESS" required> <button type="submit"><svg
                                 width="15" height="15" aria-hidden="true">
                                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-right-arrow"></use>
@@ -3161,11 +3158,11 @@
                         class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-2 current_page_item menu-item-208">
                         <a href="index.html" aria-current="page">Home</a></li>
                     <li id="menu-item-1397"
-                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1397"><a href="#">Plan
+                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1397"><a href="#trip-builder-section">Plan
                             Your Visit to Japan</a></li>
                     <li id="menu-item-311"
                         class="menu-item menu-item-type-post_type menu-item-object-page menu-item-311"><a
-                            href="#">Contact Us</a></li>
+                            href="#contact-section">Contact Us</a></li>
                 </ul>
             </div>
             <div class="contact-parent">
@@ -3191,11 +3188,11 @@
                     <p>Travel Japan <br /> Shibuya, Tokyo 150-0002<br />Japan</p>
                 </div>
                 <div class="box telephone">
-                    <div class="clearfix phone"> <a href="tel:+81312345678"><svg width="24" height="24"
+                    <div class="clearfix phone"> <a href="tel:+818056707000"><svg width="24" height="24"
                                 aria-hidden="true">
                                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-phone"></use>
-                            </svg>+81 3-1234-5678</a></div> <a
-                        href="mailto:hello@traveljapan.com">hello@traveljapan.com</a>
+                            </svg>+81 80-5670-7000</a></div> <a
+                        href="mailto:nijojapan@gmail.com">nijojapan@gmail.com</a>
                 </div>
             </div>
             <div class="contact-parent credit-wrapper">
@@ -3365,7 +3362,6 @@
             })();
         </script>
         <script defer src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
         <script defer src="js/config.js"></script>
         <script defer src="js/api-integration.js"></script>
         <script defer src="travel-redesign.js"></script>

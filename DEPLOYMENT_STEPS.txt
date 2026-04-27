@@ -1,0 +1,403 @@
+================================================================================
+  DEPLOYMENT STEPS — nijoTravel → Render → nijotours.com
+  Project    : nijoTravel
+  Domain     : https://nijotours.com  |  https://www.nijotours.com
+  Service    : nijotours-web  (on Render)
+  Stack      : Java 17 + Spring Boot 3.2 + MySQL
+  Generated  : 2026-04-27
+================================================================================
+
+
+STEP 01 — PROJECT CLEANUP COMPLETE
+--------------------------------------------------------------------------------
+The following cleanup has been done:
+
+  KEPT (needed for deployment):
+    index.html              Main public page
+    location.html           Location detail page
+    package.html            Package detail page
+    reviews.html            Reviews listing page
+    travel-redesign.css     Main public stylesheet
+    travel-redesign.js      Main public JS (packages, reviews, UI)
+    admin/                  Admin dashboard HTML+CSS+JS
+    backend/                Spring Boot Java backend (entire folder)
+    css/                    Webfont directory
+    imgs/                   Site images (logo, destinations, etc.)
+    js/                     config.js, api-integration.js, seasonal-effect.js
+    wp-content/themes/toc/  Theme fonts (Millanova) + functions.min.js
+    env.example             Environment variable template
+    backend/env.example     Backend-specific env template
+    .gitignore              Git ignore rules
+    README.md               Project readme
+    build.sh                Render build script (NEW)
+    render.yaml             Render service config (NEW)
+    RENDER_ENV_VARIABLES.txt  Env variable guide (NEW)
+    DEPLOYMENT_STEPS.txt    This file (NEW)
+    start-backend.cmd       Windows local dev helper
+
+  QUARANTINED (moved to /quarantine — safe to delete after review):
+    quarantine/wp-content-uploads/
+      Old WordPress uploaded images (2019-2020).
+      NOT referenced by any current HTML, CSS, or JS.
+      Moved to quarantine for review before permanent deletion.
+
+  GITIGNORED (not committed, not uploaded):
+    backend/target/         Maven build output — generated during build
+    backend/uploads/        Runtime uploaded images — ephemeral on Render
+    .env                    Real secrets — NEVER commit
+
+
+STEP 02 — FILES NEEDED FOR DEPLOYMENT (upload to GitHub)
+--------------------------------------------------------------------------------
+Upload the entire project root EXCEPT what's listed in STEP 03.
+
+Required structure on GitHub:
+  /
+  ├── index.html
+  ├── location.html
+  ├── package.html
+  ├── reviews.html
+  ├── travel-redesign.css
+  ├── travel-redesign.js
+  ├── build.sh                 <-- Render build script
+  ├── render.yaml              <-- Render config
+  ├── env.example
+  ├── .gitignore
+  ├── README.md
+  ├── admin/
+  ├── backend/
+  │   ├── src/
+  │   ├── pom.xml
+  │   ├── mvnw.cmd
+  │   └── .mvn/
+  ├── css/
+  ├── imgs/
+  ├── js/
+  └── wp-content/themes/
+
+
+STEP 03 — FILES NOT TO UPLOAD TO GITHUB
+--------------------------------------------------------------------------------
+These are already in .gitignore or are not needed:
+  .env                     Real environment variables — NEVER commit
+  backend/target/          Maven build artifacts — generated during build
+  backend/uploads/         Runtime uploaded files — gitignored
+  quarantine/              Old archived files — not needed for deployment
+  .idea/                   IDE project files
+  *.iml                    IntelliJ module files
+  Thumbs.db, .DS_Store     OS junk files
+
+
+STEP 04 — PUSH PROJECT TO GITHUB
+--------------------------------------------------------------------------------
+1. Open terminal in the project root (C:\Users\Thushan\Desktop\Nijo Tours).
+
+2. Initialize git and make first commit:
+     git init
+     git add .
+     git commit -m "Initial commit: nijoTravel ready for Render deployment"
+
+3. Create a GitHub repository:
+     - Go to https://github.com/new
+     - Name: nijotours (or nijotravel)
+     - Visibility: Private (recommended)
+     - Do NOT add README (you already have one)
+
+4. Link and push:
+     git remote add origin https://github.com/YOUR_USERNAME/nijotours.git
+     git branch -M main
+     git push -u origin main
+
+5. Verify on GitHub that all files are present.
+
+
+STEP 05 — CREATE RENDER WEB SERVICE
+--------------------------------------------------------------------------------
+1. Go to https://dashboard.render.com
+2. Click "New +" → "Web Service"
+3. Connect your GitHub account if not already connected.
+4. Select your nijotours repository.
+5. Configure the service:
+
+   Name            : nijotours-web
+   Environment     : Java
+   Region          : Choose closest to your users (e.g. Singapore for Japan travel)
+   Branch          : main
+   Root Directory  : (leave blank — project root)
+   Build Command   : bash build.sh
+   Start Command   : java -jar backend/target/travel-agency-1.0.0.jar
+   Instance Type   : Free (or Starter for always-on)
+
+6. Click "Create Web Service" (Render will start a build).
+
+
+STEP 06 — ADD RENDER ENVIRONMENT VARIABLES
+--------------------------------------------------------------------------------
+Before or immediately after creating the service, add these variables.
+Go to: Render Dashboard → nijotours-web → Environment → Add Environment Variable
+
+REQUIRED (add manually):
+  SPRING_DATASOURCE_URL      jdbc:mysql://your-host:3306/travel_agency?useSSL=true&serverTimezone=UTC&allowPublicKeyRetrieval=true
+  SPRING_DATASOURCE_USERNAME  your_db_username
+  SPRING_DATASOURCE_PASSWORD  your_db_password
+  JWT_SECRET                 (generate: node -e "console.log(require('crypto').randomBytes(32).toString('base64'))")
+  ADMIN_SEED_EMAIL           admin@nijotours.com
+  ADMIN_SEED_PASSWORD        your_strong_admin_password
+
+PRE-SET IN render.yaml (verify they're correct):
+  PORT                       10000
+  CORS_ALLOWED_ORIGINS       https://nijotours.com,https://www.nijotours.com
+  JPA_DDL_AUTO               update
+  JWT_EXPIRATION_MS          86400000
+  REVIEWS_REQUIRE_APPROVAL   false
+
+Full details: see RENDER_ENV_VARIABLES.txt
+
+
+STEP 07 — BUILD COMMAND
+--------------------------------------------------------------------------------
+Build Command (already set in render.yaml):
+  bash build.sh
+
+What this does:
+  1. Copies all frontend HTML/CSS/JS into backend/src/main/resources/static/
+  2. Runs: mvn package -DskipTests -B
+  3. Produces: backend/target/travel-agency-1.0.0.jar
+
+Java version required: 17 (Render Java environment includes Java 17).
+Maven required: Yes (Render Java environment includes Maven).
+
+
+STEP 08 — START COMMAND
+--------------------------------------------------------------------------------
+Start Command (already set in render.yaml):
+  java -jar backend/target/travel-agency-1.0.0.jar
+
+The Spring Boot app will:
+  - Listen on the port Render assigns ($PORT / 10000)
+  - Connect to MySQL using the SPRING_DATASOURCE_* variables
+  - Serve static files (HTML/CSS/JS bundled in the JAR)
+  - Expose API at /api/**
+  - Expose admin at /admin/**
+
+
+STEP 09 — DEPLOY
+--------------------------------------------------------------------------------
+1. Render auto-deploys when you push to GitHub (main branch).
+2. To trigger a manual deploy: Render Dashboard → nijotours-web → "Manual Deploy" → "Deploy latest commit".
+3. Watch the build log for errors.
+4. When build is complete, the service URL will be:
+     https://nijotours-web.onrender.com  (temporary Render URL)
+5. Test the temporary URL before connecting your domain.
+
+
+STEP 10 — ADD CUSTOM DOMAIN: nijotours.com
+--------------------------------------------------------------------------------
+1. Render Dashboard → nijotours-web → "Settings" → "Custom Domains"
+2. Click "Add Custom Domain"
+3. Enter: nijotours.com
+4. Render will show you the DNS record to add.
+
+
+STEP 11 — ADD www.nijotours.com
+--------------------------------------------------------------------------------
+1. Same page → Add another custom domain
+2. Enter: www.nijotours.com
+3. Render will show you DNS records for both.
+
+
+STEP 12 — DNS RECORDS SETUP (at your domain registrar)
+--------------------------------------------------------------------------------
+Go to your domain registrar (GoDaddy, Namecheap, Cloudflare, etc.)
+and add these DNS records:
+
+For nijotours.com:
+  Type   : A  (or ALIAS / ANAME if registrar supports it)
+  Name   : @  (root domain)
+  Value  : (IP address Render gives you — check Render dashboard)
+  TTL    : 3600
+
+  — OR —
+
+  Type   : CNAME
+  Name   : @
+  Value  : nijotours-web.onrender.com
+  Note   : Not all registrars allow CNAME on root. Use ALIAS/ANAME if available.
+           If only A record is supported, use the IP from Render dashboard.
+
+For www.nijotours.com:
+  Type   : CNAME
+  Name   : www
+  Value  : nijotours-web.onrender.com
+  TTL    : 3600
+
+DNS propagation may take 5 minutes to 48 hours.
+Check progress at: https://dnschecker.org
+
+
+STEP 13 — SSL CHECK
+--------------------------------------------------------------------------------
+Render provides free SSL (Let's Encrypt) automatically.
+After DNS propagation is complete:
+
+1. Visit https://nijotours.com — browser should show padlock (secure).
+2. Visit https://www.nijotours.com — same.
+3. If you see "Not Secure" or certificate warning:
+   - Wait 15–30 minutes after DNS propagates.
+   - Check Render Dashboard → nijotours-web → Custom Domains → SSL status.
+   - If status shows "Pending", wait more.
+   - If "Error", try removing and re-adding the domain.
+
+Mixed content warning fix:
+  All API calls use relative URLs (e.g. /api/packages), so they always match
+  the current protocol. No hardcoded http:// references remain in this project.
+
+
+STEP 14 — TEST WEBSITE
+--------------------------------------------------------------------------------
+Test the following after deployment:
+
+  [ ] https://nijotours.com loads correctly (homepage)
+  [ ] https://www.nijotours.com redirects or loads correctly
+  [ ] Packages section loads (API call to /api/packages)
+  [ ] Locations section loads (API call to /api/locations)
+  [ ] Hero slider shows images from admin
+  [ ] Reviews page: https://nijotours.com/reviews
+  [ ] Location detail: https://nijotours.com/location/1
+  [ ] Package detail: https://nijotours.com/package/tokyo-classic
+  [ ] Admin login: https://nijotours.com/admin/login
+  [ ] Admin dashboard works after login
+  [ ] SSL padlock shows on all pages
+  [ ] No mixed content warnings (open browser DevTools → Console)
+  [ ] No CORS errors in browser console
+
+Test admin login with:
+  Email    : (value of ADMIN_SEED_EMAIL you set)
+  Password : (value of ADMIN_SEED_PASSWORD you set)
+
+
+STEP 15 — DATABASE SETUP
+--------------------------------------------------------------------------------
+DATABASE DETECTED: MySQL
+
+Render's FREE plan does NOT include MySQL hosting.
+You need an external MySQL database.
+
+RECOMMENDED: PlanetScale (free MySQL-compatible cloud database)
+  1. Sign up at https://planetscale.com
+  2. Create a database named: travel_agency
+  3. Go to "Connect" → choose "Java / JDBC"
+  4. Copy the connection string
+  5. Set in Render environment:
+       SPRING_DATASOURCE_URL      = (PlanetScale connection string)
+       SPRING_DATASOURCE_USERNAME = (PlanetScale username)
+       SPRING_DATASOURCE_PASSWORD = (PlanetScale password)
+
+Important: Add ?useSSL=true&serverTimezone=UTC to the JDBC URL if not already present.
+
+Tables are auto-created on first startup (JPA_DDL_AUTO=update).
+Seed data (admin user, locations, packages) is inserted automatically
+by DataInitializer.java when the tables are empty.
+
+NOTE: PlanetScale uses a slightly different MySQL mode. If you see errors
+about "foreign key constraints", add &sessionVariables=sql_mode=''" to the URL.
+
+
+STEP 16 — FIX COMMON ERRORS
+--------------------------------------------------------------------------------
+
+BUILD FAILED:
+  Problem : "mvn: command not found"
+  Fix     : Make sure Render Environment is set to "Java" (not Node/Docker/etc.)
+            Render's Java env includes Maven. Re-check service settings.
+
+  Problem : "Could not copy frontend files"
+  Fix     : Check build.sh is executable (Render usually handles this).
+            Try adding: chmod +x build.sh at the start of the build command.
+
+  Problem : "Compilation error in Java source"
+  Fix     : Run locally: cd backend && mvn package -DskipTests
+            Fix the compile error, commit, and push.
+
+APP CRASHED / WON'T START:
+  Problem : "HikariPool: Connection is not available"
+  Fix     : Database is not reachable. Check SPRING_DATASOURCE_URL, USERNAME,
+            PASSWORD in Render environment. Test the JDBC URL locally first.
+
+  Problem : "Port already in use"
+  Fix     : Render controls the PORT. Never hardcode port in start command.
+            The app already reads from ${PORT:8080}.
+
+MISSING ENV VARIABLES:
+  Problem : "Could not resolve placeholder 'SPRING_DATASOURCE_PASSWORD'"
+  Fix     : Add the missing variable in Render Dashboard → Environment.
+            Save and trigger a new deploy.
+
+CORS ERRORS (in browser console):
+  Problem : "Access-Control-Allow-Origin" error when page loads API data
+  Fix     : Check CORS_ALLOWED_ORIGINS in Render environment.
+            Value must be exactly: https://nijotours.com,https://www.nijotours.com
+            No trailing slash, no spaces between origins.
+
+DATABASE CONNECTION ERRORS:
+  Problem : "Communications link failure" or "Unknown host"
+  Fix     : Check SPRING_DATASOURCE_URL is correct.
+            Ping the host from your local machine.
+            Make sure MySQL host allows remote connections (whitelist Render IPs
+            or allow all: 0.0.0.0/0 — less secure but works for testing).
+
+NOT SECURE / DANGEROUS SITE WARNING:
+  Problem : Browser shows "Not Secure" after domain is connected
+  Fix     : Wait for Render SSL to provision (up to 30 min after DNS propagates).
+            Ensure DNS is pointing to Render (check with https://dnschecker.org).
+            If still failing, remove domain in Render and re-add it.
+
+  Problem : Mixed content warning (padlock with warning icon)
+  Fix     : All API calls in this project use relative paths so this should not
+            occur. If it does, open DevTools → Console and find the http:// URL.
+            Replace it with https:// or a relative path.
+
+ADMIN LOGIN NOT WORKING:
+  Problem : Admin login fails with correct credentials
+  Fix     : Check ADMIN_SEED_EMAIL and ADMIN_SEED_PASSWORD match what you set.
+            These are only seeded when the users table is empty (first deploy).
+            If you changed them after first deploy, reset via database directly
+            or create a user programmatically.
+
+
+STEP 17 — FINAL CLIENT HANDOVER CHECKLIST
+--------------------------------------------------------------------------------
+
+  [ ] Website live at https://nijotours.com
+  [ ] Website live at https://www.nijotours.com
+  [ ] SSL padlock green on both URLs
+  [ ] Admin dashboard accessible at https://nijotours.com/admin/login
+  [ ] Admin credentials given to client securely (not by email)
+  [ ] Render service name documented: nijotours-web
+  [ ] GitHub repository access shared with client
+  [ ] RENDER_ENV_VARIABLES.txt given to client (without real secrets)
+  [ ] Database backup procedure documented
+  [ ] Client warned: uploaded images (hero, packages, locations) are stored
+      on Render's ephemeral disk and will be lost on restart. For production,
+      set up external storage (e.g. Cloudflare R2 / AWS S3) and update
+      FileStorageService.java.
+  [ ] Client knows how to trigger a redeploy (push to GitHub main branch)
+  [ ] Monitoring set up (Render has basic uptime monitoring in dashboard)
+  [ ] Render account access shared with client or transferred
+
+
+================================================================================
+  QUICK REFERENCE
+================================================================================
+
+  Render service name  : nijotours-web
+  Build command        : bash build.sh
+  Start command        : java -jar backend/target/travel-agency-1.0.0.jar
+  Java version         : 17
+  Database             : MySQL (external — e.g. PlanetScale)
+  Admin URL            : https://nijotours.com/admin/login
+  API base URL         : https://nijotours.com/api
+  Env variables file   : RENDER_ENV_VARIABLES.txt
+  Domain               : nijotours.com + www.nijotours.com
+
+================================================================================

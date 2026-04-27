@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -v \"\\\\\\\\\\\\\\\\n\\\\|//\\\\|'\\\\\\\\|\\\\\"\")",
+      "Bash(head -10 ls /c/Users/Thushan/Desktop/main-page-only/favicon*)",
+      "Bash(grep -v \"//schema.org\\\\|//www.w3.org\\\\|//fonts.google\\\\|//cdnjs\\\\|//cdn\\\\|//ajax\\\\|//code.jquery\\\\|//maps.google\\\\|//www.youtube\\\\|//i.ytimg\\\\|//images.unsplash\\\\|//plus.unsplash\\\\|//source.unsplash\\\\|localhost\")",
+      "Bash(grep -v \"//schema\\\\|//www.w3\\\\|//fonts\\\\|//cdnjs\\\\|//cdn\\\\|//ajax\\\\|//code.jquery\\\\|//maps\\\\|//www.youtube\\\\|//i.ytimg\\\\|//images.unsplash\\\\|//plus.unsplash\\\\|//source.unsplash\\\\|localhost\")",
+      "Bash([ -f \"C:/Users/Thushan/Desktop/Nijo Tours/$f\" ])",
+      "Bash([ -d \"C:/Users/Thushan/Desktop/Nijo Tours/$d\" ])"
+    ]
+  }
+}
